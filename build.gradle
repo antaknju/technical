@@ -32,8 +32,10 @@ ext{
 
 //java 8 backwards compatibility flag
 allprojects{
-    tasks.withType(JavaCompile){
-        options.compilerArgs.addAll(['--release', '8'])
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.compilerArgs.addAll(['--release', '8'])
+        }
     }
 }
 
@@ -127,7 +129,7 @@ tasks.register('version') {
             String newVersion = "${baseVersion}+${String.format("%03d", nextBuild)}"
 
             modFile.write(modContent.replaceFirst(Pattern.quote(oldVersion), newVersion))
-            println "🚀 mod.hjson: $oldVersion -> $newVersion"
+            println "mod.hjson: $oldVersion -> $newVersion"
 
             // 2. Handle README.md Badge Updating
             if (readmeFile.exists()) {
@@ -175,5 +177,16 @@ tasks.register('inject', Copy) {
         def name = base.archivesName.get()
         fileTree(destDir).include("${name}*.jar").forEach { it.delete() }
         println "Cleared previous builds of $name"
+    }
+}
+
+// TODO MINDUSTRY SECURITY FLAW: CVE-2025-66566 7.5 Transitive yawkat LZ4 Java has a possible information leak in Java safe decompressor
+configurations.configureEach {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.name == 'lz4-java')
+        {
+            details.useTarget("at.yawk.lz4:lz4-java:1.10.2")
+            details.because "Fixes CVE-2025-66566 information leak in Java decompressor"
+        }
     }
 }

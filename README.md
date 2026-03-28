@@ -1,10 +1,10 @@
-<div style="text-align: center;">
+<div align="center">
     <img src="assets/sprites-override/ui/logo.png" alt="Mod Logo"/>
 </div>
 
-<div style="text-align: center;">
+<div align="center">
     <img src="https://img.shields.io/badge/State-Alpha-red?style=flat" alt="Alpha State Badge">
-    <img src="https://img.shields.io/badge/Version-1.0.0--alpha+009-blue?style=flat" alt="Version Badge">
+    <img src="https://img.shields.io/badge/Version-1.0.0--alpha+013-blue?style=flat" alt="Version Badge">
     <img src="https://img.shields.io/badge/Mindustry-v154-blue?style=flat" alt="Mindustry Version Badge">
     <img src="https://img.shields.io/badge/Focus-Testing_Only-orange?style=flat" alt="Testing Badge">
 </div>
@@ -26,6 +26,6 @@ Mod doesn't contain much content, because of that every block adds new mechanics
 
 ---
 
-<div style="text-align: center;">
+<div align="center">
     Created by AnTakNju
 </div>
