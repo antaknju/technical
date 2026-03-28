@@ -1,19 +1,34 @@
 import java.util.regex.Pattern
 
-plugins {
-    id 'java'
-}
+apply plugin: "java"
 
-base {
-    archivesName = "technical"
-}
+version = '1.0'
 
 sourceSets.main.java.srcDirs = ["src"]
 
 repositories{
     mavenCentral()
-    maven{ url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
-    maven{ url 'https://www.jitpack.io' }
+
+    //Downloads the server-release JAR file from Mindustry releases; does not use any real repository. Surprisingly, this is the most reliable option.
+    ivy{
+        url 'https://github.com/'
+        patternLayout{artifact '/[organisation]/[module]/releases/download/[revision]/dependencies.jar'}
+        metadataSources{ artifact() }
+    }
+
+    //"Latest" option to depend on BE builds.
+    ivy{
+        url 'https://github.com/'
+        patternLayout{artifact '/[organisation]/[module]/releases/download/master/[revision].jar'}
+        metadataSources{ artifact() }
+    }
+
+    //Do the same with jabel
+    ivy{
+        url 'https://github.com/'
+        patternLayout{artifact '/[organisation]/[module]/releases/download/[revision]/jabel.jar'}
+        metadataSources{ artifact() }
+    }
 }
 
 java{
@@ -22,46 +37,36 @@ java{
 }
 
 ext{
-    //the build number that this mod is made for
-    mindustryVersion = 'v154'
+    mindustryVersion = 'v156' //the build number that this mod is made for
     jabelVersion = "93fde537c7"
-    //windows sucks
     isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 }
 
 //java 8 backwards compatibility flag
 allprojects{
-    tasks.withType(JavaCompile).tap {
-        configureEach {
+    tasks.withType(JavaCompile).tap{
+        configureEach{
             options.compilerArgs.addAll(['--release', '8'])
         }
     }
 }
 
 dependencies{
-    compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
-    compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
+    def useLatest = false //set to "true" to always depend on the newest version of mindustry
 
-    annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
+    compileOnly useLatest ? "Anuken:MindustryBuilds:latest" : "Anuken:Mindustry:$mindustryVersion"
+
+    annotationProcessor "Anuken:jabel:v1.0.0"
 }
 
-//force arc version
-configurations.all{
-    resolutionStrategy.eachDependency { details ->
-        if(details.requested.group == 'com.github.Anuken.Arc'){
-            details.useVersion "$mindustryVersion"
-        }
-    }
-}
-
-task jarAndroid{
+tasks.register('jarAndroid'){
     dependsOn "jar"
 
     doLast{
-        if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.");
+        if(!sdkRoot || !new File(sdkRoot as String).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.")
 
-        def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists()}
+        def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists() }
 
         if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
 
@@ -71,13 +76,13 @@ task jarAndroid{
         def d8 = isWindows ? "d8.bat" : "d8"
 
         //dex and desugar files - this requires d8 in your PATH
-        "$d8 $dependencies --min-api 14 --output ${project.archivesBaseName}Android.jar ${project.archivesBaseName}Desktop.jar"
-            .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
+        "$d8 $dependencies --min-api 14 --output ${project.name}Android.jar ${project.name}Desktop.jar"
+                .execute(null, new File("build/libs")).waitForProcessOutput(System.out, System.err)
     }
 }
 
 jar{
-    archiveFileName = "${base.archivesBaseName}Desktop.jar"
+    archiveFileName = "${project.name}Desktop.jar"
 
     from{
         configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
@@ -92,17 +97,16 @@ jar{
     }
 }
 
-task deploy(type: Jar){
+tasks.register('deploy', Jar){
     dependsOn jarAndroid
     dependsOn jar
-    archiveFileName = "${base.archivesBaseName}.jar"
+    archiveFileName = "${project.name}.jar"
 
-    from{ [zipTree("$buildDir/libs/${project.archivesBaseName}Desktop.jar"), zipTree("$buildDir/libs/${project.archivesBaseName}Android.jar")] }
+    from{ [zipTree("build/libs/${project.name}Desktop.jar"), zipTree("build/libs/${project.name}Android.jar")] }
 
     doLast{
         delete{
-            delete "$buildDir/libs/${project.archivesBaseName}Desktop.jar"
-            delete "$buildDir/libs/${project.archivesBaseName}Android.jar"
+            delete "build/libs/${project.name}Android.jar"
         }
     }
 }
@@ -129,7 +133,7 @@ tasks.register('version') {
             String newVersion = "${baseVersion}+${String.format("%03d", nextBuild)}"
 
             modFile.write(modContent.replaceFirst(Pattern.quote(oldVersion), newVersion))
-            println "mod.hjson: $oldVersion -> $newVersion"
+            println "version build update: $oldVersion -> $newVersion"
 
             // 2. Handle README.md Badge Updating
             if (readmeFile.exists()) {
@@ -155,7 +159,6 @@ tasks.register('version') {
                 newReadme = newReadme.replaceAll(/Version-[a-zA-Z0-9.+\-]+-blue/, "Version-${badgeVersion}-blue")
 
                 readmeFile.write(newReadme)
-                println "📝 README.md updated to State: $capitalizedState"
             }
         } else {
             throw new GradleException("Could not find version in mod.hjson")
@@ -177,16 +180,5 @@ tasks.register('inject', Copy) {
         def name = base.archivesName.get()
         fileTree(destDir).include("${name}*.jar").forEach { it.delete() }
         println "Cleared previous builds of $name"
-    }
-}
-
-// TODO MINDUSTRY SECURITY FLAW: CVE-2025-66566 7.5 Transitive yawkat LZ4 Java has a possible information leak in Java safe decompressor
-configurations.configureEach {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        if (details.requested.name == 'lz4-java')
-        {
-            details.useTarget("at.yawk.lz4:lz4-java:1.10.2")
-            details.because "Fixes CVE-2025-66566 information leak in Java decompressor"
-        }
     }
 }
