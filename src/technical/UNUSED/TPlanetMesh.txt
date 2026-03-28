@@ -1,0 +1,109 @@
+package technical.expansion;
+
+import arc.graphics.Color;
+import arc.math.Mathf;
+import arc.math.geom.Vec3;
+import arc.util.Tmp;
+import arc.util.noise.Simplex;
+import mindustry.graphics.Shaders;
+import mindustry.graphics.g3d.*;
+import mindustry.type.Planet;
+
+public class TPlanetMesh extends HexMesh 
+{
+    public static Color 
+        c_snow = Color.valueOf("#ffffff"),
+        c_rock = Color.valueOf("#505050"),
+        c_ice_spike = Color.valueOf("#b6cad6"),
+        c_sand = Color.valueOf("#d9a066"),
+        c_water = Color.valueOf("#52528d"),
+        c_lava = Color.valueOf("#e6482e"),
+        c_basalt = Color.valueOf("#292020"),
+        c_sulfur = Color.valueOf("#f5e76e"),
+        c_sulfur_green = Color.valueOf("#b4d962"),
+        c_ravine = Color.valueOf("#3d342b"),
+        c_clay = Color.valueOf("#8c9ac9"),
+        c_clay_dark = Color.valueOf("#697291");
+
+    public TPlanetMesh(Planet planet, int seed, int divisions) 
+    {
+        this.planet = planet;
+        this.shader = Shaders.planet;
+
+        this.mesh = MeshBuilder.buildHex(new HexMesher() {
+
+            // Smooth biome index: 0..7 float
+            private float getBiome(Vec3 p) {
+                float scale = 0.6f; // lower scale -> larger biome regions
+                float n = Simplex.noise3d(seed + 999, 2, 0.5f, 1.0f, p.x * scale, p.y * scale, p.z * scale);
+                return Mathf.clamp((n + 1f) * 0.5f, 0f, 1f) * 7f; // biome as float 0..7
+            }
+
+            // Height per biome
+            private float getHeightForBiome(int biome, Vec3 p) {
+                float lowFreq = Simplex.noise3d(seed, 4, 0.5f, 1.0f, p.x * 0.5f, p.y * 0.5f, p.z * 0.5f); // big hills
+                float detail = Simplex.noise3d(seed, 6, 0.5f, 1.0f, p.x * 4f, p.y * 4f, p.z * 4f) * 0.05f; // small bumps
+                float n = lowFreq + detail;
+
+                switch (biome) {
+                    case 0: return 0.55f + Math.max(0f, n) * 0.35f;                 // snowy peaks
+                    case 1: return 0.45f + Mathf.pow(Math.abs(n), 3f) * 0.4f;       // ice spikes
+                    case 2: return 0.42f + n * 0.03f;                               // sand flat
+                    case 3: return n > 0.6f ? 0.35f + n * 0.2f : 0.3f;              // islands
+                    case 4: return 0.48f + n * 0.18f;                               // lava plateau
+                    case 5: return 0.34f + Mathf.clamp(n, -0.05f, 0.05f);           // sulfur
+                    case 6: return 0.52f - Math.abs(n) * 0.25f;                     // ravines
+                    case 7: return Mathf.floor((0.5f + n * 0.4f) * 4f) / 4f;        // clay steps
+                    default: return 0.5f;
+                }
+            }
+
+            private Color getColorForBiome(int biome, float h) {
+                switch (biome) {
+                    case 0: return h > 0.65f ? c_snow : c_rock;
+                    case 1: return c_ice_spike.cpy().lerp(Color.white, h);
+                    case 2: return c_sand.cpy().lerp(c_sand.cpy().mul(0.7f), h * 0.3f);
+                    case 3: return h > 0.33f ? c_sand : c_water;
+                    case 4: return h < 0.45f ? c_lava : c_basalt;
+                    case 5: return c_sulfur.cpy().lerp(c_sulfur_green, 0.4f);
+                    case 6: return c_ravine.cpy().mul(0.6f + h);
+                    case 7: return c_clay.cpy().lerp(c_clay_dark, h * 0.3f);
+                    default: return Color.gray;
+                }
+            }
+
+            @Override
+            public float getHeight(Vec3 position) {
+                Vec3 p = Tmp.v31.set(position).nor();
+
+                float biomeF = getBiome(p);
+                int biomeLow = (int) Math.floor(biomeF);
+                int biomeHigh = Mathf.clamp(biomeLow + 1, 0, 7);
+                float t = biomeF - biomeLow;
+
+                float hLow = getHeightForBiome(biomeLow, p);
+                float hHigh = getHeightForBiome(biomeHigh, p);
+
+                return Mathf.clamp(Mathf.lerp(hLow, hHigh, t), 0.28f, 0.75f);
+            }
+
+            @Override
+            public void getColor(Vec3 position, Color out) {
+                Vec3 p = Tmp.v31.set(position).nor();
+
+                float biomeF = getBiome(p);
+                int biomeLow = (int) Math.floor(biomeF);
+                int biomeHigh = Mathf.clamp(biomeLow + 1, 0, 7);
+                float t = biomeF - biomeLow;
+
+                float h = getHeight(position);
+
+                Color cLow = getColorForBiome(biomeLow, h);
+                Color cHigh = getColorForBiome(biomeHigh, h);
+
+                out.set(cLow).lerp(cHigh, t);
+            }
+
+        }, divisions, planet.radius, 0.2f);
+    }
+}

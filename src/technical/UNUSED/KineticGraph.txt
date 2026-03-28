@@ -1,0 +1,214 @@
+package technical.expansion;
+
+import static technical.debug.Debugger.print;
+
+import arc.Events;
+import arc.math.geom.Vec2;
+import arc.struct.OrderedMap;
+import arc.struct.Seq;
+import arc.util.Log;
+import mindustry.Vars;
+import mindustry.game.EventType.ResetEvent;
+import technical.debug.Debugger.DebugLine;
+import technical.expansion.KineticBlock.KineticBuild;
+
+public class KineticGraph implements Comparable<KineticGraph>
+{
+    public Seq<KineticBuild> all = new Seq<>();
+
+    public long lastTick;
+
+    public float totalTorque;
+    public float totalSpeed;
+    public float totalInertia;
+
+    public float efficiency;
+
+    public static int lastGraphId = 0;
+    public int id;
+
+    public static OrderedMap<Integer, KineticGraph> graphs = new OrderedMap<>();
+
+    public OrderedMap<Integer, Integer> consumeQueue = new OrderedMap<>();
+
+    public KineticGraph() 
+    {
+
+    }
+
+    public static void load()
+    {
+        Events.on(ResetEvent.class, e -> {
+            staticClear();
+        });
+    }
+
+    public static int newGraph()
+    {
+        var g = new KineticGraph();
+        g.id = lastGraphId++;
+        graphs.put(g.id, g);
+
+        return g.id;
+    }
+
+    @Override
+    public int compareTo(KineticGraph other)
+    {
+        int cmp = Integer.compare(other.all.size, this.all.size);
+        if (cmp != 0) return cmp;
+
+        return Integer.compare(other.id, this.id);
+    }
+
+    public void consumeGraph(KineticGraph other)
+    {
+        if (other == this || other == null) return;
+        
+        if (compareTo(other) < 0)
+        {
+            other.consumeGraph(this);
+            return;
+        }
+
+        // for (var entry : consumeQueue.entries()) 
+        // {
+        //     if (entry.value == id) 
+        //     {
+        //         var s = Seq.with(graphs.get(other.id), graphs.get(entry.key), this);
+        //         s.sort((a, b) -> a.compareTo(b));
+
+        //         s.get(2).consumeGraph(s.get(0));
+        //         s.get(2).consumeGraph(s.get(1));
+
+        //         return;
+        //     }
+        // }
+
+        consumeQueue.put(id, other.id);
+        Log.info(consumeQueue);
+    }
+
+    protected void addGraph(KineticGraph other)
+    {
+        if (other == null || other == this) return;
+
+        for (var b : other.all)
+        {
+            addBuild(b);
+        }
+
+        graphs.remove(other.id);
+    }
+
+    protected void addBuild(KineticBuild build)
+    {
+        if (build.kinetic == null) 
+        {
+            print("WARNING: Adding Build that is not kinetic to the graph#@", id);
+            return;
+        }
+
+        if (build.kinetic.graph() != null)
+        {
+            build.kinetic.graph().all.remove(build);
+        }
+
+        all.add(build);
+        build.kinetic.graph(id);
+    }
+
+    public void remove(KineticBuild build, boolean placeholdBuild)
+    {
+        all.remove(build);
+
+        if (all.size <= 0)
+        {
+            graphs.remove(id);
+        }
+
+        if (placeholdBuild)
+        {
+            build.kinetic.graphId = newGraph();
+            build.kinetic.graph().addBuild(build);
+        }
+    }
+
+    public void tryUpdate()
+    {
+        long tick = Math.round(Vars.state.tick);
+        if (tick == lastTick) return;
+        lastTick = tick;
+
+        update();
+
+        print(graphs.orderedKeys());
+    }
+
+    protected void update()
+    {
+        if (graphs.get(id) == null)
+        {
+            print("WARNING: Updating Graph$@ That Doesn't Exist!", id);
+            return;
+        }
+
+        for (var e : consumeQueue)
+        {
+            Log.warn("graph#" + e.key + " consumes graph#" + e.value);
+            graphs.get(e.key).addGraph(graphs.get(e.value));
+        }
+        consumeQueue.clear();
+
+        totalInertia = 0;
+        totalSpeed = 0;
+        totalTorque = 0;
+
+        for (var tb : all)
+        {
+            totalInertia += tb.kinetic.inertia();
+            
+            if (tb.efficiencyScale() * tb.efficiency > 0)
+            {
+                if (tb.kinetic.data.isOutput)
+                {
+                    totalSpeed += tb.kinetic.data.output.speed;
+                    totalTorque += tb.kinetic.data.output.torque;
+                }
+
+                if (tb.kinetic.data.isInput)
+                {
+                    totalSpeed -= tb.kinetic.data.input.speed;
+                    totalTorque -= tb.kinetic.data.input.torque;
+                }
+            }
+
+            DebugLine.point(new Vec2(tb.x, tb.y)).color(id).draw();
+        }
+
+        if (totalSpeed <= 0 || totalTorque <= 0)
+        {
+            efficiency -= acceleration(totalTorque, totalInertia);
+        }
+        else
+        {
+            efficiency += acceleration(totalTorque, totalInertia);
+        }
+    }
+
+    public float acceleration(float torque, float inertia)
+    {
+        return torque / inertia;
+    }
+
+    public float getInertia()
+    {
+        return totalInertia;
+    }
+
+    public static void staticClear()
+    {
+        lastGraphId = 0;
+        graphs.clear();
+    }
+}

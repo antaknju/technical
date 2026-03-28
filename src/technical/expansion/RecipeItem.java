@@ -1,0 +1,48 @@
+package technical.expansion;
+
+import arc.graphics.Color;
+import arc.struct.Seq;
+import mindustry.type.Item;
+import technical.T;
+import technical.content.TCustom;
+
+public class RecipeItem extends Item
+{
+    public Seq<Item> startingItems = new Seq<>();
+    public Seq<ConveyorRecipe> recipes = new Seq<>();
+
+    public RecipeItem(String name, Color col)
+    {
+        super(name, col);
+    }
+
+    public void FindRecipes()
+    {
+        startingItems.clear();
+        recipes.clear();
+
+        for (var pair : TCustom.ConveyorRecipes)
+        {
+            if (pair.value.result == this)
+            {
+                startingItems.add(pair.key);
+                recipes.add(pair.value);
+            }
+        }
+    }
+
+    @Override
+    public void setStats()
+    {
+        super.setStats();
+
+        FindRecipes();
+
+        if(recipes.size <= 0) return;
+
+        for (int i = 0; i < recipes.size; i++)
+        {
+            T.addRecipeStat(stats, startingItems.get(i), recipes.get(i));
+        }
+    }
+}

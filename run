@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Exit on any error
+set -e
+
+./gradlew version inject
+java -jar ~/Mindustry/Mindustry-*.jar -debug

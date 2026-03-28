@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+QUALITY=5   # 0–10, 4–6 is ideal for games
+
+find . -type f -iname "*.wav" | while read -r wav; do
+    ogg="${wav%.wav}.ogg"
+
+    if [[ -f "$ogg" ]]; then
+        echo "Skipping (exists): $ogg"
+        continue
+    fi
+
+    echo "Converting: $wav -> $ogg"
+    ffmpeg -y -loglevel error -i "$wav" \
+        -c:a libvorbis -q:a "$QUALITY" \
+        "$ogg"
+done

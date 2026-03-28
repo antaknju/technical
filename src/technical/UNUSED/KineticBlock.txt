@@ -1,0 +1,90 @@
+package technical.expansion;
+
+import static technical.debug.Debugger.print;
+
+import arc.struct.Seq;
+import mindustry.Vars;
+import mindustry.game.Team;
+import mindustry.gen.Building;
+import mindustry.world.Block;
+
+public class KineticBlock extends TBlock
+{
+    public KineticComponentData kineticData = null;
+    public static final Seq<KineticBuild> visited = new Seq<>();
+
+    public KineticBlock(String name) 
+    {
+        super(name);
+    }
+
+    public class KineticBuild extends TBuild
+    {
+        public KineticComponent kinetic = null;
+
+        @Override
+        public void placed()
+        {
+            if (!Vars.net.client())
+            {
+                Sprocket.kineticPlaced(this, team);
+            }
+
+            propagateKineticGraph();
+        }
+
+        @Override
+        public void onRemoved()
+        {
+            if (kinetic.graph() != null)
+            {
+                kinetic.graph().remove(this, false);
+            }
+        }
+
+        @Override
+        public Building create(Block block, Team team)
+        {
+            var build = super.create(block, team);
+            
+            if (block instanceof KineticBlock kblock && build instanceof KineticBuild kbuild)
+            {
+                kbuild.kinetic = new KineticComponent(kblock.kineticData, kbuild);
+
+                return kbuild;
+            }
+
+            return build;
+        }
+
+        public void propagateKineticGraph()
+        {
+            for (var b : proximity)
+            {
+                if (b instanceof KineticBuild kbuild && kbuild.kinetic != null && kbuild.kinetic.graph() != kinetic.graph())
+                {
+                    if (!visited.contains(kbuild))
+                    {
+                        visited.add(kbuild);
+                        kinetic.graph().consumeGraph(kbuild.kinetic.graph());
+                        kbuild.propagateKineticGraph();
+                    }
+                }
+            }
+            visited.clear();
+        }
+
+        public float getKineticEfficiency()
+        {
+            return kinetic.graph().efficiency;
+        }
+
+        @Override
+        public void updateTile()
+        {
+            super.updateTile();
+
+            kinetic.update();
+        }
+    }
+}
