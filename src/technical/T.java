@@ -74,8 +74,7 @@ public class T
             }
             else
             {
-                // brutal cast
-                return (TLiquid)liq;
+                return null;
             }
         }
     }

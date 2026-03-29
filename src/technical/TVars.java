@@ -30,11 +30,6 @@ public class TVars
     private static Unit lastValidUnit = null;
     private static long lastBlockTime = 0;
 
-    public static void init() 
-    {
-        
-    }
-
     public static void load()
     {
         wrapEffect(Fx.unitControl);

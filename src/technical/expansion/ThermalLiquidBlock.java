@@ -7,6 +7,7 @@ import arc.Core;
 import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.util.Time;
@@ -40,7 +41,7 @@ public class ThermalLiquidBlock extends TBlock implements Autotiler
 
     public Color coolColor = T.c("#002fffff");
     public Color heatColor = T.c("#ff1e00ff");
-    public float heatPulse = 0.3f, heatPulseScl = 50f, glowMult = 5f;
+    public float heatPulse = 0.3f, heatPulseScl = 50f;
 
     public final int timerFlow = timers++;
 
@@ -57,6 +58,8 @@ public class ThermalLiquidBlock extends TBlock implements Autotiler
     public TextureRegion liquidRegion;
     public TextureRegion heatRegion;
 
+    public float liquidPadding = 1f;
+
     public ThermalLiquidBlock(String name)
     {
         super(name);
@@ -69,7 +72,6 @@ public class ThermalLiquidBlock extends TBlock implements Autotiler
         update = true;
         hasLiquids = true;
         group = BlockGroup.liquids;
-        outputsLiquid = true;
         envEnabled |= Env.space | Env.underwater;
     }
 
@@ -128,6 +130,28 @@ public class ThermalLiquidBlock extends TBlock implements Autotiler
 
     public static void drawTiledFrames(int size, float x, float y, float padLeft, float padRight, float padTop, float padBottom, Liquid liquid, float alpha)
     {
+        boolean canMove = !(liquid instanceof TLiquid tliq) || tliq.canMove;
+
+        if (!canMove)
+        {
+            Draw.color(liquid.color, liquid.color.write(Tmp.c1).a);
+
+            float fullWidth = size * tilesize;
+            float fullHeight = size * tilesize;
+
+            float newWidth = fullWidth - padLeft - padRight;
+            float newHeight = fullHeight - padTop - padBottom;
+
+            float newX = x + (padRight - padLeft) / 2f;
+            float newY = y + (padTop - padBottom) / 2f;
+
+            Fill.rect(newX, newY, newWidth, newHeight);
+
+            Draw.color();
+
+            return;
+        }
+
         TextureRegion region = renderer.fluidFrames[liquid.gas ? 1 : 0][liquid.getAnimationFrame()];
         TextureRegion toDraw = Tmp.tr1;
 
@@ -182,7 +206,7 @@ public class ThermalLiquidBlock extends TBlock implements Autotiler
         {
             Draw.rect(bottomRegion, x, y);
 
-            Drawf.liquid(liquidRegion, x, y, smoothLiquid, liquids.current().color);
+            drawTiledFrames(size, x, y, liquidPadding, liquids.current(), smoothLiquid);
 
             Draw.rect(region, x, y);
 

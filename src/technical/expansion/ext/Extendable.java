@@ -24,6 +24,7 @@ import mindustry.entities.Effect;
 import mindustry.entities.Puddles;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
+import mindustry.gen.Icon;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.type.Item;
@@ -37,6 +38,7 @@ import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;
 import technical.T;
+import technical.content.TIcons;
 import technical.content.TLiquids;
 import technical.expansion.TBlock;
 import technical.expansion.ext.Extension.ExtensionBuild;
@@ -171,7 +173,7 @@ public class Extendable extends KineticBlock
                 for (var ext : RequiredExtensions) {
                     table.row();
                     
-                    String name = "[accent]" + ext.key.name() + " [gray]" + ext.value + " P[]";
+                    String name = "[accent]" + ext.key.name() + " [gray]" + ext.value + TIcons.get(TIcons.boostPowerIcon);
                     table.add(name);
                 }
             }
@@ -304,7 +306,7 @@ public class Extendable extends KineticBlock
                         ExtensionType type = e.key;
                         int count = e.value;
 
-                        t.label(() -> "[lightgray]" + T.bundle(type) + ": [scarlet]" + count + " P").wrap().left().padLeft(20f);
+                        t.label(() -> "[lightgray]" + T.bundle(type) + ": [scarlet]" + count + TIcons.get(TIcons.boostPowerIcon)).wrap().left().padLeft(20f);
                         t.row();
                     }
                 }).growX();
@@ -322,9 +324,9 @@ public class Extendable extends KineticBlock
                         t.row();
 
                         if (delta > 0)
-                            t.label(() -> T.bundle("err.heating") + (delta - maxThermalDelta()) + " P").color(Color.scarlet).wrap().left().padLeft(20f);
+                            t.label(() -> T.bundle("err.heating") + (delta - maxThermalDelta()) + TIcons.get(TIcons.boostPowerIcon)).color(Color.scarlet).wrap().left().padLeft(20f);
                         else
-                            t.label(() -> T.bundle("err.cooling") + (-delta - maxThermalDelta()) + " P").color(Color.scarlet).wrap().left().padLeft(20f);
+                            t.label(() -> T.bundle("err.cooling") + (-delta - maxThermalDelta()) + TIcons.get(TIcons.boostPowerIcon)).color(Color.scarlet).wrap().left().padLeft(20f);
 
                         t.row();
                     }).growX();

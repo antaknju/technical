@@ -18,8 +18,6 @@ public class Technical extends Mod
     public void init()
     {
         TUnits.init();
-
-        TVars.init();
     }
 
     @Override
@@ -90,7 +88,7 @@ public class Technical extends Mod
 
 /*
  * Building
- *  - efficiency is the multiplier of avaliable items/liquids/power consumption
+ *  - efficiency is the multiplier of available items/liquids/power consumption
  *  - proximity are Buildings touching this Building
  *  - the Draw will glow only on special layers
  *  - Block.update = true filed makes block breakable

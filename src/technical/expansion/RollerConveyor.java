@@ -76,6 +76,8 @@ public class RollerConveyor extends TBlock implements Autotiler
         conveyorPlacement = true;
         underBullets = true;
 
+        solid = false;
+
         ambientSound = Sounds.loopConveyor;
         ambientSoundVolume = 0.0022f;
         unloadable = false;

@@ -39,7 +39,7 @@ public class TCustom
     }
 }
 
-/* Progression
+/* Progression:
  * Crude
  * Primitive
  * Untreated
@@ -56,9 +56,9 @@ public class TCustom
  */
 
 
-            // TItems.basic_circuit, new ConveyorRecipe(2, TItems.basic_circuit,
-            //     null, Type.Cutting,
-            //     TItems.iron_plate, Type.Applying,
-            //     TItems.copper_wire, Type.Applying,
-            //     TItems.iron_plate, Type.Applying
-            // ),
+// TItems.basic_circuit, new ConveyorRecipe(2, TItems.basic_circuit,
+//     null, Type.Cutting,
+//     TItems.iron_plate, Type.Applying,
+//     TItems.copper_wire, Type.Applying,
+//     TItems.iron_plate, Type.Applying
+// ),

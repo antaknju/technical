@@ -15,6 +15,7 @@ import arc.util.Time;
 import mindustry.Vars;
 import mindustry.core.UI;
 import mindustry.ctype.UnlockableContent;
+import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.graphics.Pal;
 import mindustry.type.ItemStack;
@@ -93,62 +94,48 @@ public class TUI
         parent.add(button).pad(4f);
     }
 
-    public static Table buildIconGrid(ItemStack[] items, LiquidStack[] liquids, PayloadStack[] payloads) 
-    {
+    public static Table buildIconGrid(ItemStack[] items, LiquidStack[] liquids, PayloadStack[] payloads) {
         Table grid = new Table();
-        
-        // 1. Calculate total number of icons to display
-        int itemLen = (items == null) ? 0 : items.length;
-        int liquidLen = (liquids == null) ? 0 : liquids.length;
-        int total = itemLen + liquidLen;
 
-        // 2. Determine size and columns based on count
-        float iconSize;
-        int cols;
+        // 1. Define fixed constraints
+        float iconSize = 32f; // Standardized size for all icons
+        int maxCols = 2;      // Fixed at 2 columns as requested
+        int currentCount = 0;
 
-        if (total <= 1) {
-            iconSize = 32f;
-            cols = 1;
-        } else if (total <= 4) {
-            // For 2-4 items, use a 2x2 grid. 
-            // 16f fits well in the same 32f total space, but 8f is used if you prefer a smaller look.
-            iconSize = 16f; 
-            cols = 2;
-        } else {
-            // For 5+ items, use 8f icons in a 3-column grid
-            iconSize = 8f;
-            cols = 3;
-        }
+        // 2. Helper to add icons and manage rows
+        // We use a Runnable or local logic to keep the code DRY
 
-        // 3. Populate the grid
-        int index = 0;
-
+        // Process Items
         if (items != null) {
             for (ItemStack stack : items) {
                 grid.add(new Image(stack.item.uiIcon)).size(iconSize).pad(1f);
-                index++;
-                if (index % cols == 0) grid.row();
+                currentCount++;
+                if (currentCount % maxCols == 0) grid.row();
             }
         }
 
+        // Process Payloads
         if (payloads != null) {
             for (PayloadStack stack : payloads) {
                 grid.add(new Image(stack.item.uiIcon)).size(iconSize).pad(1f);
-                if (++index % cols == 0) grid.row();
+                currentCount++;
+                if (currentCount % maxCols == 0) grid.row();
             }
         }
 
+        // Process Liquids
         if (liquids != null) {
             for (LiquidStack stack : liquids) {
                 grid.add(new Image(stack.liquid.uiIcon)).size(iconSize).pad(1f);
-                index++;
-                if (index % cols == 0) grid.row();
+                currentCount++;
+                if (currentCount % maxCols == 0) grid.row();
             }
         }
 
-        // if (total == 0) {
-        //     grid.add(new Image(mindustry.gen.Icon.cancel.getRegion())).size(32f).color(Color.scarlet);
-        // }
+        // Optional: Placeholder for empty state
+        if (currentCount == 0) {
+            grid.add(new Image(Icon.cancel.getRegion())).size(iconSize).color(Color.scarlet);
+        }
 
         return grid;
     }

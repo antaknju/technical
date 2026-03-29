@@ -1,0 +1,3307 @@
+
+// public static Block glass_core, water_extractor, torch, magnet_core, core_expansion,
+
+    // // units
+    // sulphur_unit_factory, missile_fabricator, electrical_unit_factory,
+
+    // // environment
+    // meltium_ore, salt_vent, carbon_sand,
+    
+    // // sulphur
+    // uranium_ore, sulphur_floor, sulphur_wall, sulphur_fluid_floor,
+    
+    // // magnetium
+    // ore_magnetium, magnetium_floor, dense_magnetium_floor, magnetium_tree, magnetium_cluster_tree, magnetium_wall, magnetium_vent,
+
+    // // heat
+    // slag_heater,
+    
+    // // power
+    // sulphur_burner, electrical_beam_node, sulphur_fluid_generator,
+    
+    // // crafters
+    // silicon_smelter, hydrogenator, glass_furnace, electricicator, scrap_melter, thermogen_infuser,
+    
+    // // conduits
+    // glass_conduit, glass_conduit_bridge, glass_conduit_router, glass_conduit_junction, glass_tank,
+
+    // // ducts
+    // lead_duct, lead_duct_bridge, lead_duct_router, glass_sorter, glass_cargo_loader, glass_cargo_unloader,
+
+    // // turrets
+    // water_turret, alphus, coiler, bolt_shotgun, backstabber, sandstorm, feltarion, allien,
+
+    // // defense
+    // silicon_wall, large_silicon_wall, protective_glass_wall, silicon_door,
+    
+    // //drills
+    // burst_drill, sulphur_extractor, plasma_beam_drill, wall_crusher
+    // ;
+
+    // public static void load() {
+
+    //     // DEFENSE
+
+    //     int wallHealthMultiplier = 6;
+
+    //     silicon_door = new AutoDoor("silicon-door"){{
+    //         requirements(Category.defense, with(Items.silicon, 4 * 4 * 2, AourusItems.glass, 4));
+    //         scaledHealth = 80 * wallHealthMultiplier;
+    //         size = 2;
+
+    //         buildCostMultiplier = 16;
+
+    //         researchCostMultiplier = 8/30f; // 1/30 build price
+    //     }};
+
+    //     silicon_wall = new Wall("silicon-wall"){{
+    //         requirements(Category.defense, with(Items.silicon, 4));
+    //         scaledHealth = 80 * wallHealthMultiplier;
+
+    //         buildCostMultiplier = 16;
+
+    //         // researchCost = ItemStack.with(Items.silicon, 20);
+    //         researchCostMultiplier = 3/30f; // 1/30 build price
+    //     }};
+
+    //     large_silicon_wall = new Wall("large-silicon-wall"){{
+    //         requirements(Category.defense, with(Items.silicon, 4 * 4));
+    //         size = 2;
+    //         scaledHealth = 80 * wallHealthMultiplier;
+
+    //         buildCostMultiplier = 16;
+
+    //         // researchCost = ItemStack.with(Items.silicon, 200);
+    //         researchCostMultiplier = 8/30f; // 1/30 build price
+    //     }};
+
+    //     protective_glass_wall = new Wall("protective-glass-wall"){{
+    //         requirements(Category.defense, with(AourusItems.glass, 8, Items.silicon, 16));
+    //         health = 120 * wallHealthMultiplier * 4;
+    //         size = 2;
+    //         chanceDeflect = 8;
+    //         insulated = true;
+    //         absorbLasers = true;
+    //         schematicPriority = 10;
+    //         researchCostMultiplier = 8/30f; // 1/30 build price
+    //     }};
+        
+    //     // PRODUCTION
+
+    //     wall_crusher = new WallCrafter("wall-crusher"){{
+    //         size = 3;
+    //         health = 600;
+
+    //         drillTime = 60f;
+
+    //         output = Items.sand;
+
+    //         ambientSound = Sounds.drill;
+
+    //         consumePower(120 / 60f);
+
+    //         attribute = Attribute.get("sand");
+
+    //         consumeLiquid(Liquids.hydrogen, 10f / 60f).boost();
+            
+    //         itemCapacity = 20;
+    //         // boostItemUseTime = 60f / 0.75f;
+
+
+    //         // researchCost = ItemStack.with(Items.lead, 300, AourusItems.meltium, 100);
+
+    //         researchCostMultiplier = 20/30f; // 1/30 build price
+
+    //         requirements(Category.production, ItemStack.with(Items.silicon, 100, AourusItems.electric_alloy, 50));
+    //     }};
+
+    //     plasma_beam_drill = new BeamDrill("plasma-beam-drill") {{
+    //         size = 3;
+    //         health = 500;
+    //         tier = 3;
+    //         range = 4;
+    //         drillTime = 60f * 12;
+
+    //         consumePower(160f / 60f);
+
+    //         itemCapacity = 100;
+
+    //         tier = 2;
+    //         optionalBoostIntensity = 1.8f;
+
+    //         // boostHeatColor = Color.sky.cpy().mul(0.87f);
+    //         // heatColor = new Color(1f, 0.35f, 0.35f, 0.9f);
+
+    //         heatColor = TCol.sulphur;
+    //         boostHeatColor = Liquids.hydrogen.color;
+
+    //         sparkColor = AourusItems.sulphur_fluid.color;
+
+    //         // heatPulse = 0.3f;
+    //         // heatPulseScl = 7f;
+
+    //         // fogRadius = 1;
+
+    //         // color = Color.valueOf("ff6000");
+
+    //         consumeLiquid(AourusItems.sulphur_fluid, 2f / 60f);
+    //         consumeLiquid(Liquids.hydrogen, 30f / 60f).boost();
+
+    //         // drillMultipliers.put(AourusItems.meltium, 0.5f);
+    //         researchCostMultiplier = 5/30f; // 1/30 build price
+
+    //         // researchCost = ItemStack.with(Items.silicon, 1000, AourusItems.glass, 1000);
+
+    //         requirements(Category.production, ItemStack.with(Items.silicon, 200, AourusItems.glass, 100));
+    //     }};
+
+    //     water_extractor = new AttributeCrafter("vent-water-extractor") {{
+    //         attribute = Attribute.steam;
+    //         // group = BlockGroup.liquids;
+    //         minEfficiency = 9f - 0.0001f;
+    //         baseEfficiency = 0;
+    //         displayEfficiency = false;
+    //         craftEffect = Fx.turbinegenerate;
+    //         drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawBlurSpin("-rotator", 6f));
+    //         craftTime = 120f;
+    //         size = 3;
+    //         ambientSound = Sounds.hum;
+    //         ambientSoundVolume = 0.06f;
+    //         hasLiquids = true;
+    //         boostScale = 1f / 9f;
+    //         itemCapacity = 0;
+    //         outputLiquid = new LiquidStack(Liquids.water, 30f / 60f);
+    //         liquidCapacity = 60f;
+
+    //         health = 150;
+
+    //         consumePower(30f/60);
+
+    //         // researchCost = ItemStack.with(Items.lead, 20, AourusItems.meltium, 20);
+    //         researchCostMultiplier = 0.5f/30f; // 1/30 build price
+
+    //         requirements(Category.production, ItemStack.with(AourusItems.meltium, 30, Items.lead, 60));
+    //     }};
+
+    //     burst_drill = new BurstDrill("burst-drill"){{
+    //         size = 4;
+    //         drillTime = 60f * 4.5f;
+    //         tier = 1;
+    //         drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Color.valueOf("#fe80f5"), 40f));
+    //         shake = 0f;
+    //         itemCapacity = 40;
+    //         health = 150;
+
+    //         // AourusItems
+
+    //         researchCostMultiplier = 0.5f/30f; // 1/30 build price
+
+    //         arrows = 2;
+    //         arrowColor = Color.valueOf("#fe80f5");
+    //         fogRadius = 1;
+
+    //         shake = 3f;
+
+    //         health = 80;
+
+    //         liquidBoostIntensity = 1.5f;
+
+    //         drillMultipliers.put(AourusItems.meltium, 0.5f);
+    //         drillMultipliers.put(Items.sand, 0.5f);
+
+    //         consumePower(10/60f);
+
+    //         consumeLiquid(Liquids.hydrogen, 3f / 60f).boost();
+
+    //         requirements(Category.production, ItemStack.with(Items.lead, 20, AourusItems.meltium, 20));
+    //     }};
+    
+    //     sulphur_extractor = new WallCrafter("sulphur-extractor") {{
+    //         size = 2;
+    //         health = 100;
+
+    //         drillTime = 90f;
+
+    //         output = AourusItems.sulphur;
+
+    //         ambientSound = Sounds.drill;
+
+    //         consumePower(20 / 60f);
+
+    //         attribute = Attribute.get("sulphur");
+
+    //         // researchCost = ItemStack.with(Items.lead, 300, AourusItems.meltium, 100);
+
+    //         researchCostMultiplier = 6/30f; // 1/30 build price
+
+    //         requirements(Category.production, ItemStack.with(Items.lead, 50, AourusItems.meltium, 50));
+    //     }};
+
+    //     // TURRETS
+
+    //     feltarion = new PayloadAmmoTurret("feltarion"){{
+    //         requirements(Category.turret, with(AourusItems.meltium, 500, Items.silicon, 500));
+    //         size = 4;
+
+    //         rotateDraw = true;
+            
+    //         minWarmup = 0.94f;
+    //         targetInterval = 40f;
+    //         unitSort = UnitSorts.strongest;
+    //         shootWarmupSpeed = 0.03f;
+    //         targetAir = false;
+    //         targetUnderBlocks = false;
+
+    //         shake = 3f;
+    //         ammoPerShot = 1;
+    //         maxAmmo = 3;
+    //         shootY = -1;
+    //         outlineColor = Pal.darkOutline;
+
+    //         shootSound = Sounds.missileLaunch;
+            
+    //         reload = 500f;
+    //         range = 800;
+    //         shootCone = 1f;
+    //         health = 400;
+    //         rotateSpeed = 0.75f;
+
+    //         ammo(AourusMisc.sulphur_missile, AourusWeapons.feltarion_missile);
+
+    //         coolant = consumeCoolant(0.1f);
+            
+    //         researchCostMultiplier = 4/30f; // 1/30 build price
+
+    //         drawer = new DrawTurret("reinforced-")
+    //         {{
+    //             parts.add(
+    //             new RegionPart("-mid"){{
+    //                 progress = PartProgress.recoil;
+    //                 heatProgress = PartProgress.warmup.add(-0.2f).add(p -> Mathf.sin(9f, 0.2f) * p.warmup);
+    //                 heatColor = TCol.sulphur;
+    //                 mirror = false;
+    //                 under = true;
+    //                 y = 2;
+    //                 moveY = -5f;
+    //             }}, 
+    //             new RegionPart("-blade"){{
+    //                 progress = PartProgress.warmup;
+    //                 heatProgress = PartProgress.warmup;
+    //                 heatColor = TCol.sulphur;
+    //                 moveRot = -16f;
+    //                 layerOffset = 2;
+    //                 heatLayerOffset = 10;
+    //                 // moveX = 0f;
+    //                 moveY = -4f;
+    //                 x = 8;
+    //                 y = 0;
+    //                 mirror = true;
+    //             }},
+    //             new RegionPart("-missile"){{
+    //                 progress = PartProgress.reload.curve(Interp.pow2In);
+
+    //                 colorTo = new Color(0.5f, 0.5f, 0.5f, 0f);
+    //                 color = Color.white;
+    //                 mixColorTo = Pal.darkOutline;
+    //                 mixColor = new Color(1f, 1f, 1f, 0f);
+    //                 outline = false;
+    //                 y = 2;
+
+    //                 layerOffset = 1;
+
+    //                 moves.add(new PartMove(PartProgress.warmup.inv(), 0f, -3f, 0f));
+    //             }});
+    //         }};
+    //     }};
+
+    //     allien = new ContinuousLiquidTurret("allien"){{
+    //         requirements(Category.turret, with(AourusItems.meltium, 500, Items.silicon, 500));
+    //         size = 4;
+
+    //         ammo(
+    //             Liquids.hydrogen, new PointLaserBulletType(){{
+    //                 sprite = "laser-white";
+    //                 damage = 210f;
+    //                 buildingDamageMultiplier = 0.3f;
+    //                 hitColor = Color.valueOf("718eff");
+    //                 color = Color.valueOf("718eff");
+    //                 oscMag = 0.5f;
+    //                 oscScl = 2;
+    //                 beamEffect = Fx.hitFlameBeam;
+    //             }}
+    //         );
+
+    //         loopSoundVolume = 1f;
+    //         loopSound = Sounds.laserbeam;
+
+    //         liquidConsumed = 90f / 60f;
+
+    //         shootY = 6f;
+
+    //         rotateSpeed = 0.35f;
+
+    //         range = 200f;
+    //         var haloProgress = PartProgress.warmup;
+    //         Color haloColor = Color.valueOf("718eff");
+    //         float haloY = 8f, haloRotSpeed = 1.5f, haloX = 4f;
+
+    //         aimChangeSpeed = 0.9f;
+    //         rotateSpeed = 0.9f;
+
+    //         drawer = new DrawTurret("reinforced-")
+    //         {{
+    //             parts.addAll(
+                
+    //             new RegionPart("-mid"){{
+    //                 progress = PartProgress.warmup;
+    //                 heatProgress = PartProgress.warmup;
+    //                 // heatColor = ACol.sulphur;
+    //                 mirror = false;
+    //                 under = false;
+    //                 moveY = 7f;
+    //             }},
+    //             new RegionPart("-mag"){{
+    //                 progress = PartProgress.warmup;
+    //                 heatProgress = PartProgress.warmup;
+    //                 // heatColor = ACol.sulphur;
+    //                 under = false;
+    //                 moveRot = -26f;
+    //                 // moveX = 0f;
+    //                 moveY = -3f;
+    //                 mirror = true;
+
+    //                 layerOffset = 1;
+    //                 heatLayerOffset = 2;
+
+    //                 children.addAll(
+    //                     new ShapePart(){{
+    //                     progress = haloProgress;
+    //                     color = haloColor;
+    //                     circle = true;
+    //                     hollow = true;
+    //                     stroke = 0f;
+    //                     strokeTo = 1.5f;
+    //                     radius = 5f;
+    //                     layer = Layer.effect;
+    //                     y = haloY;
+    //                     x = haloX;
+    //                 }},
+
+    //                     new ShapePart(){{
+    //                         progress = haloProgress;
+    //                         color = haloColor;
+    //                         sides = 3;
+    //                         rotation = 90f;
+    //                         hollow = true;
+    //                         stroke = 0f;
+    //                         strokeTo = 1.5f;
+    //                         radius = 2f;
+    //                         layer = Layer.effect;
+    //                         y = haloY;
+    //                         x = haloX;
+    //                     }},
+
+    //                     new HaloPart(){{
+    //                         progress = haloProgress;
+    //                         color = haloColor;
+    //                         sides = 3;
+    //                         tri = true;
+    //                         shapes = 3;
+    //                         triLength = 0f;
+    //                         triLengthTo = 6f;
+    //                         shapeRotation = 180f;
+    //                         radius = 3f;
+    //                         haloRadius = 8f;
+    //                         haloRotateSpeed = -haloRotSpeed;
+    //                         haloRotation = 180f / 3f;
+    //                         layer = Layer.effect;
+    //                         y = haloY;
+    //                         x = haloX;
+    //                     }},
+
+    //                     new HaloPart(){{
+    //                         progress = haloProgress;
+    //                         color = haloColor;
+    //                         sides = 3;
+    //                         tri = true;
+    //                         shapes = 3;
+    //                         triLength = 0f;
+    //                         triLengthTo = 3f;
+    //                         radius = 3f;
+    //                         haloRadius = 8f;
+    //                         haloRotateSpeed = -haloRotSpeed;
+    //                         haloRotation = 180f / 3f;
+    //                         layer = Layer.effect;
+    //                         y = haloY;
+    //                         x = haloX;
+    //                     }}
+    //                 );
+    //             }},
+    //             new RegionPart("-side"){{
+    //                 progress = PartProgress.warmup;
+    //                 heatProgress = PartProgress.warmup;
+    //                 // heatColor = ACol.sulphur;
+    //                 moveRot = -18f;
+    //                 under = true;
+    //                 // moveX = 0f;
+    //                 moveY = -2f;
+    //                 mirror = true;
+    //             }}
+    //             );
+    //         }};
+
+    //     }};
+
+    //     sandstorm = new ItemTurret("sandstorm"){{
+    //         requirements(Category.turret, with(Items.silicon, 50, Items.lead, 50));
+    //         ammo(
+    //             Items.sand, new BasicBulletType(){{
+    //                 damage = 60;
+    //                 speed = 8.5f;
+    //                 width = height = 8;
+    //                 shrinkY = 0.3f;
+    //                 backSprite = "large-bomb-back";
+    //                 sprite = "mine-bullet";
+    //                 velocityRnd = 0.11f;
+    //                 collidesGround = false;
+    //                 collidesTiles = false;
+    //                 shootEffect = Fx.shootSmall;
+    //                 smokeEffect = Fx.shootSmallSmoke;
+    //                 frontColor = Color.white;
+    //                 backColor = trailColor = hitColor = TCol.sand;
+    //                 trailChance = 0.44f;
+    //                 ammoMultiplier = 6f;
+
+    //                 lifetime = 30f;
+    //                 rotationOffset = 90f;
+    //                 trailRotation = true;
+    //                 trailEffect = AourusEffects.sandstorm_trail;
+
+    //                 hitEffect = despawnEffect = Fx.hitBulletColor;
+    //             }}
+    //         );
+
+    //         drawer = new DrawTurret("reinforced-"){{
+    //             for(int i = 3; i > 0; i--){
+    //                 int f = i;
+    //                 parts.add(new RegionPart("-barrel-" + i){{
+    //                     progress = PartProgress.recoil;
+    //                     recoilIndex = f - 1;
+    //                     under = true;
+    //                     moveY = -2f;
+    //                 }});
+    //             }
+    //         }};
+
+    //         reload = 5f;
+    //         // shootY = 15f;
+    //         rotateSpeed = 5f;
+    //         shootCone = 30f;
+    //         consumeAmmoOnce = true;
+
+    //         range = 250;
+
+    //         size = 3;
+    //         targetGround = false;
+
+    //         recoils = 3;
+    //         shoot = new ShootBarrel(){{
+    //             barrels = new float[]{
+    //             0f, 1f, 0f,
+    //             3f, 0f, 0f,
+    //             -3f, 0f, 0f,
+    //             };
+    //         }};
+
+    //         ammoPerShot = 3;
+    //         itemCapacity = ammoPerShot * 10;
+
+    //         recoil = 0.5f;
+    //         rotateSpeed = 5f;
+    //         inaccuracy = 18f;
+    //         shootCone = 35f;
+
+    //         scaledHealth = 200;
+    //         shootSound = Sounds.shootSnap;
+    //         coolant = consumeCoolant(0.2f);
+            
+    //         researchCostMultiplier = 5/30f; // 1/30 build price
+    //     }};
+
+    //     bolt_shotgun = new PowerTurret("bolt-shotgun"){{
+    //         drawer = new DrawTurret("reinforced-");
+    //         size = 3;
+    //         health = 1200;
+    //         reload = 60f;
+    //         range = 250f;
+
+    //         heatColor = Color.valueOf("ffa500");
+
+    //         shootCone = 120f;
+    //         inaccuracy = 12f;
+    //         recoil = 2f;
+
+    //         targetAir = true;
+    //         targetGround = false;
+
+    //         rotateSpeed = 1f;
+
+    //         shootSound = Sounds.shotgun;
+
+    //         ammoPerShot = 3;
+
+    //         shoot = new ShootPattern(){{
+    //             shots = 3;
+    //             shotDelay = 2.5f;
+    //         }};
+
+    //         shootEffect = Fx.shootSmall;
+
+    //         consumePower(90 / 60f);
+
+    //         coolant = consumeCoolant(10f);
+    //         coolantMultiplier = 0.02f;
+
+    //         shootType = AourusWeapons.bolts;
+
+    //         researchCostMultiplier = 20/30f; // 1/30 build price
+
+    //         requirements(Category.turret, with(AourusItems.glass, 20, Items.silicon, 80));
+    //     }};
+
+    //     water_turret = new LiquidTurret("water-turret"){{
+    //         drawer = new DrawTurret("reinforced-");
+    //         ammo(
+    //             Liquids.water, new LiquidBulletType(Liquids.water){{
+    //                 lifetime = 35f;
+    //                 speed = 4f;
+    //                 knockback = 0.3f;
+    //                 puddleSize = 8f;
+    //                 orbSize = 4f;
+    //                 drag = 0.001f;
+    //                 ammoMultiplier = 0.4f;
+    //                 statusDuration = 60f * 4f;
+    //                 damage = 5f;
+    //                 layer = Layer.bullet - 2f;
+    //             }}
+    //         );
+    //         size = 2;
+    //         reload = 3f;
+    //         shoot.shots = 2;
+    //         velocityRnd = 0.1f;
+    //         inaccuracy = 4f;
+    //         recoil = 1f;
+    //         shootCone = 45f;
+    //         liquidCapacity = 20f;
+    //         shootEffect = Fx.shootLiquid;
+    //         range = 150f;
+    //         health = 100;
+    //         flags = EnumSet.of(BlockFlag.turret, BlockFlag.extinguisher);
+
+    //         // researchCost = ItemStack.with(Items.lead, 50, AourusItems.meltium, 50);
+    //         researchCostMultiplier = 0.5f/30f; // 1/30 build price
+
+    //         requirements(Category.turret, with(Items.lead, 100, AourusItems.meltium, 50));
+    //     }};
+        
+    //     alphus = new ItemTurret("alphus"){{
+    //         drawer = new DrawTurret("reinforced-");
+    //         size = 3;
+    //         reload = 30f;
+    //         range = 200f;
+            
+    //         shootCone = 10f;
+    //         inaccuracy = 5f;
+    //         recoil = 1.5f;
+
+    //         ammoPerShot = 3;
+
+    //         itemCapacity = ammoPerShot * 6;
+
+    //         ammo(
+    //             AourusItems.sulphur, AourusWeapons.sulphur_missile
+    //         );
+
+    //         shootEffect = Fx.shootSmall;
+
+    //         health = 250;
+
+    //         coolant = consumeCoolant(10f);
+    //         coolantMultiplier = 0.1f;
+
+    //         // researchCost = ItemStack.with(AourusItems.meltium, 100, Items.silicon, 100);
+    //         researchCostMultiplier = 6/30f; // 1/30 build price
+
+    //         requirements(Category.turret, with(AourusItems.meltium, 100, Items.silicon, 80));
+    //     }};
+        
+    //     coiler = new ContinuousLiquidTurret("coiler"){{
+    //         drawer = new DrawTurret("reinforced-");
+    //         requirements(Category.turret, with(Items.silicon, 200, AourusItems.glass, 50));
+
+    //         liquidCapacity = 30f;
+    //         liquidConsumed = 20f / 60f;
+    //         targetInterval = 5f;
+            
+    //         targetUnderBlocks = false;
+
+    //         range = 100f;
+
+    //         loopSound = Sounds.torch;
+    //         shootSound = Sounds.none;
+    //         loopSoundVolume = 1f;
+
+    //         consumePower(30f / 60f);
+
+    //         ammo(
+    //             Liquids.hydrogen, AourusWeapons.hydrogen_beam
+    //         );
+
+    //         health = 500;
+    //         shootY = 7f;
+    //         size = 3;
+
+    //         researchCostMultiplier = 4/30f; // 1/30 build price
+    //     }};
+
+    //     backstabber = new ItemTurret("backstabber"){{
+    //         size = 4;
+    //         health = 1200;
+    //         reload = 100f;
+
+    //         range = 250f;
+
+    //         shootCone = 10f;
+    //         inaccuracy = 6f;
+    //         recoil = 2f;
+
+    //         targetAir = true;
+    //         targetGround = true;
+
+    //         rotateSpeed = 1f;
+
+    //         ammoPerShot = 2;
+
+    //         consumePower(90 / 60f);
+
+    //         coolant = consumeCoolant(30f / 60);
+    //         coolantMultiplier = 0.02f;
+
+    //         researchCostMultiplier = 90/30f; // 1/30 build price
+
+    //         requirements(Category.turret, with(AourusItems.glass, 60, Items.silicon, 200, AourusItems.electric_alloy, 60));
+
+    //         ammo(
+    //             AourusItems.electric_alloy, new BasicBulletType(){{
+    //                 shootEffect = new MultiEffect(Fx.shootTitan, new WaveEffect(){{
+    //                     colorTo = Pal.surge;
+    //                     sizeTo = 26f;
+    //                     lifetime = 14f;
+    //                     strokeFrom = 4f;
+    //                 }});
+    //                 // smokeEffect = Fx.shootSmokeTitan;
+    //                 hitColor = Pal.surge;
+
+    //                 sprite = "large-orb";
+    //                 trailEffect = Fx.missileTrail;
+    //                 trailInterval = 6f;
+    //                 trailParam = 5f;
+    //                 pierceCap = 3;
+    //                 buildingDamageMultiplier = 0.25f;
+    //                 fragOnHit = false;
+    //                 speed = 4f;
+    //                 damage = 100f;
+    //                 lifetime = 40f;
+    //                 width = height = 18f;
+    //                 backColor = Pal.surge;
+    //                 frontColor = Color.white;
+    //                 shrinkX = shrinkY = 1;
+    //                 trailColor = Pal.surge;
+    //                 trailLength = 20;
+    //                 trailWidth = 3f;
+
+    //                 despawnSound = Sounds.dullExplosion;
+
+    //                 shootSound = Sounds.cannon;
+
+    //                 intervalBullet = new BasicBulletType(3f, 30){{
+    //                     width = 9f;
+    //                     hitSize = 5f;
+    //                     height = 15f;
+    //                     pierceCap = 3;
+    //                     lifetime = 20f;
+    //                     pierceBuilding = true;
+    //                     hitColor = backColor = trailColor = Pal.surge;
+    //                     frontColor = Color.white;
+    //                     trailWidth = 2.1f;
+    //                     trailLength = 5;
+
+    //                     buildingDamageMultiplier = 0.25f;
+    //                     homingPower = 0.2f;
+
+    //                     fragBullet  = new LightningBulletType()
+    //                     {{
+    //                         lightningColor = hitColor = TCol.electricity;
+    //                         damage = 10f;
+    //                         lightningLength = 8;
+    //                         lightningLengthRand = 1;
+    //                         shootEffect = Fx.none;
+    //                         despawnEffect = AourusEffects.hit_electric;
+    //                         pierceArmor = true;
+    //                     }};
+
+    //                     fragBullets = 1;
+    //                 }};
+
+    //                 bulletInterval = 2.5f;
+    //                 intervalRandomSpread = 4f;
+    //                 intervalBullets = 4;
+    //                 intervalAngle = 180f;
+    //                 intervalSpread = 120f;
+    //             }}
+    //         );
+
+
+    //         drawer = new DrawTurret("reinforced-"){{
+    //             parts.add(new RegionPart("-riffle"){{
+    //                 progress = PartProgress.recoil;
+    //                 heatColor = Color.valueOf("ff6214");
+    //                 // mirror = true;
+    //                 under = false;
+    //                 moveX = 0;
+    //                 moveY = -3f;
+    //                 // moveRot = -7f;
+    //             }});
+    //         }};
+    //     }};
+
+    //     // HEAT
+
+    //     slag_heater = new HeatProducer("slag-heater"){{
+    //         requirements(Category.crafting, with(Items.silicon, 50, AourusItems.meltium, 80));
+
+    //         researchCostMultiplier = 5/60f;
+
+    //         drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawLiquidTile(Liquids.slag), new DrawDefault(), new DrawHeatOutput());
+    //         size = 2;
+    //         itemCapacity = 0;
+    //         liquidCapacity = 20f;
+    //         rotateDraw = false;
+    //         regionRotated1 = 1;
+    //         ambientSound = Sounds.hum;
+    //         consumeLiquid(Liquids.slag, 8f / 60f);
+    //         heatOutput = 3f;
+    //     }};
+
+    //     // slag_heater = new Generice
+
+    //     // POWER
+
+    //     sulphur_fluid_generator = new ConsumeGenerator("sulphur-fluid-generator") {{
+    //         size = 3;
+    //         health = 300;
+    //         itemCapacity = 10;
+
+    //         // itemDuration = 60f;
+    //         powerProduction = 900 / 60f;
+
+    //         explodeOnFull = true;
+
+    //         liquidCapacity = 120f/ 60;
+
+    //         hasLiquids = true;
+
+    //         drawer = new DrawMulti(
+    //             new DrawRegion("-bottom"), 
+    //             new DrawLiquidTile(AourusItems.sulphur_fluid),
+    //             new DrawParticles(){{
+    //                 color = TCol.sulphur_light;
+    //                 alpha = 0.7f;
+    //                 particleSize = 10f;
+    //                 particles = 20;
+    //                 particleRad = 10f;
+    //                 particleLife = 250f;
+    //                 reverse = true;
+    //                 particleSizeInterp = Interp.pow2In;
+    //             }},
+    //             new DrawDefault());
+
+    //         explosionRadius = 9;
+    //         explosionDamage = 500;
+    //         explodeEffect = new MultiEffect(Fx.bigShockwave, new WrapEffect(Fx.titanSmoke, AourusItems.sulphur_fluid.color), AourusEffects.sulphurSplat);
+    //         explodeSound = Sounds.largeExplosion;
+
+    //         explosionPuddles = 50;
+    //         explosionPuddleRange = 8 * 7f;
+    //         explosionPuddleLiquid = AourusItems.sulphur_fluid;
+    //         explosionPuddleAmount = 200f;
+    //         explosionMinWarmup = 0.5f;
+
+    //         ambientSound = Sounds.hum;
+    //         ambientSoundVolume = 0.24f;
+    //         size = 3;
+    //         // health = 700;
+    //         // itemDuration = 360f;
+
+    //         researchCostMultiplier = 20/30f; // 1/30 build price
+
+    //         outputLiquid = new LiquidStack(AourusItems.sulphur_fluid, 20f / 60f);
+
+    //         consumeItems(with(AourusItems.sulphur, 3));
+    //         consumeLiquid(Liquids.hydrogen, 10f / 60f);
+
+
+    //         consumeLiquid(Liquids.water, 30f / 60f);
+
+    //         requirements(Category.power, ItemStack.with(AourusItems.glass, 100, Items.silicon, 200));
+    //     }};
+
+    //     sulphur_burner = new ThermalGenerator("sulphur-burner"){{
+
+    //         attribute = Attribute.get("sulphur");
+    //         size = 3;
+    //         health = 160;
+    //         // itemCapacity = 10;
+
+    //         powerProduction = 60f / 60f;
+
+    //         ambientSound = Sounds.smelter;
+    //         ambientSoundVolume = 0.6f;
+
+    //         drawer = new DrawMulti(new DrawDefault(), new DrawArcSmelt(), new DrawRegion("-top"));
+
+    //         // researchCost = ItemStack.with(Items.lead, 10, AourusItems.meltium, 10);
+    //         researchCostMultiplier = 0.2f/30f; // 1/30 build price
+
+    //         requirements(Category.power, ItemStack.with(Items.lead, 50, AourusItems.meltium, 30));
+    //     }};
+    
+    //     electrical_beam_node = new BeamNode("electrical-beam-node"){{
+    //         requirements(Category.power, with(AourusItems.meltium, 8));
+    //         consumesPower = outputsPower = true;
+    //         health = 50;
+    //         range = 10;
+    //         fogRadius = 1;
+    //         researchCost = with(AourusItems.meltium, 10);
+    //         buildCostMultiplier = 1f;
+
+    //         researchCostMultiplier = 1/30f; // 1/30 build price
+
+    //         laserColor1 = Color.valueOf("ff6000");
+    //         laserColor2 = Color.valueOf("a93f00");
+
+    //         consumePowerBuffered(1000f);
+    //     }};
+        
+    //     // CRAFTERS
+
+    //     hydrogenator = new GenericCrafter("hydrogenator") {{
+    //         size = 3;
+    //         health = 160;
+    //         itemCapacity = 10;
+
+    //         craftTime = 10f;
+
+    //         group = BlockGroup.liquids;
+
+    //         craftTime = 60f;
+
+    //         consumeLiquid(Liquids.water, 30f / 60f);
+    //         consumePower(60 / 60f);
+
+    //         drawer = new DrawMulti(
+    //             new DrawRegion("-bottom"), 
+    //             new DrawLiquidTile(Liquids.water, 2f),
+    //             new DrawLiquidBubbles(Color.valueOf("7693e3")){{
+    //                 sides = 10;
+    //                 recurrence = 3f;
+    //                 spread = 6;
+    //                 radius = 1.5f;
+    //                 amount = 20;
+    //             }},
+    //             new DrawDefault()
+    //         );
+
+    //         // outputItem = new ItemStack(Liquids.hydrogen, 4);
+
+    //         // craftEffect = Fx.smeltsmoke;
+
+    //         hasPower = true;
+    //         hasLiquids = true;
+
+    //         ambientSound = Sounds.electricHum;
+    //         ambientSoundVolume = 0.08f;
+
+    //         outputLiquids = LiquidStack.with(Liquids.hydrogen, 10f / 60);
+
+    //         researchCostMultiplier = 4/30f; // 1/30 build price
+
+    //         requirements(Category.crafting, with(Items.silicon, 50, AourusItems.meltium, 100, AourusItems.glass, 50));
+    //     }};
+
+    //     thermogen_infuser = new HeatCrafter("thermogen-infuser") {{
+    //         size = 3;
+    //         health = 160;
+    //         itemCapacity = 10;
+
+    //         craftTime = 10f;
+
+    //         group = BlockGroup.liquids;
+
+    //         craftTime = 100f;
+
+    //         heatRequirement = 6;
+    //         maxEfficiency = 2.5F;
+
+    //         consumeLiquid(Liquids.hydrogen, 20f / 60f);
+    //         consumePower(600 / 60f);
+
+    //         drawer = new DrawMulti(
+    //             new DrawRegion("-bottom"), 
+    //             new DrawLiquidTile(Liquids.hydrogen),
+    //             new DrawGlowRegion(),
+    //             new DrawDefault(),
+    //             new DrawHeatInput()
+    //         );
+
+    //         // outputItem = new ItemStack(Liquids.hydrogen, 4);
+
+    //         // craftEffect = Fx.smeltsmoke;
+
+    //         hasPower = true;
+    //         hasLiquids = true;
+
+    //         ambientSound = Sounds.techloop;
+    //         ambientSoundVolume = 0.08f;
+
+    //         outputLiquids = LiquidStack.with(AourusItems.thermogen, 1f / 60);
+
+    //         researchCostMultiplier = 4/30f; // 1/30 build price
+
+    //         requirements(Category.crafting, with(Items.silicon, 50, AourusItems.meltium, 100, AourusItems.glass, 50));
+    //     }};
+
+    //     electricicator = new HeatCrafter("electricicator") {{
+    //         size = 3;
+    //         health = 150;
+    //         itemCapacity = 10;
+
+    //         craftTime = 90f;
+            
+
+    //         outputItem = new ItemStack(AourusItems.electric_alloy, 1);
+
+    //         hasPower = true;
+    //         // hasLiquids = true;
+
+    //         ambientSound = Sounds.smelter;
+    //         ambientSoundVolume = 0.12f;
+
+    //         heatRequirement = 6;
+    //         maxEfficiency = 3;
+
+
+    //         // consumeLiquid(Liquids.slag, 5f / 60f);
+    //         consumeItems(with(Items.silicon, 2, AourusItems.meltium, 3));
+    //         consumePower(90 / 60f);
+
+    //         drawer = new DrawMulti(new DrawRegion("-bottom"), 
+    //         new DrawArcSmelt(),
+    //         new DrawDefault());
+
+    //         // researchCost = ItemStack.with(Items.lead, 300, AourusItems.meltium, 300);
+    //         researchCostMultiplier = 7/30f; // 1/30 build price
+
+    //         requirements(Category.crafting, ItemStack.with(Items.silicon, 600, AourusItems.meltium, 200));
+    //     }};
+
+    //     scrap_melter = new EfficiencyCrafter("scrap-melter")
+    //     {{
+    //         size = 1;
+    //         health = 350;
+    //         itemCapacity = 10;
+
+    //         craftEffect = Fx.incinerateSlag;
+    //         craftTime = 25f;
+    //         // effectChance = 0.03f;
+
+    //         hasLiquids = true;
+    //         liquidCapacity = 10f/ 60;
+
+    //         consumePower(45 / 60f);
+    //         consume(new ConsumeItemMeltable());
+
+    //         outputLiquids = LiquidStack.with(Liquids.slag, 10f/60);
+    //         drawer = new DrawMulti(
+    //             new DrawDefault(),
+    //             new DrawLiquidTile(Liquids.slag),
+    //             new DrawRegion("-top")
+    //         );
+
+    //         researchCostMultiplier = 7/30f; // 1/30 build price
+
+    //         requirements(Category.crafting, ItemStack.with(Items.silicon, 200, AourusItems.meltium, 100));
+    //     }};
+
+    //     silicon_smelter = new GenericCrafter("silicon-smelter") {{
+    //         size = 3;
+    //         health = 150;
+    //         itemCapacity = 10;
+
+    //         craftTime = 60f;
+            
+
+    //         outputItem = new ItemStack(Items.silicon, 3);
+
+    //         craftEffect = Fx.smeltsmoke;
+
+    //         hasPower = true;
+    //         hasLiquids = true;
+
+    //         ambientSound = Sounds.smelter;
+    //         ambientSoundVolume = 0.12f;
+
+
+    //         consumeLiquid(Liquids.water, 30f / 60f);
+    //         consumeItems(with(AourusItems.sulphur, 2, AourusItems.meltium, 2));
+    //         consumePower(90 / 60f);
+
+            
+    //         // inputLiquid = new LiquidStack(Liquids.water, 0.5f);
+
+    //         var flame = new DrawCrucibleFlame();
+    //         flame.flameRad = 4f;
+    //         flame.particleRad = 12f;
+    //         flame.particleSize = 4f;
+    //         flame.particles = 50;
+
+    //         craftEffect = Fx.smeltsmoke;
+    //         drawer = new DrawMulti(new DrawRegion("-bottom"), flame, new DrawDefault());
+
+    //         // researchCost = ItemStack.with(Items.lead, 300, AourusItems.meltium, 300);
+    //         researchCostMultiplier = 2/30f; // 1/30 build price
+
+    //         requirements(Category.crafting, ItemStack.with(Items.lead, 150, AourusItems.meltium, 100));
+    //     }};
+        
+    //     glass_furnace = new GenericCrafter("glass-furnace") {{
+    //         size = 3;
+    //         health = 200;
+    //         itemCapacity = 10;
+
+    //         craftTime = 90f;
+
+    //         outputItem = new ItemStack(AourusItems.glass, 1);
+
+    //         craftEffect = Fx.smeltsmoke;
+
+    //         hasPower = true;
+    //         hasLiquids = true;
+
+    //         ambientSound = Sounds.smelter;
+    //         ambientSoundVolume = 0.12f;
+
+    //         consumeLiquid(Liquids.water, 60f / 60f);
+    //         consumeItems(with(AourusItems.sulphur, 3, Items.sand, 3));
+    //         consumePower(90 / 60f);
+
+    //         craftEffect = Fx.smeltsmoke;
+    //         drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawGlowRegion("-glow"), new DrawLiquidTile(), new DrawDefault());
+
+    //         // researchCost = ItemStack.with(Items.lead, 1000, AourusItems.meltium, 1000, Items.silicon, 300);
+    //         researchCostMultiplier = 4/30f; // 1/30 build price
+
+    //         requirements(Category.crafting, ItemStack.with(Items.lead, 200, AourusItems.meltium, 200, Items.silicon, 100));
+    //     }};
+
+    //     // UNITS
+
+    //     electrical_unit_factory = new UnitFactory("electrical-unit-factory"){{
+    //         size = 3;
+    //         health = 300;
+    //         itemCapacity = 1000;
+    //         buildCostMultiplier = 2f;
+
+    //         // regionSuffix = "-dark";
+
+    //         plans = Seq.with(
+    //             new UnitPlan(TUnits.shrine, 60f * 25, ItemStack.with(Items.silicon, 30, AourusItems.electric_alloy, 10)),
+    //             new UnitPlan(TUnits.millenium, 60f * 30, ItemStack.with(Items.silicon, 80, AourusItems.electric_alloy, 30))
+    //         );
+
+    //         // researchCost = ItemStack.with(Items.silicon, 100, AourusItems.meltium, 500);
+    //         researchCostMultiplier = 15/30f; // 1/30 build price
+
+    //         consumePower(60 / 60f);
+    //         consumeLiquid(Liquids.slag, 15 / 60f);
+
+    //         requirements(Category.units, ItemStack.with(Items.silicon, 300, AourusItems.electric_alloy, 100, AourusItems.glass, 100));
+    //     }};
+
+    //     sulphur_unit_factory = new UnitFactory("sulphur-unit-factory"){{
+    //         size = 3;
+    //         health = 300;
+    //         itemCapacity = 1000;
+    //         buildCostMultiplier = 2f;
+
+    //         regionSuffix = "-dark";
+
+    //         plans = Seq.with(
+    //             new UnitPlan(TUnits.boomer, 60f * 5, ItemStack.with(Items.silicon, 10, AourusItems.sulphur, 30)),
+    //             new UnitPlan(TUnits.sulphury, 60f * 10, ItemStack.with(Items.silicon, 50, AourusItems.sulphur, 50))
+    //         );
+
+    //         researchCost = ItemStack.with(Items.silicon, 100, AourusItems.meltium, 500);
+    //         // researchCostMultiplier = 5/30f; // 1/30 build price
+
+    //         consumePower(60 / 60f);
+
+    //         requirements(Category.units, ItemStack.with(AourusItems.meltium, 100, Items.silicon, 100));
+    //     }};
+
+    //     missile_fabricator = new UnitFactory("missile-fabricator"){{
+    //         size = 3;
+    //         health = 300;
+    //         itemCapacity = 1000;
+    //         buildCostMultiplier = 2f;
+
+    //         regionSuffix = "-dark";
+
+    //         plans = Seq.with(
+    //             new UnitPlan(AourusMisc.sulphur_missile, 60f * 10, ItemStack.with(Items.silicon, 60, AourusItems.sulphur, 60))
+    //         );
+
+    //         // researchCost = ItemStack.with(Items.silicon, 100, AourusItems.meltium, 500);
+    //         researchCostMultiplier = 90/30f; // 1/30 build price
+
+    //         consumePower(60 / 60f);
+
+    //         requirements(Category.units, ItemStack.with(AourusItems.meltium, 100, Items.silicon, 100));
+    //     }};
+        
+    //     // TRANSPORT
+
+    //     glass_tank = new LiquidRouter("glass-tank"){{
+    //         requirements(Category.liquid, with(AourusItems.glass, 10));
+    //         liquidCapacity = 1000f;
+    //         size = 2;
+    //         liquidPadding = 6f/4f;
+    //         researchCostMultiplier = 4;
+    //         solid = true;
+    //         health = 400;
+
+    //         researchCostMultiplier = 5/30f; // 1/30 build price
+    //     }};
+
+    //     glass_conduit = new ArmoredConduit("glass-conduit"){{
+    //         requirements(Category.liquid, ItemStack.with(AourusItems.glass, 1));
+    //         botColor = Pal.darkestMetal;
+    //         leaks = true;
+    //         liquidCapacity = 50f;
+    //         liquidPressure = 1.03f;
+    //         health = 50;
+    //         researchCostMultiplier = 3;
+    //         underBullets = true;
+    //         // explosivenessScale = flammabilityScale = 20f/50f;
+
+    //         researchCostMultiplier = 10/30f; // 1/30 build price
+    //         // researchCost = ItemStack.with(AourusItems.glass, 10);
+    //     }};
+
+    //     // glass_conduit_junction = new LiquidJunction("glass-conduit-junction"){{
+    //     //     requirements(Category.liquid, ItemStack.with(AourusItems.glass, 5, Items.lead, 10));
+    //     //     buildCostMultiplier = 3f;
+    //     //     health = 250;
+    //     //     ((Conduit)glass_conduit).junctionReplacement = this;
+    //     //     researchCostMultiplier = 1;
+    //     //     solid = false;
+    //     //     underBullets = true;
+    //     // }};
+
+    //     glass_conduit_bridge = new DirectionLiquidBridge("glass-bridge-conduit"){{
+    //         requirements(Category.liquid, ItemStack.with(AourusItems.glass, 2, AourusItems.meltium, 10));
+    //         range = 4;
+    //         hasPower = false;
+    //         liquidCapacity = 120f;
+    //         researchCostMultiplier = 1;
+    //         underBullets = true;
+    //         health = 50;
+
+    //         ((Conduit)glass_conduit).rotBridgeReplacement = this;
+
+    //         researchCostMultiplier = 25/30f; // 1/30 build price
+    //     }};
+
+    //     glass_conduit_router = new LiquidRouter("glass-conduit-router"){{
+    //         requirements(Category.liquid, ItemStack.with(AourusItems.meltium, 10, AourusItems.glass, 2));
+    //         liquidCapacity = 150f;
+    //         liquidPadding = 3f/4f;
+    //         researchCostMultiplier = 3;
+    //         underBullets = true;
+    //         solid = false;
+    //         health = 50;
+
+    //         researchCostMultiplier = 25/30f; // 1/30 build price
+    //     }};
+    
+    //     lead_duct = new Duct("lead-duct"){{
+    //         requirements(Category.distribution, ItemStack.with(Items.lead, 1));
+    //         health = 50;
+    //         speed = 4f;
+    //         researchCostMultiplier = 5/30f; // 1/30 build price
+    //     }};
+
+    //     lead_duct_router = new DuctRouter("lead-duct-router"){{
+    //         health = 50;
+    //         speed = 4f;
+    //         regionRotated1 = 1;
+    //         solid = false;
+    //         researchCostMultiplier = 3/30f; // 1/30 build price
+
+    //         requirements(Category.distribution, ItemStack.with(Items.lead, 10));
+    //     }};
+
+    //     lead_duct_bridge = new DuctBridge("lead-duct-bridge"){{
+    //         health = 50;
+    //         speed = 4f;
+    //         buildCostMultiplier = 0.5f;
+    //         researchCostMultiplier = 5/30f; // 1/30 build price
+
+    //         ((Duct)lead_duct).bridgeReplacement = this;
+
+    //         requirements(Category.distribution, ItemStack.with(Items.lead, 20, AourusItems.meltium, 10));
+    //     }};
+        
+    //     glass_sorter = new Sorter("glass-sorter"){{
+    //         requirements(Category.distribution, ItemStack.with(AourusItems.glass, 5, AourusItems.meltium, 10));
+    //         health = 50;
+    //         researchCost = ItemStack.with(AourusItems.glass, 50, AourusItems.meltium, 1000);
+    //     }};
+
+    //     glass_cargo_loader = new UnitCargoLoader("glass-cargo-loader"){{
+    //         requirements(Category.distribution, ItemStack.with(AourusItems.glass, 50, Items.silicon, 100));
+    //         health = 500;
+    //         itemCapacity = 200;
+    //         size = 2;
+    //         unitType = TUnits.cargo;
+    //         // researchCost = ItemStack.with(AourusItems.glass, 500, Items.silicon, 1000);
+    //         researchCostMultiplier = 10/30f; // 1/30 build price
+
+    //         polyStroke = 1.5f;
+    //         polySides = 5;
+    //         polyRotateSpeed = 2f;
+    //         polyColor = Liquids.hydrogen.color;
+    //         polyRadius = 5.5f;
+
+    //         consumePower(180f / 60f);
+    //         consumeLiquid(Liquids.hydrogen, 10f / 60);
+
+    //     }};
+
+    //     glass_cargo_unloader = new UnitCargoUnloadPoint("glass-cargo-unloader"){{
+    //         requirements(Category.distribution, ItemStack.with(AourusItems.glass, 50, Items.silicon, 100));
+    //         size = 2;
+    //         itemCapacity = 200;
+    //         health = 500;
+    //         // researchCost = ItemStack.with(AourusItems.glass, 500, Items.silicon, 1000);
+    //         researchCostMultiplier = 10/30f; // 1/30 build price
+
+    //         consumePower(60f / 60f);
+    //     }};
+
+    //     // CORE
+
+    //     core_expansion = new CoreExpansion("core-expansion"){{
+    //         requirements(Category.effect, with(Items.silicon, 300, AourusItems.glass, 100));
+    //         size = 3;
+    //         coreMerge = true;
+    //         itemCapacity = 500;
+    //         scaledHealth = 55;
+    //     }};
+
+    //     torch = new LightBlock("torch") {{
+    //         size = 1;
+    //         health = 250;
+    //         configurable = false;
+    //         brightness = 0.6f;
+    //         radius = 80f;
+    //         fogRadius = 6;
+    //         consumePower(30f/60);
+    //         researchCostMultiplier = 1/30f; // 1/30 build price
+
+    //         requirements(Category.effect, ItemStack.with(Items.lead, 10, AourusItems.meltium, 10));
+    //     }};
+
+    //     glass_core = new CoreBlock("glass-core") {{
+    //         size = 3;
+    //         health = 2000;
+    //         itemCapacity = 1000;
+
+            
+
+    //         isFirstTier = true;
+    //         incinerateNonBuildable = true;
+
+    //         alwaysUnlocked = true;
+            
+    //         unitType = TUnits.aqarus;
+
+
+    //         requirements(Category.effect, ItemStack.with(Items.lead, 800, AourusItems.meltium, 800));
+    //     }};
+
+    //     magnet_core = new CoreBlock("magnet-core") {{
+    //         size = 4;
+    //         health = 4500;
+    //         itemCapacity = 2500;
+
+    //         // isFirstTier = true;
+    //         incinerateNonBuildable = true;
+
+    //         // alwaysUnlocked = true;
+
+    //         unitType = TUnits.aquarion;
+
+    //         requirements(Category.effect, ItemStack.with(AourusItems.magnetium, 1000, Items.silicon, 1000, AourusItems.glass, 200));
+    //     }};
+        
+    //     /////////////////
+    //     // ENVIRONMENT //
+    //     /////////////////
+
+
+    //     // Magnetium
+
+    //     ore_magnetium = new OreBlock("ore-magnetium") {{
+    //         variants = 3;
+
+    //         itemDrop = AourusItems.magnetium;
+
+    //         emitLight = true;
+    //         lightColor = Color.valueOf("9d9fd5").a(0.40f);
+
+    //         wallOre = true;
+    //     }};
+
+
+    //     magnetium_wall = new StaticWall("magnetium-wall");
+
+    //     magnetium_floor = new Floor("magnetium-floor") {{
+    //         variants = 3;
+    //         wall = magnetium_wall;
+    //     }};
+
+    //     dense_magnetium_floor = new Floor("dense-magnetium-floor") {{
+    //         variants = 4;
+    //         wall = magnetium_wall;
+    //     }};
+
+    //     magnetium_tree = new TreeBlock("magnetium-tree"){{
+    //         emitLight = true;
+    //         lightColor = Color.valueOf("8896c3").a(0.35f);
+    //     }};
+
+    //     magnetium_cluster_tree = new TreeBlock("magnetium-cluster-tree"){{
+    //         emitLight = true;
+    //         lightColor = Color.valueOf("8896c3").a(0.35f);
+    //     }};
+
+    //     magnetium_vent = new SteamVent("magnetium-vent"){{
+    //         parent = blendGroup = AourusBlocks.dense_magnetium_floor;
+    //         effect = AourusEffects.ultra_vent_steam;
+    //         effectColor = Color.valueOf("273358");
+    //         attributes.set(Attribute.steam, 1f);
+    //     }};
+
+    //     // Sulphur
+
+    //     uranium_ore = new OreBlock("uranium-ore") {{
+    //         variants = 3;
+
+    //         itemDrop = AourusItems.sulphur;
+
+    //         emitLight = true;
+    //         lightColor = Color.valueOf("35ca61").a(0.10f);
+    //     }};
+
+    //     sulphur_floor = new Floor("sulphur-floor") {{
+    //         playerUnmineable = true;
+    //         variants = 3;
+
+    //         wall = Blocks.arkyicWall;
+
+    //         attributes.set(Attribute.get("sulphur"), 1 / 9f);
+
+    //         emitLight = true;
+    //         lightColor = Color.valueOf("d2ff7f").a(0.38f);
+    //     }};
+
+    //     sulphur_wall = new StaticWall("sulphur-wall") {{
+    //         playerUnmineable = true;
+    //         attributes.set(Attribute.get("sulphur"), .5f);
+    //         variants = 3;
+    //     }};
+    
+    //     sulphur_fluid_floor = new Floor("sulphur-fluid-floor") {{
+    //         drownTime = 160f;
+    //         status = AourusStatuses.sulphured;
+    //         statusDuration = 120f;
+    //         speedMultiplier = 0.19f;
+    //         variants = 0;
+    //         liquidDrop = AourusItems.sulphur_fluid;
+    //         isLiquid = true;
+    //         cacheLayer = CacheLayer.water;
+    //         attributes.set(Attribute.get("sulphur"), 2 / 9f);
+
+    //         wall = Blocks.arkyicWall;
+
+    //         emitLight = true;
+    //         lightRadius = 40f;
+    //         lightColor = Color.valueOf("d2ff7f").a(0.38f);
+    //     }};
+
+    //     // Others
+
+    //     carbon_sand = new Floor("carbon-sand") {{
+    //         variants = 3;
+    //         wall = Blocks.carbonWall;
+
+    //         attributes.set(Attribute.get("sand"), 1);
+    //         itemDrop = Items.sand;
+    //         playerUnmineable = true;
+    //     }};
+
+    //     meltium_ore = new OreBlock("meltium-ore") {{
+    //         variants = 3;
+
+    //         itemDrop = AourusItems.meltium;
+    //     }};
+
+    //     salt_vent = new SteamVent("salt-vent"){{
+    //         parent = blendGroup = Blocks.salt;
+    //         attributes.set(Attribute.steam, 1f);
+    //     }};
+    // }
+
+
+
+
+    // sulphur_front_spark = new Effect(12f, e -> {
+    //     color(Color.white, TCol.sulphur_light, e.fin());
+    //     stroke(e.fout() * 1.2f + 0.5f);
+
+    //     randLenVectors(e.id, 7, 25f * e.finpow(), e.rotation, 50f, (x, y) -> {
+    //         lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), e.fin() * 5f + 2f);
+    //     });
+    // }),
+
+    // fireExplosion = new Effect(35, e -> {
+
+    //     // BLAST EXPLOSION
+    //     color(Pal.missileYellow);
+
+    //     e.scaled(6, i -> {
+    //         stroke(3f * i.fout());
+    //         Lines.circle(e.x, e.y, 3f + i.fin() * 15f);
+    //     });
+
+    //     color(Color.gray);
+
+    //     randLenVectors(e.id, 5, 2f + 23f * e.finpow(), (x, y) -> {
+    //         Fill.circle(e.x + x, e.y + y, e.fout() * 4f + 0.5f);
+    //     });
+
+    //     color(Pal.missileYellowBack);
+    //     stroke(e.fout());
+
+    //     randLenVectors(e.id + 1, 4, 1f + 23f * e.finpow(), (x, y) -> {
+    //         lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f);
+    //     });
+
+    //     Drawf.light(e.x, e.y, 45f, Pal.missileYellowBack, 0.8f * e.fout());
+
+    //     // FIRE
+
+    //     color(Pal.lightFlame, Pal.darkFlame, e.fin());
+
+    //     randLenVectors(e.id, 5, 2f + e.fin() * 20f, (x, y) -> {
+    //         Fill.circle(e.x + x, e.y + y, 0.2f + e.fout() * 3f);
+    //     });
+
+    //     color();
+    // }),
+
+    // sulphured = new Effect(120f, e -> {
+    //     color(TCol.sulphur);
+    //     alpha(Mathf.clamp(e.fin() * 2f));
+
+    //     Fill.circle(e.x, e.y, e.fout() * 2f);
+    // }),
+
+//     sandstorm_trail = new Effect(10.0F, (e) -> {
+//         // disperse
+//         Draw.color(TCol.sand, e.color, e.fin());
+//         Lines.stroke(0.5F + e.fout() * 1.3F);
+//         rand.setSeed((long)e.id);
+
+//         for(int i = 0; i < 2; ++i) {
+//             float rot = e.rotation + rand.range(15.0F) + 180.0F;
+//             v.trns(rot, rand.random(e.fin() * 27.0F));
+//             Lines.lineAngle(e.x + v.x, e.y + v.y, rot, e.fout() * rand.random(2.0F, 7.0F) + 1.5F);
+//         }
+
+//         // missile trail smoke
+//         Color c = Color.grays(0.6f).lerp(TCol.sand, 0.5f).a(0.1f);
+//         float intensity = 1F;
+//         Draw.color(c, 0.3F);
+
+//         for(int i = 0; i < 3; ++i) {
+//             final int fi = i;
+//             rand.setSeed((long)(e.id * 2 + fi));
+//             float lenScl = rand.random(0.3F, 0.7F);
+//             e.scaled(e.lifetime * lenScl, (e2) -> {
+//                 Angles.randLenVectors((long)(e2.id + fi - 1), e2.fin(Interp.pow10Out), (int)(2.9F * intensity), 13.0F * intensity, (x, y, in, out) -> {
+//                 float fout = e2.fout(Interp.pow5Out) * rand.random(0.5F, 1.0F);
+//                 float rad = fout * (2.0F + intensity) * 2.35F;
+//                 Fill.circle(e2.x + x, e2.y + y, rad);
+// //                 Drawf.light(e2.x + x, e2.y + y, rad * 2.5F, c, 0.5F);
+// //                 });
+// //             });
+// //         }
+// //    }),
+
+//     hit_electric = new Effect(40.0F, (e) -> {
+//         Draw.color(TCol.electricity);
+//         Lines.stroke(e.fout() * 1.6F);
+//         Angles.randLenVectors((long)e.id, 18, e.finpow() * 12.0F, e.rotation, 360.0F, (x, y) -> {
+//             float ang = Mathf.angle(x, y);
+//             Lines.lineAngle(e.x + x, e.y + y, ang, e.fout() * 3.0F + 1.0F);
+//         });
+//     }),
+
+//     // sulphurSplat = new Effect(400f, 300f, b -> {
+//     //     float intensity = 3f;
+
+//     //     color(AourusItems.sulphur_fluid.color);
+//     //     for(int i = 0; i < 4; i++){
+//     //         rand.setSeed(b.id*2 + i);
+//     //         float lenScl = rand.random(0.5f, 1f);
+//     //         int fi = i;
+//     //         b.scaled(b.lifetime * lenScl, e -> {
+//     //             randLenVectors(e.id + fi - 1, e.fin(Interp.pow10Out), (int)(5f * intensity), 22f * intensity, (x, y, in, out) -> {
+//     //                 float fout = e.fout(Interp.pow5Out) * rand.random(0.5f, 1f);
+//     //                 float rad = fout * ((2f + intensity) * 1.35f);
+
+//     //                 Fill.circle(e.x + x, e.y + y, rad);
+//     //                 Drawf.light(e.x + x, e.y + y, rad * 2.5f, b.color, 0.5f);
+//     //             });
+//     //         });
+//     //     }
+//     // }).layer(Layer.bullet - 2f),
+
+//     impact_wave = new Effect(60f, e -> {
+//         color(e.color);
+
+//         stroke(e.fout() * 1.5f);
+
+//         randLenVectors(e.id, 24, 8f + e.finpow() * e.rotation, (x, y) -> {
+//             lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), e.fout() * 6 + 1f);
+//         });
+
+//         e.scaled(30f, b -> {
+//             Lines.stroke(5f * b.fout());
+//             Lines.circle(e.x, e.y, b.finpow() * 40f);
+//         });
+//     }),
+
+
+    // // massive_missile_explosion = new Effect(30, e -> {
+    // //     color(TCol.sulphur_light);
+
+    // //     // massive explosion
+    // //     e.scaled(7, i -> {
+    // //         stroke(3f * i.fout());
+    // //         Lines.circle(e.x, e.y, 4f + i.fin() * 30f);
+    // //     });
+
+    // //     color(Color.gray);
+
+    // //     randLenVectors(e.id, 8, 2f + 30f * e.finpow(), (x, y) -> {
+    // //         Fill.circle(e.x + x, e.y + y, e.fout() * 4f + 0.5f);
+    // //     });
+
+    // //     color(TCol.sulphur);
+    // //     stroke(e.fout());
+
+    // //     randLenVectors(e.id + 1, 6, 1f + 29f * e.finpow(), (x, y) -> {
+    // //         lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 4f);
+    // //     });
+
+    // //     Drawf.light(e.x, e.y, 50f, TCol.sulphur, 0.8f * e.fout());
+
+    // //     // scathe explosion
+    // //     color(TCol.sulphur_light);
+    // //     stroke(e.fout() * 5f);
+    // //     float circleRad = 6f + e.finpow() * 60f;
+    // //     Lines.circle(e.x, e.y, circleRad);
+
+    // //     rand.setSeed(e.id);
+    // //     for(int i = 0; i < 16; i++){
+    // //         float angle = rand.random(360f);
+    // //         float lenRand = rand.random(0.5f, 1f);
+    // //         Tmp.v1.trns(angle, circleRad);
+
+    // //         for(int s : Mathf.signs){
+    // //             Drawf.tri(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.foutpow() * 40f, e.fout() * 30f * lenRand + 6f, angle + 90f + s * 90f);
+    // //         }
+    // //     }
+
+    // //     // scathe light
+    // //     // float circleRad = 6f + e.finpow() * 60f;
+
+    // //     color(e.color, e.foutpow());
+    // //     Fill.circle(e.x, e.y, circleRad);
+    // // }),
+
+    // // massive_shoot = new Effect(8, e -> {
+    // //     color(TCol.sulphur_light, TCol.sulphur, e.fin());
+    // //     float w = 1.2f + 7 * e.fout();
+    // //     Drawf.tri(e.x, e.y, w, 25f * e.fout(), e.rotation);
+    // //     Drawf.tri(e.x, e.y, w, 4f * e.fout(), e.rotation + 180f);
+    // // }),
+
+    // ultra_vent_steam = new Effect(140f, e -> {
+    //     color(e.color, Color.valueOf("657bbd"), e.fin());
+
+    //     alpha(e.fslope() * 0.78f);
+
+    //     float length = 3f + e.finpow() * 15f;
+    //     rand.setSeed(e.id);
+    //     for(int i = 0; i < rand.random(5, 6); i++){
+    //         v.trns(rand.random(360f), rand.random(length));
+    //         Fill.circle(e.x + v.x, e.y + v.y, rand.random(1f, 3f) + e.fslope() * 1.1f);
+    //     }
+    // }).layer(Layer.darkness - 1),
+
+    // small_impact_wave = new Effect(60f, e -> {
+    //     color(e.color);
+
+    //     stroke(e.fout() * 1f);
+
+    //     randLenVectors(e.id, 16, 8f + e.finpow() * e.rotation, (x, y) -> {
+    //         lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), e.fout() * 3 + 1f);
+    //     });
+
+    //     e.scaled(30f, b -> {
+    //         Lines.stroke(3f * b.fout());
+    //         Lines.circle(e.x, e.y, b.finpow() * 20f);
+    //     });
+    // })
+
+    // // shoot_megalton = new Effect(8, e -> {
+    // //     color(TCol.graphite_light, TCol.graphite_dark, e.fin());
+    // //     float w = 1f + 5 * e.fout();
+    // //     Drawf.tri(e.x, e.y, w, 15f * e.fout(), e.rotation);
+    // //     Drawf.tri(e.x, e.y, w, 3f * e.fout(), e.rotation + 180f);
+    // // })
+
+
+        // glass = new Item("glass", Color.valueOf("#fff9d8")) {{
+        //     cost = 2f;
+        // }};
+
+        // electric_alloy = new Item("electric-alloy", TCol.electricity) {{
+        //     cost = 2.5f;
+        // }};
+
+        // meltium = new Item("meltium", Color.valueOf("b240b8")) {{
+        //     cost = 0.8f;
+        //     hardness = 1;
+        // }};
+
+        // magnetium = new Item("magnetium", Color.valueOf("6b7595")) {{
+        //     cost = 2f;
+        //     hardness = 2;
+        // }};
+
+        // sulphur_fluid = new CellLiquid("sulphur-fluid", Color.valueOf("d7ffc6")) {{
+        //     flammability = 1f;
+        //     explosiveness = 0.75f;
+        //     temperature = 0.65f;
+        //     heatCapacity = 0f;
+        //     viscosity = 0.25f;
+        //     coolant = false;
+        //     moveThroughBlocks = true;
+        //     // particleEffect = Fx.bubble;
+        //     // effect = Fx.sulphurFluid;
+        //     // alwaysUnlocked = true;
+        // }};
+
+        // thermogen = new Liquid("thermogen", Color.valueOf("fbb58a")) {{
+        //     flammability = 2f;
+        //     explosiveness = 2f;
+        //     temperature = 1f;
+        //     heatCapacity = 0f;
+        //     lightColor = Color.valueOf("fbb58a").a(0.3f);
+
+        //     gas = true;
+        // }};
+
+
+// public static SectorPreset sector0, sturdy_hills, sulphur_lake, deep_forward, against, enclosed
+    // ;
+
+    // public static void load() {
+    //     sector0 = new SectorPreset("sector0", AourusPlanets.aourus, 0) {{
+    //         alwaysUnlocked = true;
+    //         addStartingItems = false;
+    //         captureWave = 10;
+    //         difficulty = 1;
+    //         noLighting = true;
+
+    //         rules = rule -> {
+    //             rule.teams.get(rule.waveTeam).rtsAi = false;
+    //         };
+    //     }};
+        
+    //     against = new SectorPreset("against", AourusPlanets.aourus, 1) {{
+    //         alwaysUnlocked = false;
+    //         difficulty = 2;
+    //         overrideLaunchDefaults = true;
+    //         noLighting = true;
+
+    //         rules = AourusPlanets.aourus.ruleSetter;
+            
+    //         rules = rule -> {
+    //             rule.attackMode = true;
+    //             rule.teams.get(rule.waveTeam).rtsAi = true;
+    //         };
+    //     }};
+
+    //     enclosed = new SectorPreset("enclosed", AourusPlanets.aourus, 2) {{
+    //         alwaysUnlocked = false;
+    //         difficulty = 3;
+    //         overrideLaunchDefaults = true;
+    //         noLighting = true;
+
+    //         rules = AourusPlanets.aourus.ruleSetter;
+            
+    //         rules = rule -> {
+    //             // rule.attackMode = true;
+    //             rule.fog = false;
+    //             rule.staticFog = false;
+    //             // rule.teams.get(rule.waveTeam).rtsAi = true;
+    //         };
+    //     }};
+
+        // deep_forward = new SectorPreset("deep-forward", AourusPlanets.aourus, 65) {{
+        //     alwaysUnlocked = false;
+        //     // addStartingItems = false;
+        //     // captureWave = 10;
+        //     difficulty = 2;
+        //     overrideLaunchDefaults = true;
+        //     noLighting = true;
+        //     // startWaveTimeMultiplier = 3f;
+
+        //     // rules = rule -> {
+        //     //     rule.loadout = Seq.with(ItemStack.with(Items.graphite, 100, Items.lead, 100));
+        //     //     rule.waves = false;
+        //     //     rule.attackMode = true;
+
+        //     //     // rule.waitEnemies = true;
+        //     //     // rule.initialWaveSpacing = 0;
+        //     //     // rule.winWave = 15;
+        //     // };
+        // }};
+
+        // sturdy_hills = new SectorPreset("sturdy-hills", AourusPlanets.aourus, 15) {{
+        //     alwaysUnlocked = false;
+        //     // addStartingItems = false;
+        //     // captureWave = 10;
+        //     difficulty = 2;
+        //     overrideLaunchDefaults = true;
+        //     noLighting = true;
+        //     // startWaveTimeMultiplier = 3f;
+
+        //     // rules = rule -> {
+        //     //     rule.loadout = Seq.with(ItemStack.with(Items.graphite, 100, Items.lead, 100));
+        //     //     // rule.waveSpacing = 30f * 60;
+        //     //     rule.waitEnemies = true;
+        //     //     rule.attackMode = false;
+        //     //     // rule.initialWaveSpacing = 0;
+        //     //     rule.winWave = 15;
+        //     // };
+        // }};
+
+        // sulphur_lake = new SectorPreset("sulphur-lake", AourusPlanets.aourus, 67) {{
+        //     alwaysUnlocked = false;
+        //     // addStartingItems = false;
+        //     // captureWave = 10;
+        //     difficulty = 3;
+        //     overrideLaunchDefaults = true;
+        //     noLighting = true;
+        //     // startWaveTimeMultiplier = 3f;
+
+        //     // rules = rule -> {
+        //     //     rule.loadout = Seq.with(ItemStack.with(Items.graphite, 100, Items.silicon, 100, Items.lead, 100));
+        //     //     // rule.waveSpacing = 30f * 60;
+        //     //     rule.waitEnemies = true;
+        //     //     // rule.initialWaveSpacing = 0;
+        //     //     rule.winWave = 20;
+        //     // };
+        // }};
+
+
+//sulphured = new StatusEffect("sulphured") {{
+        //     color = applyColor = TCol.sulphur;
+        //     damage = 5 / 60f;
+        //     effect = AourusEffects.sulphured;
+        //     transitionDamage = 30f;
+
+        //     outline = true;
+
+        //     alwaysUnlocked = true;
+
+        //     init(() -> {
+        //         opposite(StatusEffects.wet);
+        //         affinity(StatusEffects.burning, (unit, result, time) -> {
+        //             unit.damagePierce(transitionDamage);
+        //             Fx.burning.at(unit.x + Mathf.range(unit.bounds() / 2f), unit.y + Mathf.range(unit.bounds() / 2f));
+        //             result.set(StatusEffects.burning, Math.min(time + result.time, 300f));
+        //         });
+        //     });
+        // }};
+
+
+//AourusPlanets.aourus.techTree = nodeRoot("aourus", AourusBlocks.glass_core, true, () -> {
+
+        //     node (AourusMisc.sulphur_missile, () -> {
+
+        //     });
+
+        //     node (AourusBlocks.magnet_core, () -> {
+                
+        //     });
+
+        //     node(AourusBlocks.water_extractor, Seq.with(new Research(AourusBlocks.lead_duct)), () -> {
+        //         node(AourusBlocks.glass_conduit, () -> {
+        //             node(AourusBlocks.glass_conduit_bridge, () -> {
+                        
+        //             });
+        //             node(AourusBlocks.glass_conduit_router, () -> {
+                            
+        //             });
+        //             node (AourusBlocks.hydrogenator, () -> {
+                        
+        //             });
+        //         });
+        //     });
+
+        //     node (AourusBlocks.sulphur_burner, () -> {
+        //         node (AourusBlocks.torch, Seq.with(new Research(AourusBlocks.electrical_beam_node)), () -> {
+                    
+        //         });
+        //         node (AourusBlocks.electrical_beam_node, Seq.with(new Research(AourusBlocks.burst_drill)), () -> {
+                    
+        //         });
+
+        //         node (AourusBlocks.sulphur_fluid_generator, () -> {
+                        
+        //         });
+        //     });
+
+        //     node(AourusBlocks.burst_drill, Seq.with(new Research(AourusBlocks.sulphur_burner)), () -> {
+        //         node(AourusBlocks.sulphur_extractor, Seq.with(new OnSector(AourusSectors.against)), () -> {
+                
+        //         });
+        //     });
+
+        //     node(AourusBlocks.water_turret, Seq.with(new Research(AourusBlocks.water_extractor)), () -> {
+        //         node(AourusBlocks.alphus, () -> {
+        //             node(AourusBlocks.coiler, () -> {
+
+        //             });
+        //         });
+        //         node(AourusBlocks.silicon_wall, () -> {
+        //             node(AourusBlocks.large_silicon_wall, () -> {
+                        
+        //             });
+        //         });
+        //     });
+
+        //     node(AourusBlocks.lead_duct, Seq.with(new Research(AourusBlocks.torch)), () -> {
+        //         node(AourusBlocks.lead_duct_bridge, () -> {
+                        
+        //         });
+        //         node(AourusBlocks.lead_duct_router, () -> {
+                            
+        //         });
+        //     });
+
+        //     node(AourusBlocks.silicon_smelter, () -> {
+        //         node(AourusBlocks.glass_furnace, () -> { // , Seq.with(new SectorComplete(AourusSectors.sturdy_hills))
+        //         });
+        //     });
+
+        //     nodeProduce (Items.lead, () -> {
+        //         nodeProduce (AourusItems.sulphur, () -> {
+        //             nodeProduce (Items.silicon, () -> {
+        //                 nodeProduce (Liquids.slag, () -> {
+                        
+        //                 });
+        //             });
+        //         });
+        //         nodeProduce (Items.sand, () -> {
+        //             nodeProduce (AourusItems.glass, () -> {
+                        
+        //             });
+        //         });
+        //         nodeProduce (Items.graphite, () -> {
+                    
+        //         });
+        //         nodeProduce (Liquids.water, () -> {
+        //             nodeProduce (Liquids.hydrogen, () -> {
+                        
+        //             });
+        //         });
+        //     });
+
+        //     node(TUnits.aqarus, () -> {
+        //         node(AourusBlocks.sulphur_unit_factory, () -> {
+        //             node(TUnits.boomer, () -> {
+        //                 node(TUnits.tyrant, () -> {
+                            
+        //                 });
+        //             });
+        //             node(TUnits.shrine, () -> { // , Seq.with(new SectorComplete(AourusSectors.deep_forward))
+        //                 node(TUnits.flex, () -> {
+                            
+        //                 });
+        //             });
+        //             node(TUnits.sulphury, () -> { // , Seq.with(new SectorComplete(AourusSectors.deep_forward))
+        //                 node(TUnits.maltorion, () -> {
+
+        //                 });
+        //             });
+        //             node(TUnits.tantaros, () -> {
+                            
+        //             });
+        //         });
+        //     });
+
+        //     node(AourusStatuses.sulphured, () -> {
+                
+        //     });
+
+        //     node (AourusSectors.sector0, () -> {
+        //         // node (AourusSectors.deep_forward, () -> {
+
+        //         // });
+        //         // node (AourusSectors.sturdy_hills, () -> {
+
+        //         // });
+        //         node (AourusSectors.against, () -> {
+        //             node (AourusSectors.enclosed, () -> {
+
+        //             });
+        //         });
+        //     });
+        // });
+
+
+        // gatherdix = new UnitType("gatherdix") {{
+        //     controller = u -> new MinerAI();
+        //     constructor = UnitEntity::create;
+        //     mineItems = Seq.with(Items.copper, Items.lead);
+        //     health = 200;
+        //     isEnemy = false;
+        //     envDisabled = 0;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     itemCapacity = 30;
+
+        //     speed = 4f;
+        //     rotateSpeed = 5f;
+		// 	accel = 0.05f;
+
+        //     mineWalls = false;
+        //     mineFloor = true;
+
+        //     hitSize = 5f;
+
+        //     alwaysUnlocked = true;
+
+        //     drag = 0.035f;
+        //     armor = 1;
+
+        //     lowAltitude = true;
+        //     flying = true;
+
+        //     fogRadius = 2f;
+
+        //     mineTier = 1;
+        //     mineSpeed = 4f;
+
+        //     buildSpeed = 0;
+
+        //     coreUnitDock = true;
+
+        //     lightRadius = 150f;
+
+        // }};
+
+        // sporin = new UnitType("sporin"){{
+        //     constructor = CrawlUnit::create;
+        //     useUnitCap = false;
+
+        //     // controller = u -> new SteamHugAI();
+        //     health = 20;
+
+        //     omniMovement = false;
+        //     targetAir = false;
+
+        //     drawBody = true;
+        // }};
+
+// aqarus = new UnitType("aqarus") {{
+        //     controller = u -> new BuilderAI(false, 500f);
+        //     health = 100;
+        //     isEnemy = false;
+        //     envDisabled = 0;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     itemCapacity = 20;
+
+        //     speed = 4f;
+        //     rotateSpeed = 3f;
+		// 	accel = 0.05f;
+
+        //     mineWalls = false;
+        //     mineFloor = true;
+
+        //     hitSize = 5f;
+
+        //     alwaysUnlocked = true;
+
+        //     drag = 0.035f;
+        //     // hitSize = 8f;
+        //     armor = 0.5f;
+
+        //     lowAltitude = true;
+        //     flying = true;
+
+        //     fogRadius = 0f;
+        //     targetable = false;
+        //     hittable = false;
+        //     targetPriority = -2;
+
+        //     payloadCapacity = 2 * 2 * tilesize * tilesize;
+        //     pickupUnits = false;
+        //     vulnerableWithPayloads = true;
+
+		// 	// engineColor = Color.valueOf("#4eabda");
+
+        //     mineTier = 1;
+        //     mineSpeed = 6f;
+
+        //     buildSpeed = 1f;
+
+        //     coreUnitDock = true;
+
+        //     lightRadius = 150f;
+
+        //     constructor = PayloadUnit::create;
+
+        //     weapons.add(new Weapon() {{
+        //         reload = 1f;
+        //         x = 0f;
+        //         y = 0f;
+
+        //         top = false;
+
+        //         autoTarget = false;
+
+        //         noAttack = true;
+                
+        //         shootSound = Sounds.none;
+
+        //         rotate = false;
+        //         // flags = EnumSet.of(BlockFlag.turret, BlockFlag.extinguisher);
+
+        //         shootCone = 5f;
+        //         inaccuracy = 5f;
+
+        //         bullet = new LiquidBulletType()
+        //         {{
+        //             lifetime = 25f;
+        //             speed = 4f;
+        //             knockback = 0;
+        //             puddleSize = 8f;
+        //             orbSize = 2f;
+        //             drag = 0.001f;
+        //             ammoMultiplier = 0.4f;
+        //             statusDuration = 60f;
+        //             damage = 0;
+        //             layer = Layer.bullet - 2f;
+        //             liquid = Liquids.water;
+        //         }};
+        //     }});
+        // }};
+
+        // gatherdix = new UnitType("gatherdix") {{
+        //     controller = u -> new MinerAI();
+        //     mineItems = Seq.with(AourusItems.meltium, Items.lead);
+        //     health = 200;
+        //     isEnemy = false;
+        //     envDisabled = 0;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     itemCapacity = 30;
+
+        //     speed = 4f;
+        //     rotateSpeed = 5f;
+		// 	accel = 0.05f;
+
+        //     mineWalls = false;
+        //     mineFloor = true;
+
+        //     hitSize = 5f;
+
+        //     alwaysUnlocked = true;
+
+        //     drag = 0.035f;
+        //     // hitSize = 8f;
+        //     armor = 1;
+
+        //     lowAltitude = true;
+        //     flying = true;
+
+        //     fogRadius = 2f;
+
+        //     // payloadCapacity = 2 * 2 * tilesize * tilesize;
+        //     // pickupUnits = true;
+        //     // vulnerableWithPayloads = true;
+
+		// 	// engineColor = Color.valueOf("#4eabda");
+
+        //     mineTier = 1;
+        //     mineSpeed = 4f;
+
+        //     buildSpeed = 0;
+
+        //     coreUnitDock = true;
+
+        //     lightRadius = 150f;
+
+        //     constructor = UnitEntity::create;
+        // }};
+
+        // aquarion = new UnitType("aquarion") {{
+        //     controller = u -> new BuilderAI(true, 500f);
+        //     health = 800;
+        //     isEnemy = false;
+        //     envDisabled = 0;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     itemCapacity = 60;
+
+        //     speed = 4f;
+        //     rotateSpeed = 2f;
+		// 	accel = 0.1f;
+
+        //     hitSize = 8f;
+
+        //     drag = 0.035f;
+        //     armor = 3;
+
+        //     lowAltitude = true;
+        //     flying = true;
+
+        //     mineTier = 1;
+        //     mineSpeed = 8f;
+
+        //     buildSpeed = 1.5f;
+
+        //     coreUnitDock = true;
+
+        //     lightRadius = 175f;
+
+        //     constructor = UnitEntity::create;
+
+        //     weapons.add(new Weapon("aourus-aquarion-riffle") {{
+        //         reload = 20f;
+        //         x = 0f;
+        //         y = 0f;
+
+        //         engineOffset = 7f;
+
+        //         recoil = 0.5f;
+
+        //         mirror = false;
+
+        //         top = false;
+                
+        //         shootSound = Sounds.none;
+
+        //         rotate = false;
+
+        //         shootCone = 5f;
+        //         inaccuracy = 5f;
+
+        //         shoot = new ShootPattern() {{
+        //             shots = 20;
+        //             shotDelay = 0.5f;
+        //         }};
+
+        //         bullet = new LiquidBulletType() {{
+        //             lifetime = 35f;
+        //             speed = 4f;
+        //             knockback = 0.3f;
+        //             puddleSize = 10f;
+        //             orbSize = 2f;
+        //             drag = 0.002f;
+        //             ammoMultiplier = 1f;
+        //             statusDuration = 60f * 5f;
+        //             damage = 5f;
+        //             layer = Layer.bullet - 2f;
+        //             liquid = Liquids.water;
+
+        //             buildingDamageMultiplier = 0;
+        //         }};
+        //     }});
+        // }};
+
+        // millenium = new UnitType("millenium") {{
+        //     outlineColor = Pal.darkOutline;
+        //     constructor = CrawlUnit::create;
+        //     aiController = HugAI::new;
+        //     drawBody = false;
+        //     omniMovement = false;
+        //     rotateSpeed = 1.7f;
+        //     crushDamage = 0.6f;
+        //     health = 800;
+        //     armor = 3;
+        //     hitSize = 9f;
+        //     segments = 6;
+        //     segmentScl = 3f;
+        //     segmentPhase = 1f;
+        //     segmentMag = 0.3f*segments;
+        //     speed = 0.8f;
+
+        //     healColor = Pal.accent;
+
+        //     abilities.add(new ShieldArcAbility(){{
+        //         region = "aourus-none";
+        //         // drawArc = false;
+        //         radius = 8f;
+        //         angle = 140f;
+        //         regen = 0.3f;
+        //         cooldown = 60f * 15f;
+        //         max = 1000f;
+        //         width = 7f;
+        //         whenShooting = false;
+        //     }});
+
+        //     weapons.add(new Weapon() {{
+        //         shootSound = Sounds.none;
+        //         shootY = 0f;
+        //         reload = 40f;
+        //         shootCone = 40f;
+        //         shootSound = Sounds.bolt;
+        //         // ejectEffect = Fx.none;
+
+        //         shoot = new ShootPattern() {{
+        //             shots = 3;
+        //             shotDelay = 5f;
+        //         }};
+
+        //         x = 3f;
+        //         mirror = true;
+
+        //         bullet = new LightningBulletType()
+        //         {{
+        //             lightningColor = hitColor = TCol.electricity;
+        //             damage = 10f;
+        //             lightningLength = 12;
+        //             lightningLengthRand = 3;
+        //             shootEffect = Fx.lightning;
+        //         }};
+        //     }});
+        // }};
+
+        // boomer = new UnitType("boomer") {{
+
+        //     aiController = SuicideAI::new;
+
+        //     outlineColor = Pal.darkOutline;
+
+
+        //     constructor = TankUnit::create;
+
+        //     squareShape = true;
+        //     omniMovement = false;
+        //     rotateMoveFirst = true;
+        //     rotateSpeed = 1.3f;
+        //     speed = 0.8f;
+        //     outlineColor = Pal.darkOutline;
+           
+        //     hitSize = 10f;
+        //     treadPullOffset = 3;
+        //     speed = 0.75f;
+        //     rotateSpeed = 3.5f;
+        //     health = 200;
+        //     armor = 2f;
+        //     itemCapacity = 0;
+        //     treadRects = new Rect[]{new Rect(12 - 32f, 7 - 32f, 14, 51)};
+
+        //     ammoType = new ItemAmmoType(AourusItems.sulphur);
+
+        //     cachedRequirements = ItemStack.with(Items.silicon, 100);
+
+        //     // researchRequirements(ItemStack.with(Items.silicon, 100));
+
+        //     weapons.add(new Weapon(){{
+        //         shootOnDeath = true;
+        //         reload = 24f;
+        //         shootCone = 180f;
+        //         ejectEffect = Fx.none;
+                
+        //         shootSound = Sounds.flame;
+        //         x = shootY = 0f;
+        //         mirror = false;
+        //         bullet = new BulletType(){{
+        //             hitEffect = new MultiEffect(AourusEffects.small_impact_wave.wrap(TCol.sulphur_light, 40f));
+        //             hitSound = Sounds.explosion;
+        //             collidesTiles = false;
+        //             collides = false;
+        //             hitSound = Sounds.explosion;
+        //             status = StatusEffects.burning;
+        //             statusDuration = 60f * 4;
+
+        //             rangeOverride = 35f;
+        //             speed = 0f;
+        //             splashDamageRadius = 64f;
+        //             instantDisappear = true;
+        //             splashDamage = 80f;
+        //             killShooter = true;
+        //             hittable = false;
+        //             collidesAir = true;
+        //         }};
+        //     }});
+        // }};
+
+        // tyrant = new UnitType("tyrant") {{
+        //     constructor = TankUnit::create;
+        //     aiController = HugAI::new;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     alwaysShootWhenMoving = true;
+
+        //     health = 1000;
+        //     armor = 10f;
+
+        //     squareShape = true;
+        //     omniMovement = false;
+        //     rotateMoveFirst = true;
+        //     rotateSpeed = 1.3f;
+        //     speed = 0.8f;
+        //     outlineColor = Pal.darkOutline;
+
+        //     hitSize = 24f;
+        //     treadPullOffset = 3;
+        //     speed = 0.75f;
+        //     rotateSpeed = 3.5f;
+        //     itemCapacity = 0;
+        //     treadRects = new Rect[]{
+        //             new Rect(
+        //                     13 - 45,
+        //                     3 - 47f,
+        //                     14,
+        //                     24
+        //             ),
+        //             new Rect(
+        //                     13 - 45,
+        //                     67 - 47f,
+        //                     14,
+        //                     24
+        //             )
+        //     };
+
+        //     ammoType = new ItemAmmoType(AourusItems.sulphur);
+
+            
+        //     weapons.add(new Weapon(){{
+
+        //         // minShootVelocity = 0.2f;
+                
+        //         // shootOnDeath = true;
+        //         reload = 40f;
+        //         shootCone = 180f;
+        //         ejectEffect = Fx.none;
+
+        //         ignoreRotation = true;
+        //         top = false;
+
+        //         shootSound = Sounds.none;
+        //         x = shootY = 0f;
+        //         mirror = false;
+        //         bullet = new BulletType(){{
+        //             collidesTiles = false;
+        //             collides = false;
+        //             hitSound = Sounds.explosionbig;
+
+        //             buildingDamageMultiplier = 1.5f;
+        //             shake = 1f;
+
+        //             rangeOverride = 50f;
+        //             hitEffect = new MultiEffect(AourusEffects.impact_wave.wrap(TCol.sulphur_light, 40f));
+        //             speed = 0f;
+        //             splashDamageRadius = 50f;
+        //             instantDisappear = true;
+        //             splashDamage = 60f;
+        //             // killShooter = true;
+        //             hittable = false;
+        //             collidesAir = true;
+
+        //             statusDuration = 60 * 4f; // sulphured
+        //             status = AourusStatuses.sulphured; 
+        //         }};
+        //     }});
+        // }};
+
+        // sulphury = new UnitType("sulphury") {{
+        //     constructor = LegsUnit::create;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     health = 350;
+        //     speed = 0.72f;
+        //     drag = 0.11f;
+        //     armor = 2f;
+        //     hitSize = 10f;
+
+        //     legStraightness = 0.3f;
+        //     stepShake = 0f;
+
+        //     legCount = 4;
+        //     legLength = 8f;
+        //     lockLegBase = true;
+        //     legContinuousMove = true;
+        //     legExtension = -2f;
+        //     legBaseOffset = 3f;
+        //     legMaxLength = 1.1f;
+        //     legMinLength = 0.2f;
+        //     legLengthScl = 0.96f;
+        //     legForwardScl = 1.1f;
+        //     legGroupSize = 2;
+        //     rippleScale = 0.2f;
+
+        //     legMoveSpace = 1f;
+        //     allowLegStep = true;
+        //     hovering = true;
+        //     legPhysicsLayer = false;
+
+        //     shadowElevation = 0.1f;
+        //     groundLayer = Layer.legUnit - 1f;
+
+        //     ammoType = new ItemAmmoType(AourusItems.sulphur);
+
+        //     weapons.add(new Weapon("aourus-sulphury-flamethrower"){{
+        //         top = false;
+        //         shootSound = Sounds.flame;
+        //         shootY = 2f;
+        //         reload = 11f;
+        //         recoil = 1f;
+        //         ejectEffect = Fx.none;
+
+        //         y = 0;
+        //         x = 3f;
+
+        //         bullet = new BulletType(4.2f, 20f){{
+        //             ammoMultiplier = 3f;
+        //             hitSize = 7f;
+        //             lifetime = 13f;
+        //             pierce = true;
+        //             pierceBuilding = true;
+        //             pierceCap = 2;
+        //             statusDuration = 60f * 4;
+        //             shootEffect = Fx.shootSmallFlame;
+        //             hitEffect = Fx.hitFlameSmall;
+        //             despawnEffect = Fx.none;
+        //             status = StatusEffects.burning;
+        //             keepVelocity = false;
+        //             hittable = false;
+        //             buildingDamageMultiplier = 1.75f;
+        //         }};
+        //     }});
+        // }};
+
+        // shrine = new UnitType("shrine") {{
+        //     constructor = UnitEntity::create;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     flying = true;
+        //     // lowAltitude = true;
+
+        //     health = 200;
+        //     speed = 2f;
+        //     drag = 0.02f;
+        //     accel = 0.05f;
+
+        //     targetAir = false;
+
+        //     range = 140f;
+        //     faceTarget = false;
+        //     autoFindTarget = true;
+        //     circleTarget = true;
+
+        //     armor = 1f;
+        //     hitSize = 10f;
+
+        //     ammoType = new ItemAmmoType(Items.graphite);
+
+        //     weapons.add(new Weapon(){{
+        //         minShootVelocity = 0.75f;
+        //         x = 0;
+        //         mirror = false;
+        //         shootY = 0f;
+        //         reload = 12f;
+        //         shootCone = 180f;
+        //         ejectEffect = Fx.none;
+        //         inaccuracy = 15f;
+        //         ignoreRotation = true;
+        //         top = false;
+        //         shootSound = Sounds.none;
+        //         bullet = new BombBulletType(27f, 25f){{
+        //             width = 8f;
+        //             height = 10f;
+        //             hitEffect = Fx.flakExplosion;
+        //             shootEffect = Fx.none;
+        //             smokeEffect = Fx.none;
+
+        //             status = StatusEffects.blasted;
+        //             statusDuration = 60f;
+        //             damage = splashDamage * 0.5f;
+        //         }};
+        //     }});
+        // }};
+
+        // flex = new UnitType("flex") {{
+        //     constructor = UnitEntity::create;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     flying = true;
+
+        //     lowAltitude = true;
+
+        //     // circleTarget = true;
+
+        //     health = 650;
+        //     speed = 3f;
+        //     drag = 0.03f;
+        //     accel = 0.05f;
+
+        //     armor = 4f;
+        //     hitSize = 30f;
+
+        //     ammoType = new ItemAmmoType(AourusItems.sulphur);
+
+        //     Weapon weapon = new Weapon("aourus-flex-turret"){{
+        //         mirror = false;
+        //         x = 0f;
+        //         y = 6f;
+
+        //         lowAltitude = true;
+
+        //         top = true;
+        //         shootSound = Sounds.missile;
+        //         shootY = 4f;
+        //         reload = 20f;
+        //         recoil = 5f;
+
+        //         rotate = true;
+
+        //         bullet = AourusWeapons.sulphur_missile;
+        //             bullet.damage = 30f;
+        //     }};
+
+        //     Weapon weapon_mirrored = new Weapon("aourus-flex-turret"){{
+        //         mirror = true;
+        //         x = 7f;
+        //         y = -3f;
+
+        //         lowAltitude = true;
+
+        //         top = true;
+                
+        //         shootSound = Sounds.missile;
+        //         shootY = 4f;
+        //         reload = 20f;
+        //         recoil = 5f;
+
+        //         rotate = true;
+
+        //         bullet = AourusWeapons.sulphur_missile;
+        //             bullet.damage = 30f;
+        //     }};
+
+        //     weapons.add(weapon, weapon_mirrored);
+        // }};
+    
+        // tantaros = new UnitType("tantaros") {{
+        //     trailLength = 35;
+		// 	waveTrailX = 9f;
+		// 	waveTrailY = -15f;
+		// 	trailScl = 2f;
+
+        //     outlineColor = Pal.darkOutline;
+
+		// 	constructor = UnitWaterMove::create;
+
+        //     targetAir = true;
+        //     targetGround = true;
+
+        //     faceTarget = false;
+            
+        //     naval = true;
+        //     flying = false;
+        //     isEnemy = false;
+        //     lowAltitude = true;
+
+        //     rotateSpeed = 1f;
+
+        //     health = 1500;
+        //     speed = 2f;
+        //     drag = 0.25f;
+        //     accel = 0.03f;
+
+        //     armor = 10f;
+        //     hitSize = 30f;
+
+        //     immunities.add(AourusStatuses.sulphured);
+
+        //     // payloadCapacity = (4 * 4) * tilePayload;
+
+        //     // ammoType = new Liq
+
+        //     weapons.add(new Weapon("aourus-flex-turret"){{
+        //         mirror = true;
+        //         x = 7f;
+        //         y = -3f;
+
+        //         lowAltitude = true;
+
+        //         top = true;
+                
+        //         shootSound = Sounds.missile;
+        //         shootY = 4f;
+        //         reload = 20f;
+        //         recoil = 5f;
+                
+        //         rotateSpeed = 2.5f;
+
+
+        //         // rotationLimit = 120f;
+
+        //         rotate = true;
+
+        //         bullet = AourusWeapons.sulphur_missile;
+        //         bullet.damage = 40f;
+        //     }});
+
+        //     weapons.add(new Weapon("aourus-tantaros-riffle"){{
+        //         mirror = false;
+
+        //         shootSound = Sounds.bolt;
+
+        //         x = 0f;
+        //         y = 4f;
+
+        //         top = true;
+        //         // shootSound = Sounds.none;
+        //         shootY = 4f;
+        //         reload = 30f;
+        //         recoil = 3f;
+
+        //         // rotationLimit = 90f;
+
+        //         recoilTime = 5f;
+
+        //         shootCone = 2f;
+
+        //         rotateSpeed = 1f;
+
+        //         rotate = true;
+
+        //         reload = 45f;
+
+        //         bullet = new ShrapnelBulletType(){{
+        //             lifetime = 20f;
+        //             length = 150f;
+        //             damage = 50f;
+        //             status = AourusStatuses.sulphured;
+        //             statusDuration = 60f;
+        //             fromColor = TCol.sulphur_light;
+        //             toColor = TCol.sulphur_light;
+        //             serrationSpaceOffset = 40f;
+        //             width = 6f;
+        //             shootEffect = AourusEffects.sulphur_front_spark;
+        //             smokeEffect = new MultiEffect(AourusEffects.sulphur_front_spark, new Effect(lifetime + 10f, b -> {
+        //                 Draw.color(fromColor, toColor, b.fin());
+        //                 Fill.circle(b.x, b.y, (width / 1.75f) * b.fout());
+        //             }));
+        //         }};
+        //     }});
+            
+        //     // weapons.add(AourusWeapons.tantaroser);
+        // }};
+        
+        // maltorion = new UnitType("maltorion") {{
+        //     constructor = LegsUnit::create;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     legCount = 6;
+        //     legLength = 18f;
+        //     legGroupSize = 3;
+        //     lockLegBase = true;
+        //     legContinuousMove = true;
+        //     legExtension = -3f;
+        //     legBaseOffset = 7f;
+        //     legMaxLength = 1.1f;
+        //     legMinLength = 0.2f;
+        //     legLengthScl = 0.95f;
+        //     legForwardScl = 0.9f;
+
+        //     legMoveSpace = 1f;
+        //     hovering = false;
+
+        //     flying = false;
+
+        //     health = 2000;
+        //     speed = 1.5f;
+        //     drag = 0.03f;
+        //     accel = 0.05f;
+
+        //     armor = 7f;
+        //     hitSize = 16f;
+
+        //     // weapons.add(AourusWeapons.shocking_turrets);
+        //     weapons.add(AourusWeapons.bolter);
+        //     weapons.add(AourusWeapons.shocking_turrets);
+        // }};
+    
+        // anihilator = new UnitType("anihilator") {{
+        //     constructor = UnitEntity::create;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     // range = 200f;
+
+        //     flying = true;
+        //     lowAltitude = true;
+
+        //     health = 5000;
+        //     armor = 6f;
+        //     speed = 1.5f;
+        //     drag = 0.04f;
+        //     accel = 0.03f;
+
+        //     hitSize = 30f;
+
+        //     weapons.add(new Weapon(){{
+
+        //         top = false;
+
+        //         mirror = false;
+
+        //         outlineRadius = 0;
+
+        //         parts.add(new RegionPart("aourus-anihilator-bomb-launcher-side"){{
+        //             under = false;
+
+        //             mirror = true;
+
+        //             moves.add(new PartMove(PartProgress.reload, 2f, 2f, 20f));
+
+        //             heatColor = Color.red;
+        //             cooldownTime = 60f;
+        //         }});
+        //         parts.add(new RegionPart("aourus-anihilator-bomb-launcher"){{
+        //             under = false;
+
+        //             mirror = false;
+
+        //             moves.add(new PartMove(PartProgress.reload, 0f, -5f, 0f));
+
+        //             heatColor = Color.red;
+        //             cooldownTime = 60f;
+        //         }});
+
+                
+
+        //         shootSound = Sounds.titanExplosion;
+        //         x = y = shootY = 0f;
+
+        //         reload = 750f;
+
+        //         recoil = 5f;
+                
+        //         bullet = new BulletType(){{
+
+        //             shootEffect = new MultiEffect(new Effect(9, e -> {
+        //                 color(Color.white, e.color, e.fin());
+        //                 stroke(0.7f + e.fout());
+        //                 Lines.square(e.x, e.y, e.fin() * 5f, e.rotation + 45f);
+
+        //                 Drawf.light(e.x, e.y, 23f, e.color, e.fout() * 0.7f);
+        //             }), new WaveEffect(){{
+        //                 colorFrom = colorTo = Pal.missileYellow;
+        //                 sizeTo = 15f;
+        //                 lifetime = 12f;
+        //                 strokeFrom = 3f;
+        //             }});
+
+        //             spawnUnit = new MissileUnitType("anihilator-bomb"){{
+        //                 trailColor = engineColor = Pal.redSpark;
+        //                 engineSize = 2.25f;
+        //                 engineLayer = Layer.effect;
+        //                 speed = 1.5f;
+        //                 maxRange = 6f;
+        //                 lifetime = 60f * 3f;
+        //                 // outlineColor = Pal.darkOutline;
+        //                 // killable = false;
+        //                 lowAltitude = true;
+        //                 targetable = false;
+        //                 hittable = false;
+        //                 top = false;
+        //                 outlineRadius = 0;
+
+        //                 // hitEffect = new MultiEffect(Fx.titanExplosion, Fx.titanSmoke);
+
+        //                 weapons.add(new Weapon(){{
+        //                     shootSound = Sounds.none;
+        //                     shootCone = 360f;
+        //                     mirror = false;
+        //                     reload = 1f;
+        //                     shootOnDeath = true;
+        //                     bullet = new ExplosionBulletType(200f, 25f){{
+        //                         shootEffect = new MultiEffect(
+        //                             new WrapEffect(Fx.titanExplosion, TCol.red, 24f),
+        //                             new WrapEffect(Fx.titanSmoke, TCol.red, 24f)
+        //                         );
+        //                         damage = 150f;
+        //                         range = 30f;
+        //                     }};
+        //                 }});
+        //             }};
+        //         }};
+        //     }});
+        
+        //     weapons.add(AourusWeapons.bomb_turret);
+        // }};
+    
+        // cargo = new UnitType("cargo") {{
+        //     constructor = BuildingTetherPayloadUnit::create;
+        //     controller = u -> new CargoAI();
+        //     isEnemy = false;
+        //     allowedInPayloads = false;
+        //     logicControllable = false;
+        //     playerControllable = false;
+        //     envDisabled = 0;
+        //     payloadCapacity = 0f;
+
+        //     outlineColor = Pal.darkOutline;
+
+        //     lowAltitude = false;
+        //     flying = true;
+        //     drag = 0.06f;
+        //     speed = 3.5f;
+        //     rotateSpeed = 9f;
+        //     accel = 0.1f;
+        //     itemCapacity = 100;
+        //     health = 200f;
+        //     hitSize = 9f;
+        //     // engineSize = 2.3f;
+        //     // engineOffset = 6.5f;
+        //     hidden = true;
+        //     engineSize = 0;
+
+        //     // setEnginesMirror(
+        //     // new UnitEngine(21 / 4f, 19 / 4f, 2.2f, 45f),
+        //     // new UnitEngine(23 / 4f, -22 / 4f, 2.2f, 315f)
+        //     // );
+        // }};
+
+
+// public static final BulletType 
+
+    // feltarion_missile = new BulletType(0f, 0f)
+    // {{
+    //     shootEffect = AourusEffects.massive_shoot;
+    //     smokeEffect = Fx.none;
+    //     hitColor = Pal.redLight;
+    //     ammoMultiplier = 1f;
+
+    //     spawnUnit = new MissileUnitType("feltarion-missile"){{
+    //         speed = 3.5f;
+    //         maxRange = 6f;
+    //         lifetime = 60f * 3f;
+    //         outlineColor = Pal.darkOutline;
+    //         engineColor = trailColor = TCol.sulphur_light;
+    //         engineLayer = Layer.effect;
+    //         engineSize = 3.1f;
+    //         engineOffset = 10f;
+    //         rotateSpeed = 0.25f;
+    //         trailLength = 18;
+    //         missileAccelTime = 50f;
+    //         lowAltitude = true;
+    //         loopSound = Sounds.missileTrail;
+    //         loopSoundVolume = 0.6f;
+    //         deathSound = Sounds.largeExplosion;
+    //         targetAir = false;
+            
+    //         // targetUnderBlocks = false;
+
+    //         fogRadius = 6f;
+
+    //         health = 160;
+
+    //         weapons.add(new Weapon(){{
+    //             shootCone = 360f;
+    //             mirror = false;
+    //             reload = 1f;
+    //             deathExplosionEffect = Fx.massiveExplosion;
+    //             shootOnDeath = true;
+    //             shake = 10f;
+    //             bullet = new ExplosionBulletType(1000f, 65f){{
+    //                 hitColor = Pal.redLight;
+    //                 shootEffect = AourusEffects.massive_missile_explosion;
+
+    //                 collidesAir = false;
+    //                 buildingDamageMultiplier = 0.1f;
+
+    //                 ammoMultiplier = 1f;
+    //             }};
+    //         }});
+
+    //         abilities.add(new MoveEffectAbility(){{
+    //             effect = Fx.missileTrailSmoke;
+    //             rotation = 180f;
+    //             y = -9f;
+    //             color = Color.grays(0.6f).lerp(TCol.sulphur_light, 0.5f).a(0.4f);
+    //             interval = 7f;
+    //         }});
+    //     }};
+    // }},
+
+    // bolts = new LightningBulletType()
+    // {{
+    //     layer = Layer.max;
+    //     lightningColor = hitColor = TCol.electricity;
+    //     damage = 40f;
+    //     lightningLength = 40;
+    //     lightningLengthRand = 8;
+    //     shootEffect = Fx.lightning;
+
+    //     fragBullets = 3;
+    //     fragBullet  = new LightningBulletType()
+    //     {{
+    //         lightningColor = hitColor = TCol.electricity;
+    //         damage = 30f;
+    //         lightningLength = 8;
+    //         lightningLengthRand = 1;
+    //         shootEffect = Fx.none;
+    //     }};
+    // }},
+
+    // cry_laser = new LaserBulletType(50f){{
+    //     colors = new Color[]{TCol.electricity.cpy().a(0.4f), TCol.electricity, Color.white};
+    //     // buildingDamageMultiplier = 0.25f;
+    //     layer = Layer.max;
+
+    //     width = 20f;
+    //     hitEffect = Fx.hitLancer;
+    //     sideAngle = 120f;
+    //     sideWidth = 2f;
+    //     sideLength = 20f;
+    //     lifetime = 30f;
+    //     drawSize = 400f;
+    //     length = 120f;
+    //     pierceCap = 2;
+
+    //     fragBullets = 2;
+    //     fragBullet  = new LightningBulletType()
+    //     {{
+    //         lightningColor = hitColor = TCol.electricity;
+    //         damage = 15f;
+    //         lightningLength = 6;
+    //         lightningLengthRand = 2;
+    //         shootEffect = Fx.lightning;
+    //     }};
+    // }},
+    
+    // sulphur_missile = new MissileBulletType(){{
+    //     damage = 40f;
+
+    //     speed = 3f;
+    //     homingPower = 0.1f;
+    //     homingDelay = 5f;
+
+    //     width = 12f;
+    //     height = 12f;
+
+    //     hitEffect = AourusEffects.fireExplosion;
+    //     despawnEffect = AourusEffects.fireExplosion;
+
+    //     shootEffect = Fx.shootSmall;
+
+    //     status = StatusEffects.burning;
+
+    //     frontColor = trailColor = Color.valueOf("f3fae5");
+    //     backColor = Color.valueOf("b6ec4e");
+    //     trailLength = 10;
+        
+    //     hitSize = 6f;
+    //     lifetime = 60f;
+    //     pierce = true;
+    // }},
+
+    // hydrogen_beam = new ContinuousFlameBulletType(){{
+
+    //     flareWidth = 3f;
+    //     flareLength = 15f;
+
+    //     damage = 30f;
+    //     length = 80f;
+    //     knockback = 1f;
+    //     pierceCap = 2;
+    //     buildingDamageMultiplier = 0.3f;
+
+    //     flareColor = Color.valueOf("718eff");
+
+    //     lengthWidthPans = new float[] {
+    //         1.12f, 2f, 0.88f,
+    //         1.1f, 1.5f, 0.88f,
+    //         1.08f, 1f, 0.88f,
+    //         1.06f, 0.5f, 0.88f
+    //     };
+    //     colors = new Color[]{Color.valueOf("91a4ff").a(0.8f), Color.valueOf("718eff"), Color.valueOf("3a8dff").a(0.8f), Color.white};
+    // }},
+
+    // ultra_hydrogen_beam = new ContinuousFlameBulletType(){{
+
+    //     flareWidth = 5f;
+    //     flareLength = 30f;
+
+    //     damage = 160f;
+    //     length = 120f;
+    //     knockback = 2f;
+    //     pierceCap = 4;
+    //     buildingDamageMultiplier = 0.3f;
+
+    //     flareColor = Color.valueOf("718eff");
+
+    //     lengthWidthPans = new float[] {
+    //         2f, 4f, 0.5f,
+    //         1.6f, 3f, 0.45f,
+    //         1.4f, 3.5f, 0.4f,
+    //         1.2f, 3f, 0.35f,
+    //         1f, 2f, 0.3f,
+    //     };
+    //     colors = new Color[]{Color.valueOf("91a4ff").a(0.8f), Color.valueOf("718eff").a(0.8f), Color.valueOf("3a8dff").a(0.8f), Color.white, Color.white};
+    // }},
+
+    // laser = new RailBulletType(){{
+    //     length = 160f;
+    //     damage = 40f;
+    //     hitColor = TCol.electricity;
+    //     hitEffect = endEffect = Fx.hitBulletColor;
+    //     pierceDamageFactor = 0.8f;
+
+    //     smokeEffect = Fx.colorSpark;
+
+    //     endEffect = new Effect(14f, e -> {
+    //         color(e.color);
+    //         Drawf.tri(e.x, e.y, e.fout() * 1.5f, 5f, e.rotation);
+    //     });
+
+    //     shootEffect = new Effect(10, e -> {
+    //         color(e.color);
+    //         float w = 1.2f + 7 * e.fout();
+
+    //         Drawf.tri(e.x, e.y, w, 30f * e.fout(), e.rotation);
+    //         color(e.color);
+
+    //         for(int i : Mathf.signs){
+    //             Drawf.tri(e.x, e.y, w * 0.9f, 18f * e.fout(), e.rotation + i * 90f);
+    //         }
+
+    //         Drawf.tri(e.x, e.y, w, 4f * e.fout(), e.rotation + 180f);
+    //     });
+
+    //     lineEffect = new Effect(20f, e -> {
+    //         if(!(e.data instanceof Vec2 v)) return;
+
+    //         color(e.color);
+    //         stroke(e.fout() * 0.9f + 0.6f);
+
+    //         Fx.rand.setSeed(e.id);
+    //         for(int i = 0; i < 7; i++){
+    //             Fx.v.trns(e.rotation, Fx.rand.random(8f, v.dst(e.x, e.y) - 8f));
+    //             Lines.lineAngleCenter(e.x + Fx.v.x, e.y + Fx.v.y, e.rotation + e.finpow(), e.foutpowdown() * 20f * Fx.rand.random(0.5f, 1f) + 0.3f);
+    //         }
+
+    //         e.scaled(14f, b -> {
+    //             stroke(b.fout() * 1.5f);
+    //             color(e.color);
+    //             Lines.line(e.x, e.y, v.x, v.y);
+    //         });
+    //     });
+    // }};
+
+    // public static final Weapon
+    // bomb_turret = new Weapon("aourus-bomb-turret"){{
+    //     reload = 60f;
+    //     recoil = 1.5f;
+    //     inaccuracy = 15;
+    //     shootSound = Sounds.missileSmall;
+    //     top = true;
+    //     mirror = alternate = true;
+    //     rotate = true;
+    //     // heatColor = ACol.electricity;
+    //     shootCone = 30f;
+
+    //     x = 15f;
+    //     y = -1f;
+
+    //     shoot = new ShootPattern(){{
+    //         shots = 3;
+    //         shotDelay = 3f;
+    //     }};
+
+    //     bullet = new MissileBulletType(0f, 0f, "shell"){{
+    //         width = 8f;
+    //         height = 10f;
+    //         hitEffect = Fx.flakExplosion;
+    //         shootEffect = Fx.none;
+    //         smokeEffect = Fx.none;
+
+    //         speed = 5f;
+    //         lifetime = 60f;
+    //         drag = 0.025f;
+
+    //         status = StatusEffects.blasted;
+    //         statusDuration = 60f;
+    //         damage = splashDamage = 40f;
+    //     }};
+    // }},
+
+    // shocking_turrets = new Weapon("aourus-maltorion-back"){{
+    //     reload = 70;
+    //     recoil = 1.5f;
+    //     inaccuracy = 5;
+    //     shootSound = Sounds.bolt;
+    //     top = true;
+    //     mirror = alternate = true;
+    //     rotate = false;
+    //     heatColor = TCol.electricity;
+    //     shootCone = 30f;
+
+    //     inaccuracy = 12f;
+
+    //     x = 7f;
+    //     y = -8f;
+
+    //     shootY = 0f;
+    //     shootX = 3.5f;
+
+    //     parts.add(new RegionPart("-riffle"){{
+    //         rotation = -50f;
+    //         under = true;
+    //         moves.add(new PartMove(PartProgress.reload, 0f, 0f, 0f));
+
+    //         heatColor = Color.red;
+    //         cooldownTime = 60f;
+    //     }});
+
+    //     shoot = new ShootPattern(){{
+    //         shots = 5;
+    //         shotDelay = 5f;
+    //     }};
+
+    //     bullet = new BasicBulletType(4.5f, 20f){{
+    //         ejectEffect = Fx.none;
+    //         trailWidth = 1.5f;
+    //         trailLength = 15;
+    //         drawSize = 200f;
+
+    //         status = StatusEffects.shocked;
+    //         statusDuration = 30f;
+    //         lifetime = 40f;
+    //         homingPower = 0.05f;
+    //         homingRange = 120f;
+    //         width = 10f;
+    //         height = 25f;
+    //         keepVelocity = true;
+    //         knockback = 0.75f;
+    //         trailColor = backColor = lightColor = lightningColor = hitColor = TCol.electricity;
+    //         frontColor = backColor.cpy().lerp(Color.white, 0.45f);
+    //         trailChance = 0.1f;
+    //         trailParam = 1f;
+    //         // trailEffect = NHFx.trailToGray;
+    //         // despawnEffect = NHFx.square(backColor, 18f, 2, 12f, 2);
+    //         // hitEffect = NHFx.lightningHitSmall(backColor);
+    //         shootEffect = Fx.none;
+    //         smokeEffect = Fx.colorSpark;
+
+    //         // buildingDamageMultiplier = 0.4f;
+    //     }};
+    // }},
+    // bolter = new Weapon("aourus-maltorion-side"){{
+    //     reload = 30f;
+    //     recoil = 1.5f;
+    //     inaccuracy = 5;
+    //     shootSound = Sounds.shockBlast;
+    //     top = true;
+    //     mirror = alternate = true;
+    //     rotate = false;
+    //     rotateSpeed = 2.55f;
+    //     heatColor = TCol.electricity;
+    //     shootCone = 30f;
+
+
+    //     parts.add(new RegionPart("-riffle"){{
+    //         moveRot = -25f;
+    //         under = true;
+    //         moves.add(new PartMove(PartProgress.reload, 0f, 0f, 0f));
+
+    //         heatColor = Color.red;
+    //         cooldownTime = 60f;
+    //     }});
+
+
+    //     x = 8f;
+    //     y = -3f;
+
+    //     shoot = new ShootPattern(){{
+    //         shots = 4;
+    //         shotDelay = 3f;
+    //     }};
+    //     bullet = new LightningBulletType()
+    //     {{
+    //         layer = Layer.max;
+    //         lightningColor = hitColor = TCol.electricity;
+    //         damage = 30f;
+    //         lightningLength = 12;
+    //         lightningLengthRand = 12;
+    //         shootEffect = Fx.lightning;
+    //     }};
+    // }};

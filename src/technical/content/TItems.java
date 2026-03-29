@@ -10,7 +10,7 @@ public class TItems
     // Mineable
     uranium, raw_copper, stone, clay, coal, raw_iron, raw_zinc,
     // Craftable
-    brick, iron_plate, dense_ammo, copper_wire, iron_gear, copper_gear, copper_plate, porcelain, flint, copper_rod, iron_rod,
+    brick, iron_plate, dense_ammo, copper_wire, iron_gear, copper_gear, copper_plate, porcelain, flint, copper_rod, iron_rod, zinc_ingot, brass_ingot,
     // Technology
     metallurgy_xp
     ;
@@ -50,7 +50,7 @@ public class TItems
             healthScaling = 0.5f;
         }};
 
-        raw_zinc = new Item("raw-zinc", TCol.iron) {{
+        raw_zinc = new Item("raw-zinc", TCol.zinc) {{
             cost = 0.6f;
             buildable = false;
             hardness = 4;
@@ -116,13 +116,23 @@ public class TItems
             cost = 5f;
         }};
 
+        brass_ingot = new Item("brass-ingot", TCol.brass) {{
+            buildable = true;
+            cost = 5f;
+        }};
+
+        zinc_ingot = new Item("zinc-ingot", TCol.zinc) {{
+            buildable = true;
+            cost = 3f;
+        }};
+
         copper_rod = new Item("copper-rod", TCol.copper) {{
             buildable = false;
             cost = 5f;
         }};
 
         iron_rod = new Item("iron-rod", TCol.iron) {{
-            buildable = false;
+            buildable = true;
             cost = 5f;
         }};
 
@@ -135,47 +145,6 @@ public class TItems
         // basic_circuit = new RecipeItem("basic-circuit", TCol.circuit) {{
         //     cost = 15f;
         //     buildable = true;
-        // }};
-
-        // glass = new Item("glass", Color.valueOf("#fff9d8")) {{
-        //     cost = 2f;
-        // }};
-
-        // electric_alloy = new Item("electric-alloy", TCol.electricity) {{
-        //     cost = 2.5f;
-        // }};
-
-        // meltium = new Item("meltium", Color.valueOf("b240b8")) {{
-        //     cost = 0.8f;
-        //     hardness = 1;
-        // }};
-
-        // magnetium = new Item("magnetium", Color.valueOf("6b7595")) {{
-        //     cost = 2f;
-        //     hardness = 2;
-        // }};
-
-        // sulphur_fluid = new CellLiquid("sulphur-fluid", Color.valueOf("d7ffc6")) {{
-        //     flammability = 1f;
-        //     explosiveness = 0.75f;
-        //     temperature = 0.65f;
-        //     heatCapacity = 0f;
-        //     viscosity = 0.25f;
-        //     coolant = false;
-        //     moveThroughBlocks = true;
-        //     // particleEffect = Fx.bubble;
-        //     // effect = Fx.sulphurFluid;
-        //     // alwaysUnlocked = true;
-        // }};
-
-        // thermogen = new Liquid("thermogen", Color.valueOf("fbb58a")) {{
-        //     flammability = 2f;
-        //     explosiveness = 2f;
-        //     temperature = 1f;
-        //     heatCapacity = 0f;
-        //     lightColor = Color.valueOf("fbb58a").a(0.3f);
-
-        //     gas = true;
         // }};
     }
 }

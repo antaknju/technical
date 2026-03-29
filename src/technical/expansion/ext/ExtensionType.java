@@ -8,5 +8,6 @@ public enum ExtensionType
     Cooler,
     Storage,
     Control,
+    AlloyVessel,
     MechanicalEnergyCapacitor,
 };

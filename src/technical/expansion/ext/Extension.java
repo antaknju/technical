@@ -21,6 +21,7 @@ import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;
 import technical.T;
+import technical.content.TIcons;
 import technical.expansion.TBlock;
 import technical.expansion.ext.Extendable.ExtendableBuild;
 import technical.expansion.kinetic.KineticBlock;
@@ -96,7 +97,7 @@ public class Extension extends KineticBlock
         });
 
         stats.add(boostEffectStat, table -> {
-            table.add("+" + efficiencyBoost + " P").color(Pal.accent);
+            table.add("+" + efficiencyBoost + TIcons.get(TIcons.boostPowerIcon)).color(Pal.accent);
         });
     }
 
@@ -156,7 +157,7 @@ public class Extension extends KineticBlock
                 generateTime = Mathf.clamp(generateTime, 0f, 1f);
             }
 
-            if (Extendable != null && Extendable.efficiency > 0 && Extendable.hasRequiredExtensions() && ((efficiency > 0 && block.consumers.length > 0) || (block.consumers.length <= 0)))
+            if (Extendable != null && Extendable.efficiency > 0 && Extendable.hasRequiredExtensions() && (efficiency > 0 || block.consumers.length == 0))
             {
                 warmup = Mathf.approachDelta(warmup, warmupTarget(), warmupSpeed);
             }

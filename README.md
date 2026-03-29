@@ -4,7 +4,7 @@
 
 <div align="center">
     <img src="https://img.shields.io/badge/State-Alpha-red?style=flat" alt="Alpha State Badge">
-    <img src="https://img.shields.io/badge/Version-1.0.1--alpha+018-blue?style=flat" alt="Version Badge">
+    <img src="https://img.shields.io/badge/Version-1.1.0--alpha+044-blue?style=flat" alt="Version Badge">
     <img src="https://img.shields.io/badge/Mindustry-v154-blue?style=flat" alt="Mindustry Version Badge">
     <img src="https://img.shields.io/badge/Focus-Testing_Only-orange?style=flat" alt="Testing Badge">
 </div>
@@ -16,13 +16,13 @@
 ---
 
 ## About the project
-Technical is a complete overhaul of the standard Mindustry experience, my main direction was adding content that differs a lot from main game, so it gives you new fresh feeling, but still feels like Mindustry.
-Mod doesn't contain much content, because of that every block adds new mechanics it means new class, new code, but it's much more quality.
+Technical is a complete overhaul of the standard Mindustry experience. My primary goal was to add content that diverges significantly from the base game, providing a fresh experience while still retaining the core "Mindustry" feel.
 
+While the mod focuses on quality over quantity, every block introduces unique mechanics, so every block gives new, fair challenge.
 
 ### Key features
-* **Completely Custom World:** New planet, new environment, new mechanics, custom environmental hazards
-* **Completely Custom Mechanics:** Belt crafting system, thermal pipes, mechanical power, trains
+* **Completely Custom World:** Explore a new planet with unique environments, original mechanics, and custom environmental hazards.
+* **Completely Custom Mechanics:** Master deep systems including a belt crafting system, thermal pipes, mechanical power, and trains.
 
 ---
 

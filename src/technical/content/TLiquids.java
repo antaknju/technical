@@ -13,7 +13,7 @@ public class TLiquids
 {
     public static TLiquid 
     
-    crude_oil, heavy_oil_fraction, wide_oil_fraction, metan, petrol, kerosene, oil, steam, water, ice, molten_iron, molten_copper, solidified_iron, solidified_copper, 
+    crude_oil, heavy_oil_fraction, wide_oil_fraction, metan, petrol, steam, water, ice, molten_iron, molten_copper, solidified_iron, solidified_copper, molten_zinc, solidified_zinc, molten_brass, solidified_brass,
     toxic_waste, bio_fluid, lava
     ;
 
@@ -102,19 +102,6 @@ public class TLiquids
             color = T.c("#222222ff");
         }};
 
-        solidified_copper = new TLiquid("solidified-copper"){{
-            viscosity = 0;
-            flammability = 0f;
-            temperature = 0.7f;
-            coolant = false;
-            heatCapacity = 0.5f;
-            explosiveness = 0;
-
-            canMove = false;
-
-            color = TCol.copper;
-        }};
-
         solidified_iron = new TLiquid("solidified-iron"){{
             viscosity = 0;
             flammability = 0f;
@@ -126,6 +113,84 @@ public class TLiquids
             canMove = false;
 
             color = TCol.iron;
+        }};
+
+        molten_iron = new TLiquid("molten-iron"){{
+            viscosity = 0.2f;
+            flammability = 0f;
+            temperature = 1.2f;
+            coolant = false;
+            heatCapacity = 0;
+            explosiveness = 0;
+
+            color = T.c("#c7734c");
+
+            setupLower(solidified_iron, 100, 5);
+        }};
+
+        solidified_zinc = new TLiquid("solidified-zinc"){{
+            viscosity = 0;
+            flammability = 0f;
+            temperature = 0.8f;
+            coolant = false;
+            heatCapacity = 0;
+            explosiveness = 0;
+
+            canMove = false;
+
+            color = TCol.zinc;
+        }};
+
+        molten_zinc = new TLiquid("molten-zinc"){{
+            viscosity = 0.2f;
+            flammability = 0f;
+            temperature = 1.2f;
+            coolant = false;
+            heatCapacity = 0.5f;
+            explosiveness = 0;
+
+            color = T.c("#ff7e00");
+
+            setupLower(solidified_zinc, 70, 5);
+        }};
+
+        solidified_brass = new TLiquid("solidified-brass"){{
+            viscosity = 0;
+            flammability = 0f;
+            temperature = 0.5f;
+            coolant = false;
+            heatCapacity = 0;
+            explosiveness = 0;
+
+            canMove = false;
+
+            color = TCol.brass;
+        }};
+
+        molten_brass = new TLiquid("molten-brass"){{
+            viscosity = 0.2f;
+            flammability = 0f;
+            temperature = 1.2f;
+            coolant = false;
+            heatCapacity = 0.5f;
+            explosiveness = 0;
+
+            color = T.c("#ff3600");
+
+            setupLower(solidified_brass, 80, 5);
+        }};
+
+        solidified_copper = new TLiquid("solidified-copper"){{
+            viscosity = 0;
+            flammability = 0f;
+            temperature = 0.7f;
+            coolant = false;
+            heatCapacity = 0.5f;
+            explosiveness = 0;
+
+            canMove = false;
+
+            color = TCol.copper;
         }};
 
         molten_copper = new TLiquid("molten-copper"){{
@@ -160,19 +225,6 @@ public class TLiquids
             color = TCol.lavaOrange;
             colorFrom = TCol.lavaRed;
             colorTo = TCol.lavaYellow;
-        }};
-        
-        molten_iron = new TLiquid("molten-iron"){{
-            viscosity = 0.2f;
-            flammability = 0f;
-            temperature = 1.2f;
-            coolant = false;
-            heatCapacity = 0;
-            explosiveness = 0;
-
-            color = T.c("#c7734c");
-
-            setupLower(solidified_iron, 100, 5);
         }};
 
         ice = new TLiquid("ice"){{
