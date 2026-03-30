@@ -87,9 +87,14 @@ public class Technical extends Mod
 }
 
 /*
- * Building
+ * Building:
  *  - efficiency is the multiplier of available items/liquids/power consumption
  *  - proximity are Buildings touching this Building
  *  - the Draw will glow only on special layers
  *  - Block.update = true filed makes block breakable
+ *
+ * Spriting:
+ *  - When drawing environmental builds use only 2 colors for floors, 3 colors for 3D objects
+ *  - When drawing huge builds first main part, then smaller size, and smaller, and smaller
+ *  - When drawing environment use simple, but not ideal shapes: triangles,
  */

@@ -76,7 +76,7 @@ public class TWeapons
 
     public static final BoulderBulletType
 
-    stone_boulder = new BoulderBulletType("technical-stone-boulder"){{
+    stone_boulder = new BoulderBulletType("technical-bullet-stone-boulder"){{
         damage = 100f;
         speed = 1f;
 
@@ -91,7 +91,7 @@ public class TWeapons
         pierceCap = 20;
 
         fragBullets = 6;
-        fragBullet = new BoulderBulletType("technical-stone-boulder") 
+        fragBullet = new BoulderBulletType("technical-bullet-stone-boulder")
         {{
             damage = 50f;
             speed = 2f;

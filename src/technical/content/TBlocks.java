@@ -108,19 +108,21 @@ public class TBlocks {
 
     small_helper_turret, furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe,
 
-    light_stone_wall, pebbles, clay, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber,
+    pebbles, clay, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber,
     
     stone_crusher, roller_conveyor, brick_furnace, flint_extractor, iron_inserter, electric_inserter, mechanical_inserter, basic_ammo_forge, iron_chaingun, sickle_trap, flywheel, iron_gear_applicator, copper_gear_applicator, brick_crucible, basic_mold, mechanical_pump,
 
     porcelain_furnace, steam_engine, brass_arm, brass_welder, brass_polisher, brass_smasher, ingot_mold,
 
     // ENVIRONMENT
-    scoria_floor, spongy_scoria_floor, scoria_wall, scoria_boulder, scoria_volcano, lava_floor,
-    gneiss_floor, gneiss_crater_floor, gneiss_wall,
+    scoria_floor, scoria_wall, scoria_boulder, scoria_volcano, lava_floor,
+    gneiss_floor, gneiss_wall, gneiss_boulder,
     red_salt_floor, red_salt_boulder, red_salt_wall,
     jasper_floor, jasper_wall, jasper_boulder, jasper_vent,
-    limestone_floor, limestone_wall, limestone_boulder,
+    sulfur_floor, sulfur_wall, sulfur_boulder, sulfur_vent, sulfur_crystal, sulfur_small_crystal,
+    limestone_floor, limestone_wall, limestone_boulder, limestone_large_boulder,
     zinc_ore, copper_ore, coal_ore, iron_ore,
+    stone_floor, stone_wall, stone_boulder,
 
     // MYCELIS
     mycelis_heart, mycelis_cord, mycelis_cord_iron_plated, mycelis_brutal_drill, mycelis_oxidizer;
@@ -1840,8 +1842,17 @@ public class TBlocks {
             variants = 3;
         }};
 
-        light_stone_wall = new StaticWall("light-stone-wall"){{
+        stone_boulder = new Prop("stone-boulder"){{
+            variants = 2;
+        }};
+
+        stone_floor = new Floor("stone-floor"){{
             variants = 3;
+            decoration = stone_boulder;
+        }};
+
+        stone_wall = new StaticWall("stone-wall"){{
+            variants = 2;
             attributes.set(TAttributes.stone, 0.8f);
         }};
 
@@ -1869,8 +1880,43 @@ public class TBlocks {
             attributes.set(Attribute.steam, 1f);
         }};
 
+        sulfur_boulder = new Prop("sulfur-boulder"){{
+            variants = 2;
+        }};
+
+        sulfur_crystal = new TallBlock("sulfur-crystal"){{
+            variants = 2;
+            clipSize = 128f;
+        }};
+
+        sulfur_small_crystal = new TallBlock("sulfur-small-crystal"){{
+            variants = 2;
+            clipSize = 64f;
+        }};
+
+        sulfur_floor = new Floor("sulfur-floor"){{
+            variants = 3;
+            decoration = sulfur_boulder;
+        }};
+
+        sulfur_wall = new StaticWall("sulfur-wall"){{
+            variants = 2;
+            attributes.set(TAttributes.sulfur, 0.8f);
+        }};
+
+        sulfur_vent = new SteamVent("sulfur-vent"){{
+            variants = 2;
+            parent = blendGroup = sulfur_floor;
+            attributes.set(Attribute.steam, 1f);
+        }};
+
         limestone_boulder = new Prop("limestone-boulder"){{
             variants = 2;
+        }};
+
+        limestone_large_boulder = new TallBlock("limestone-large-boulder"){{
+            variants = 2;
+            clipSize = 64f;
         }};
 
         limestone_floor = new Floor("limestone-floor"){{
@@ -1883,11 +1929,11 @@ public class TBlocks {
             attributes.set(TAttributes.stone, 0.5f);
         }};
 
-        gneiss_floor = new Floor("gneiss-floor"){{
+        gneiss_boulder = new Prop("gneiss-boulder"){{
             variants = 3;
         }};
 
-        gneiss_crater_floor = new Floor("gneiss-crater-floor"){{
+        gneiss_floor = new Floor("gneiss-floor"){{
             variants = 3;
         }};
 
@@ -1900,9 +1946,9 @@ public class TBlocks {
             variants = 3;
         }};
 
-        spongy_scoria_floor = new Floor("spongy-scoria-floor"){{
-            variants = 3;
-        }};
+//        spongy_scoria_floor = new Floor("spongy-scoria-floor"){{
+//            variants = 3;
+//        }};
 
         scoria_boulder = new Prop("scoria-boulder"){{
             variants = 2;

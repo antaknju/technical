@@ -2,7 +2,7 @@ displayName: "[blue[]]Technical[white[]]"
 description: "A Mindustry mod that adds new campaign with a lot new mechanisms to learn"
 author: "[royal[]]AnTakNju[white[]]"
 
-version: 1.1.0-alpha+044
+version: 1.2.0-alpha+074
 
 name: "technical"
 main: "technical.Technical"
