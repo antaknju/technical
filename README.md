@@ -4,7 +4,7 @@
 
 <div align="center">
     <img src="https://img.shields.io/badge/State-Alpha-red?style=flat" alt="Alpha State Badge">
-    <img src="https://img.shields.io/badge/Version-1.2.0--alpha+074-blue?style=flat" alt="Version Badge">
+    <img src="https://img.shields.io/badge/Version-1.2.1--alpha+075-blue?style=flat" alt="Version Badge">
     <img src="https://img.shields.io/badge/Mindustry-v154-blue?style=flat" alt="Mindustry Version Badge">
     <img src="https://img.shields.io/badge/Focus-Testing_Only-orange?style=flat" alt="Testing Badge">
 </div>
