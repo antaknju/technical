@@ -14,7 +14,6 @@ import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
-import mindustry.entities.part.DrawPart.PartProgress;
 import mindustry.entities.part.RegionPart;
 import mindustry.entities.pattern.ShootBarrel;
 import mindustry.gen.Building;
@@ -123,6 +122,7 @@ public class TBlocks {
     limestone_floor, limestone_wall, limestone_boulder, limestone_large_boulder,
     zinc_ore, copper_ore, coal_ore, iron_ore,
     stone_floor, stone_wall, stone_boulder,
+    slate_floor, slate_wall, slate_boulder,
 
     // MYCELIS
     mycelis_heart, mycelis_cord, mycelis_cord_iron_plated, mycelis_brutal_drill, mycelis_oxidizer;
@@ -1389,6 +1389,7 @@ public class TBlocks {
             unitType = TUnits.onset;
 
             thrusterLength = 35/4f;
+
             armor = 6f;
 
             alwaysUnlocked = true;
@@ -1852,6 +1853,20 @@ public class TBlocks {
         }};
 
         stone_wall = new StaticWall("stone-wall"){{
+            variants = 2;
+            attributes.set(TAttributes.stone, 0.8f);
+        }};
+
+        slate_boulder = new Prop("slate-boulder"){{
+            variants = 3;
+        }};
+
+        slate_floor = new Floor("slate-floor"){{
+            variants = 3;
+            decoration = slate_boulder;
+        }};
+
+        slate_wall = new StaticWall("slate-wall"){{
             variants = 2;
             attributes.set(TAttributes.stone, 0.8f);
         }};
