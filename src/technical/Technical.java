@@ -1,5 +1,7 @@
 package technical;
 
+import arc.Core;
+import arc.graphics.Texture;
 import mindustry.Vars;
 import mindustry.content.UnitTypes;
 import mindustry.mod.*;
@@ -18,6 +20,11 @@ public class Technical extends Mod
     public void init()
     {
         TUnits.init();
+
+        // Adding linear interpolation of custom atlas pages
+        for (Texture tex : Core.atlas.getTextures()) {
+            tex.setFilter(Texture.TextureFilter.linear);
+        }
     }
 
     @Override

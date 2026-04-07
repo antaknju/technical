@@ -1,4 +1,3 @@
-// Erekir Music Credits
 package technical.content;
 
 import arc.Events;
@@ -13,6 +12,7 @@ import mindustry.game.EventType.MusicRegisterEvent;
 import mindustry.game.EventType.StateChangeEvent;
 import mindustry.game.EventType.WorldLoadEvent;
 
+// Erekir Music Credits for versatile file searching and on planet music changing
 public class TMusic
 {
     public static Seq<Music> vAmbient;

@@ -122,7 +122,8 @@ public class TBlocks {
     limestone_floor, limestone_wall, limestone_boulder, limestone_large_boulder,
     zinc_ore, copper_ore, coal_ore, iron_ore,
     stone_floor, stone_wall, stone_boulder,
-    slate_floor, slate_wall, slate_boulder,
+    rusted_floor, oxidized_floor,
+    slate_floor, slate_wall, slate_boulder, slate_vent,
 
     // MYCELIS
     mycelis_heart, mycelis_cord, mycelis_cord_iron_plated, mycelis_brutal_drill, mycelis_oxidizer;
@@ -1864,6 +1865,22 @@ public class TBlocks {
         slate_floor = new Floor("slate-floor"){{
             variants = 3;
             decoration = slate_boulder;
+        }};
+
+        slate_vent = new SteamVent("slate-vent"){{
+            variants = 2;
+            parent = blendGroup = slate_floor;
+            attributes.set(Attribute.steam, 1f);
+        }};
+
+        rusted_floor = new Floor("rusted-floor"){{
+            variants = 3;
+            decoration = iron_ore;
+        }};
+
+        oxidized_floor = new Floor("oxidized-floor"){{
+            variants = 3;
+            decoration = copper_ore;
         }};
 
         slate_wall = new StaticWall("slate-wall"){{
