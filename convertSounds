@@ -4,6 +4,7 @@ set -e
 
 QUALITY=5   # 0–10, 4–6 is ideal for games
 
+# shellcheck disable=SC2095
 find . -type f -iname "*.wav" | while read -r wav; do
     ogg="${wav%.wav}.ogg"
 

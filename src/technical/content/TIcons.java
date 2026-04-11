@@ -55,6 +55,6 @@ public class TIcons
 
     public static String get(int id)
     {
-        return "[white]" + (char)id;
+        return " []" + (char)id;
     }
 }
