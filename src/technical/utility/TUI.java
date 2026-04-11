@@ -1,7 +1,8 @@
-package technical.expansion;
+package technical.utility;
 
 import arc.func.Boolp;
 import arc.graphics.Color;
+import arc.graphics.g2d.TextureRegion;
 import arc.math.Interp;
 import arc.scene.event.HandCursorListener;
 import arc.scene.style.TextureRegionDrawable;
@@ -18,14 +19,18 @@ import mindustry.ctype.UnlockableContent;
 import mindustry.gen.Icon;
 import mindustry.gen.Tex;
 import mindustry.graphics.Pal;
+import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
 import mindustry.type.PayloadStack;
 import mindustry.ui.Bar;
 import mindustry.ui.Styles;
 import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;
-import technical.Fr;
+import mindustry.world.meta.Stats;
+import technical.expansion.ConveyorRecipe;
+import technical.expansion.RecipeDrawable;
 import technical.content.TIcons;
 
 public class TUI 
@@ -71,7 +76,7 @@ public class TUI
         return name + " " + UI.formatAmount((long)(amount / fr)) + " " + unit.localized();
     }
 
-    public static void addRecipeButton(Table parent, RecipeDrawable recipe, Runnable changed, Boolp isChecked) 
+    public static void addRecipeButton(Table parent, RecipeDrawable recipe, Runnable changed, Boolp isChecked)
     {
         // Styles.clearTogglei is standard for Mindustry toggle buttons
         ImageButton button = new ImageButton(Styles.clearTogglei);
@@ -260,5 +265,45 @@ public class TUI
         timeCell.tooltip(Stat.productionTime.localized() + ": " + durationFormated + " " + StatUnit.seconds.localized());
 
         return table;
+    }
+
+    public static void addConveyorRecipeStat(Stats stats, Item startingItem, ConveyorRecipe recipe)
+    {
+        Stat recipeStat = new Stat("recipe", StatCat.crafting);
+
+        stats.add(recipeStat, table -> {
+            table.row();
+
+            table.table(Styles.grayPanel, t -> {
+
+                t.image(startingItem.unlockedNow() ? startingItem.uiIcon : TIcons.question)
+                        .size(40).padLeft(10);
+
+                for (int i = 0; i < recipe.actions.length; i++) {
+                    ConveyorRecipe.Action act = recipe.actions[i];
+
+                    t.table(arrow -> {
+                        arrow.add(TBundle.get_enum(act.type)).padBottom(4f).row();
+                        arrow.image(Icon.right).size(40);
+                        arrow.row();
+
+                        if (act.item != null) {
+                            TextureRegion icon = act.item.unlockedNow() ? act.item.uiIcon : TIcons.question;
+                            arrow.image(icon).size(30).padTop(4f);
+                        } else {
+                            arrow.table(b -> {}).size(30).padTop(4f);
+                        }
+                    }).padTop(10).padBottom(10);
+
+                    Item after = (i == recipe.actions.length - 1 ? recipe.result : startingItem);
+                    TextureRegion afterIcon = after.unlockedNow() ? after.uiIcon : TIcons.question;
+
+                    t.image(afterIcon).size(40).padRight(10);
+                }
+
+            }).growX().pad(6);
+
+            table.add("[accent]" + recipe.times + "x").bottom().left().padLeft(-40).padBottom(12);
+        });
     }
 }

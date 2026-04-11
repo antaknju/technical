@@ -13,8 +13,8 @@ import mindustry.type.LiquidStack;
 import mindustry.ui.Bar;
 import mindustry.world.consumers.ConsumeItemDynamic;
 import mindustry.world.consumers.ConsumeLiquidsDynamic;
-import technical.T;
-import technical.TCol;
+import technical.utility.T;
+import technical.utility.TCol;
 import technical.content.TFx;
 
 public class MycelisRecipeCrafter extends MycelisBlock

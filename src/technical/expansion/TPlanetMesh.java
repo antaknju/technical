@@ -3,18 +3,17 @@ package technical.expansion;
 import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.math.geom.Vec3;
-import arc.util.Log;
-import arc.util.Tmp;
 import arc.util.noise.Simplex;
 import mindustry.graphics.Shaders;
 import mindustry.graphics.g3d.*;
 import mindustry.type.Planet;
-import technical.T;
+import technical.utility.T;
+import technical.utility.TCol;
 
 public class TPlanetMesh extends HexMesh 
 {
     // public static Color 
-    //     c_snow = T.c("#ffffff"),
+    //     c_snow = TCol.from("#ffffff"),
     //     c_rock = Color.valueOf("#505050"),
     //     c_ice_spike = Color.valueOf("#b6cad6"),
     //     c_sand = Color.valueOf("#d9a066"),
@@ -29,16 +28,16 @@ public class TPlanetMesh extends HexMesh
     
     // Water Biomes
     final static Color 
-        ocean = T.c("#3219a3"),
-        deepOcean = T.c("#170957"),
-        beach = T.c("#d9b566"),
-        desert = T.c("#d9a066"),
-        snow = T.c("#dadada"),
-        mountain = T.c("#424242"),
-        dirt = T.c("#4e2f1c"),
-        stone = T.c("#505050"),
-        clay = T.c("#8c9ac9"),
-        lava = T.c("#e6482e");
+        ocean = TCol.from("#3219a3"),
+        deepOcean = TCol.from("#170957"),
+        beach = TCol.from("#d9b566"),
+        desert = TCol.from("#d9a066"),
+        snow = TCol.from("#dadada"),
+        mountain = TCol.from("#424242"),
+        dirt = TCol.from("#4e2f1c"),
+        stone = TCol.from("#505050"),
+        clay = TCol.from("#8c9ac9"),
+        lava = TCol.from("#e6482e");
 
     public TPlanetMesh(Planet planet, int seed, int divisions) 
     {

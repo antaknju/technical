@@ -10,7 +10,6 @@ import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
-import mindustry.graphics.Pal;
 import mindustry.type.Item;
 import mindustry.type.Liquid;
 import mindustry.world.consumers.ConsumeCoolant;
@@ -20,12 +19,13 @@ import mindustry.world.draw.DrawDefault;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;
-import technical.T;
 import technical.content.TIcons;
-import technical.expansion.TBlock;
 import technical.expansion.ext.Extendable.ExtendableBuild;
 import technical.expansion.kinetic.KineticBlock;
 import technical.expansion.tech.TechStat;
+import technical.utility.TBundle;
+import technical.utility.TCol;
+import technical.utility.TDraw;
 
 public class Extension extends KineticBlock 
 {
@@ -85,7 +85,7 @@ public class Extension extends KineticBlock
 
         // Add formatted stats
         stats.add(extensionType, table -> {
-            table.add("[accent]" + T.bundle(type) + "[]");
+            table.add(TBundle.color(TBundle.get_enum(type), TCol.highlight));
         });
 
         stats.add(additionalStorageStat, table -> {
@@ -97,7 +97,7 @@ public class Extension extends KineticBlock
         });
 
         stats.add(boostEffectStat, table -> {
-            table.add("+" + efficiencyBoost + TIcons.get(TIcons.boostPowerIcon)).color(Pal.accent);
+            table.add(TBundle.color("+" + efficiencyBoost, TCol.highlight) + TIcons.get(TIcons.boostPowerIcon));
         });
     }
 
@@ -216,10 +216,10 @@ public class Extension extends KineticBlock
 
             if (Extendable == null) return;
             
-            T.outline(Extendable);
+            TDraw.highlight(Extendable);
             for (var ext : Extendable.connectedExtensions)
             {
-                T.outline(ext);
+                TDraw.highlight(ext);
             }
         }
 

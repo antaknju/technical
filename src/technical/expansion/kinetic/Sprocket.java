@@ -6,7 +6,6 @@ import static technical.debug.Debugger.print;
 
 import arc.Core;
 import arc.Events;
-import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
@@ -14,12 +13,10 @@ import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
-import arc.util.Log;
 import arc.util.Nullable;
 import arc.util.Time;
 import arc.util.Tmp;
 import arc.util.io.Reads;
-import mindustry.Vars;
 import mindustry.game.EventType.ResetEvent;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
@@ -28,9 +25,8 @@ import mindustry.graphics.Pal;
 import mindustry.input.Placement;
 import mindustry.ui.Bar;
 import mindustry.world.Tile;
-import technical.Fr;
-import technical.T;
-import technical.TCol;
+import technical.utility.Fr;
+import technical.utility.TCol;
 
 public class Sprocket extends KineticBlock
 {

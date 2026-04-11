@@ -12,7 +12,6 @@ import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.scene.ui.layout.Table;
 import arc.struct.ObjectIntMap;
-import arc.struct.ObjectIntMap.Entry;
 import arc.struct.Seq;
 import arc.util.Eachable;
 import arc.util.Nullable;
@@ -24,7 +23,6 @@ import mindustry.entities.Effect;
 import mindustry.entities.Puddles;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
-import mindustry.gen.Icon;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.type.Item;
@@ -33,17 +31,17 @@ import mindustry.ui.Bar;
 import mindustry.world.Tile;
 import mindustry.world.draw.DrawBlock;
 import mindustry.world.draw.DrawDefault;
-import mindustry.world.meta.Attribute;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;
-import technical.T;
 import technical.content.TIcons;
 import technical.content.TLiquids;
-import technical.expansion.TBlock;
 import technical.expansion.ext.Extension.ExtensionBuild;
 import technical.expansion.kinetic.KineticBlock;
 import technical.expansion.tech.TechStat;
+import technical.utility.TBundle;
+import technical.utility.TCol;
+import technical.utility.TDraw;
 
 public class Extendable extends KineticBlock
 {
@@ -156,11 +154,11 @@ public class Extendable extends KineticBlock
         stats.add(allowedExtensions, table -> {
             table.defaults().padLeft(60).left();
             if (AllowedExtensions.isEmpty()) {
-                table.add("[gray]None").color(Color.lightGray);
+                table.row().add("None").color(Color.gray);
             } else {
                 for (ExtensionType ext : AllowedExtensions) {
                     table.row();
-                    table.add(ext.name()).color(Pal.accent);
+                    table.add(ext.name()).color(TCol.highlight);
                 }
             }
         });
@@ -168,12 +166,12 @@ public class Extendable extends KineticBlock
         stats.add(requiredExtensions, table -> {
             table.defaults().padLeft(60).left();
             if (RequiredExtensions.isEmpty()) {
-                table.row().add("[gray]None").color(Color.lightGray);
+                table.row().add("None").color(Color.gray);
             } else {
                 for (var ext : RequiredExtensions) {
                     table.row();
                     
-                    String name = "[accent]" + ext.key.name() + " [gray]" + ext.value + TIcons.get(TIcons.boostPowerIcon);
+                    String name = TBundle.color(ext.key.name() + ": ", TCol.highlight) + ext.value + TIcons.get(TIcons.boostPowerIcon);
                     table.add(name);
                 }
             }
@@ -299,14 +297,14 @@ public class Extendable extends KineticBlock
                 table.row();
                 table.table(t -> {
                     t.left();
-                    t.label(() -> T.bundle("err.missing-extensions")).color(Pal.accent).left().wrap();
+                    t.label(() -> TBundle.error("missing-extensions")).color(Pal.accent).left().wrap();
                     t.row();
                     for (ObjectIntMap.Entry<ExtensionType> e : missing) 
                     {
                         ExtensionType type = e.key;
                         int count = e.value;
 
-                        t.label(() -> "[lightgray]" + T.bundle(type) + ": [scarlet]" + count + TIcons.get(TIcons.boostPowerIcon)).wrap().left().padLeft(20f);
+                        t.label(() -> TBundle.color(TBundle.get_enum(type), Color.lightGray) + ": " + TBundle.color(count + TIcons.get(TIcons.boostPowerIcon), TCol.error)).wrap().left().padLeft(20f);
                         t.row();
                     }
                 }).growX();
@@ -320,13 +318,13 @@ public class Extendable extends KineticBlock
                     table.row();
                     table.table(t -> {
                         t.left();
-                        t.label(() -> T.bundle("err.unstability-warning")).color(Pal.accent).left().wrap();
+                        t.label(() -> TBundle.error("unstability-warning")).color(Pal.accent).left().wrap();
                         t.row();
 
                         if (delta > 0)
-                            t.label(() -> T.bundle("err.heating") + (delta - maxThermalDelta()) + TIcons.get(TIcons.boostPowerIcon)).color(Color.scarlet).wrap().left().padLeft(20f);
+                            t.label(() -> TCol.str(TCol.error) + TBundle.error("heating") + (delta - maxThermalDelta()) + TIcons.get(TIcons.boostPowerIcon)).wrap().left().padLeft(20f);
                         else
-                            t.label(() -> T.bundle("err.cooling") + (-delta - maxThermalDelta()) + TIcons.get(TIcons.boostPowerIcon)).color(Color.scarlet).wrap().left().padLeft(20f);
+                            t.label(() -> TCol.str(TCol.error) + TBundle.error("cooling") + (-delta - maxThermalDelta()) + TIcons.get(TIcons.boostPowerIcon)).wrap().left().padLeft(20f);
 
                         t.row();
                     }).growX();
@@ -365,10 +363,10 @@ public class Extendable extends KineticBlock
             
             if (connectedExtensions.isEmpty()) return;
             
-            T.outline(this);
+            TDraw.highlight(this);
             for (var ext : connectedExtensions)
             {
-                T.outline(ext);
+                TDraw.highlight(ext);
             }
         }
 
@@ -446,9 +444,9 @@ public class Extendable extends KineticBlock
 
             if (!req.isEmpty()) return 0;
 
-            float feff = Mathf.clamp(1 + (eff / efficiencyCap() * getTotalStat(TechStat.efficiencyCap)) + multiblockEff * getTotalStat(TechStat.multiblockEfficiency), 0f, maxEfficiency());
+            float final_eff = Mathf.clamp(1 + (eff / efficiencyCap() * getTotalStat(TechStat.efficiencyCap)) + multiblockEff * getTotalStat(TechStat.multiblockEfficiency), 0f, maxEfficiency());
 
-            return super.efficiencyScale() * feff;
+            return super.efficiencyScale() * final_eff;
         }
 
         @Override
@@ -463,14 +461,14 @@ public class Extendable extends KineticBlock
 
         public float getMaximumLiquidAccepted(Liquid liquid)
         {
-            int additional = 0;
+            float additional = 0;
             for (ExtensionBuild ext : connectedExtensions) 
             {
                 if (ext.efficiency > 0)
                     additional += ((Extension)ext.block).additionalLiquidStorage;
             }
 
-            return (int)((liquidCapacity + additional) * getTotalStat(TechStat.liquidCapacity));
+            return (liquidCapacity + additional) * getTotalStat(TechStat.liquidCapacity);
         }
 
         @Override

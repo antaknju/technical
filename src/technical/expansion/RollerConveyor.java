@@ -11,7 +11,6 @@ import mindustry.world.blocks.distribution.StackConveyor;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
-import technical.T;
 import technical.content.TBlocks;
 import technical.content.TCustom;
 import technical.expansion.tech.TechStat;
@@ -47,8 +46,8 @@ import static mindustry.Vars.world;
 import arc.Core;
 import arc.func.Boolf;
 import arc.graphics.g2d.Draw;
-import arc.struct.ObjectMap.Entry;
 import arc.struct.Seq;
+import technical.utility.TUI;
 
 public class RollerConveyor extends TBlock implements Autotiler
 {
@@ -92,7 +91,7 @@ public class RollerConveyor extends TBlock implements Autotiler
 
         for (var vk : TCustom.ConveyorRecipes)
         {
-            T.addRecipeStat(stats, vk.key, vk.value);
+            TUI.addConveyorRecipeStat(stats, vk.key, vk.value);
         }
     }
 

@@ -1,7 +1,6 @@
-package technical;
+package technical.utility;
 
 import arc.graphics.Color;
-import arc.math.Mathf;
 
 public class TCol 
 {
@@ -36,7 +35,14 @@ public class TCol
     lavaYellow = from("#f17e19"),
     lavaOrange = from("#eb6325"),
 
-    arrow = from("#926e1fff")
+    water = from("#41aba3"),
+
+    metal = from("#7a8185"),
+
+    arrow = from("#926e1fff"),
+
+    highlight = copper,
+    error = Color.scarlet
     ;
 
     public static Color from(String hex) {
@@ -52,5 +58,10 @@ public class TCol
         float b = Math.max(0, Math.min(1f, 2f - Math.abs(h * 6f - 4f)));
 
         return new Color(r, g, b);
+    }
+
+    public static String str(Color color)
+    {
+        return "[#" + color.toString() + "]";
     }
 }

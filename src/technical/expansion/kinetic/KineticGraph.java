@@ -9,7 +9,6 @@ import arc.struct.Seq;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.game.EventType.ResetEvent;
-import technical.Fr;
 import technical.debug.Debugger.DebugLine;
 import technical.expansion.kinetic.KineticBlock.KineticBuild;
 

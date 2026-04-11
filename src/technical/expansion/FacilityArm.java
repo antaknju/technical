@@ -13,8 +13,7 @@ import arc.util.Tmp;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import technical.T;
-import technical.TCol;
+import technical.utility.TCol;
 
 public class FacilityArm extends FacilityAddapter
 {
@@ -195,8 +194,8 @@ import arc.util.Tmp;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import technical.T;
-import technical.TCol;
+import technical.utility.T;
+import technical.utility.TCol;
 import technical.debug.Debugger.DebugLine;
 
 

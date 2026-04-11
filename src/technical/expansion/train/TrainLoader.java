@@ -13,7 +13,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.Item;
 import mindustry.ui.Bar;
 import mindustry.world.Tile;
-import technical.T;
+import technical.utility.T;
 import technical.expansion.train.RailConnector.RailConnectorBuild;
 
 import static mindustry.Vars.*;

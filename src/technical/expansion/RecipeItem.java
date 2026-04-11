@@ -3,17 +3,17 @@ package technical.expansion;
 import arc.graphics.Color;
 import arc.struct.Seq;
 import mindustry.type.Item;
-import technical.T;
 import technical.content.TCustom;
+import technical.utility.TUI;
 
 public class RecipeItem extends Item
 {
     public Seq<Item> startingItems = new Seq<>();
     public Seq<ConveyorRecipe> recipes = new Seq<>();
 
-    public RecipeItem(String name, Color col)
+    public RecipeItem(String name)
     {
-        super(name, col);
+        super(name);
     }
 
     public void FindRecipes()
@@ -42,7 +42,7 @@ public class RecipeItem extends Item
 
         for (int i = 0; i < recipes.size; i++)
         {
-            T.addRecipeStat(stats, startingItems.get(i), recipes.get(i));
+            TUI.addConveyorRecipeStat(stats, startingItems.get(i), recipes.get(i));
         }
     }
 }

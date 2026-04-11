@@ -9,7 +9,7 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.world.Block;
 import mindustry.world.draw.DrawBlock;
-import technical.TCol;
+import technical.utility.TCol;
 
 public class DrawReactorCore extends DrawBlock
 {

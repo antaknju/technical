@@ -1,8 +1,9 @@
-displayName: "[blue[]]Technical[white[]]"
+displayName: "[#eb7425[]]Technical[white[]]"
 description: "A Mindustry mod that adds new campaign with a lot new mechanisms to learn"
-author: "[royal[]]AnTakNju[white[]]"
+subtitle: "Isn't Mindustry Technical enough?"
+author: "AnTakNju"
 
-version: 1.4.1-alpha+117
+version: 1.5.0-alpha+360
 
 name: "technical"
 main: "technical.Technical"

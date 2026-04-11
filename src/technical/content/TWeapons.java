@@ -1,7 +1,6 @@
 package technical.content;
 
 import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
 import static technical.debug.Debugger.print;
 
 import arc.graphics.g2d.Draw;
@@ -16,17 +15,12 @@ import arc.graphics.Color;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
-import mindustry.core.World;
 import mindustry.entities.Effect;
 import mindustry.entities.Puddles;
 import mindustry.entities.Units;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.bullet.*;
-import mindustry.entities.effect.MultiEffect;
-import mindustry.entities.part.DrawPart.PartProgress;
 import mindustry.entities.part.RegionPart;
-import mindustry.entities.pattern.ShootAlternate;
-import mindustry.gen.Building;
 import mindustry.gen.Bullet;
 import mindustry.gen.Sounds;
 import mindustry.gen.Unit;
@@ -34,16 +28,15 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.Weapon;
 import mindustry.type.unit.MissileUnitType;
-import mindustry.type.unit.TankUnitType;
 import mindustry.type.weapons.BuildWeapon;
 import mindustry.world.Tile;
 
-import technical.TCol;
+import technical.utility.TCol;
 import technical.expansion.BoulderBulletType;
 import technical.expansion.HelperBulletType;
 import technical.expansion.SpawningLaserBulletType;
-import technical.Fr;
-import technical.T;
+import technical.utility.Fr;
+import technical.utility.T;
 
 public class TWeapons 
 {
@@ -232,7 +225,7 @@ public class TWeapons
         
         damage = 10f;
 
-        colors = new Color[]{TLiquids.metan.color, T.c("#ff7a469f"), T.c("#ffd2c08c")};
+        colors = new Color[]{TLiquids.metan.color, TCol.from("#ff7a469f"), TCol.from("#ffd2c08c")};
         width = 3f;
 
         spawnType = new BulletType(2f, 37f){{

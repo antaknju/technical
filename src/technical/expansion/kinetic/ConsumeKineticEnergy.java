@@ -8,7 +8,7 @@ import mindustry.world.Block;
 import mindustry.world.consumers.Consume;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.Stats;
-import technical.Fr;
+import technical.utility.Fr;
 import technical.content.TIcons;
 import technical.expansion.kinetic.KineticBlock.KineticBuild;
 

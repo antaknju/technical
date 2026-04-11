@@ -2,7 +2,7 @@ package technical.content;
 
 import arc.struct.ObjectMap;
 import mindustry.type.Item;
-import technical.T;
+import technical.utility.T;
 import technical.expansion.ConveyorRecipe;
 import technical.expansion.ConveyorRecipe.Action.Type;
 import technical.expansion.tech.Tech;
@@ -14,10 +14,11 @@ import static mindustry.type.ItemStack.*;
 public class TCustom
 {
     public static ObjectMap<Item, ConveyorRecipe> ConveyorRecipes;
-    public static Tech crudeMetallurgy;
+    public static Tech crude_metallurgy;
 
     public static void load()
     {
+        /// BUNGEN IGNORE
         ConveyorRecipes = T.mapOf(
             TItems.iron_plate, new ConveyorRecipe(3, TItems.precision_mechanism,
                 TItems.iron_gear, Type.Applying,
@@ -26,7 +27,7 @@ public class TCustom
             )
         );
 
-        crudeMetallurgy = new Tech("crude-metallurgy"){{
+        crude_metallurgy = new Tech("crude-metallurgy"){{
             type = TechType.Metallurgy;
 
             mapStats(T.mapOf(

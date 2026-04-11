@@ -1,10 +1,9 @@
 package technical.expansion.trap;
 
 import mindustry.world.Tile;
-import technical.T;
-import technical.TCol;
+import technical.utility.TBundle;
+import technical.utility.TCol;
 import technical.content.TFx;
-import technical.expansion.TBlock;
 import technical.expansion.kinetic.KineticBlock;
 import technical.expansion.tech.TechStat;
 import technical.expansion.trap.TrapBlock.TrapBlockBuild;
@@ -34,6 +33,7 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
 import mindustry.ui.Bar;
+import technical.utility.TDraw;
 
 public class TrapHook extends KineticBlock
 {
@@ -192,13 +192,13 @@ public class TrapHook extends KineticBlock
             } 
 
             if (connection != null || other.connection != null) {
-                Vars.ui.showInfoToast(T.bundle("err.links", "scarlet"), 1f);
+                Vars.ui.showInfoToast(TBundle.color(TBundle.error("links"), TCol.error), 1f);
                 return false;
             }
 
             float dst = Mathf.dst(x, y, other.x, other.y) / Vars.tilesize;
             if (dst > range) {
-                Vars.ui.showInfoToast(T.bundle("err.range", "scarlet"), 1f);
+                Vars.ui.showInfoToast(TBundle.color(TBundle.error("range"), TCol.error), 1f);
                 return false;
             }
 
@@ -219,7 +219,7 @@ public class TrapHook extends KineticBlock
             Draw.color();
 
             if (connection != null)
-                T.outline(connection, Pal.place);
+                TDraw.highlight(connection, Pal.place);
 
             Draw.reset();
 
@@ -231,8 +231,8 @@ public class TrapHook extends KineticBlock
         {
             if (connection == null || configuring) return;
 
-            T.outline(this, Pal.accent);
-            T.outline(connection, Pal.place);
+            TDraw.highlight(this, Pal.accent);
+            TDraw.highlight(connection, Pal.place);
 
             Draw.reset();
         }
@@ -262,7 +262,7 @@ public class TrapHook extends KineticBlock
                 }
                 else
                 {
-                    Draw.color(T.c("#aaaaaa7a"));
+                    Draw.color(TCol.from("#aaaaaa7a"));
                     Lines.stroke(1);
                 }
 

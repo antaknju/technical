@@ -1,17 +1,14 @@
 package technical.expansion;
 
 import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.math.geom.Point2;
-import arc.struct.EnumSet;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.content.Blocks;
-import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.entities.Puddles;
 import mindustry.gen.Building;
@@ -19,7 +16,7 @@ import mindustry.graphics.Pal;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
-import technical.Fr;
+import technical.utility.Fr;
 import technical.content.TFx;
 import technical.content.TLiquids;
 

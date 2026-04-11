@@ -18,6 +18,7 @@ import mindustry.entities.part.RegionPart;
 import mindustry.entities.pattern.ShootBarrel;
 import mindustry.gen.Building;
 import mindustry.gen.Sounds;
+import mindustry.graphics.CacheLayer;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
@@ -38,42 +39,14 @@ import mindustry.world.draw.DrawTurret;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.BuildVisibility;
-import technical.Fr;
-import technical.T;
-import technical.TCol;
-import technical.expansion.ConveyorCrafter;
-import technical.expansion.ConveyorRecipe;
-import technical.expansion.DroneCoreExpansion;
-import technical.expansion.FacilityController;
-import technical.expansion.HelperTurret;
-import technical.expansion.Inserter;
-import technical.expansion.FacilityFloorTile;
-import technical.expansion.FacilityInserter;
-import technical.expansion.FacilityLaser;
-import technical.expansion.FacilityLoader;
-import technical.expansion.FacilityPlan;
-import technical.expansion.FacilityPolisher;
-import technical.expansion.FacilityStep;
-import technical.expansion.FacilityWelder;
-import technical.expansion.Recipe;
-import technical.expansion.RecipeCrafter;
-import technical.expansion.RollerConveyor;
-import technical.expansion.RollerTunnel;
-import technical.expansion.TechLab;
-import technical.expansion.ThermalConduit;
-import technical.expansion.ThermalConduitHeater;
-import technical.expansion.ThermalPump;
-import technical.expansion.ThermalRouter;
-import technical.expansion.Volcano;
+import technical.utility.Fr;
+import technical.utility.T;
+import technical.utility.TCol;
+import technical.expansion.*;
 import technical.expansion.FacilityStep.FacilityStepType;
 import technical.expansion.draw.*;
 import technical.expansion.draw.DrawCogs.DrawCog;
-import technical.expansion.ext.ExtendableCrafter;
-import technical.expansion.ext.ExtendableDrill;
-import technical.expansion.ext.ExtendableGenerator;
-import technical.expansion.ext.ExtendableWallCrafter;
-import technical.expansion.ext.Extension;
-import technical.expansion.ext.ExtensionType;
+import technical.expansion.ext.*;
 import technical.expansion.kinetic.KineticBlock;
 import technical.expansion.kinetic.KineticComponentData;
 import technical.expansion.kinetic.KineticEnergy;
@@ -114,6 +87,7 @@ public class TBlocks {
     porcelain_furnace, steam_engine, brass_arm, brass_welder, brass_polisher, brass_smasher, ingot_mold,
 
     // ENVIRONMENT
+    water_floor, water_deep,
     scoria_floor, scoria_wall, scoria_boulder, scoria_volcano, lava_floor,
     gneiss_floor, gneiss_wall, gneiss_boulder,
     red_salt_floor, red_salt_boulder, red_salt_wall,
@@ -122,6 +96,7 @@ public class TBlocks {
     limestone_floor, limestone_wall, limestone_boulder, limestone_large_boulder,
     zinc_ore, copper_ore, coal_ore, iron_ore,
     stone_floor, stone_wall, stone_boulder,
+    sandstone_floor, sandstone_wall, sandstone_boulder, sandstone_water,
     rusted_floor, oxidized_floor,
     slate_floor, slate_wall, slate_boulder, slate_vent,
 
@@ -1290,6 +1265,8 @@ public class TBlocks {
             hasPower = false;
             hasLiquids = false;
 
+            tier = 2; // tier = 1 is for player unit
+
             drillTime = 9 * Fr.time; // for full ore connection is 1
             hardnessDrillMultiplier = 400f;
             tier = 1; // ONLY FOR COMMIT TESTING
@@ -1313,7 +1290,7 @@ public class TBlocks {
             drawer = new DrawMulti(new DrawDefault(), new DrawBlurSpin("-rotator", 1f){{blurThresh = 100f;}}, new DrawRegion("-top"));
         }};
 
-        mechanical_drill = new ExtendableDrill("mechanical-drill"){{
+        mechanical_drill = new ExtendableDrillRig("mechanical-drill"){{
             requirements(Category.production, with(TItems.iron_plate, 20, TItems.precision_mechanism, 5, TItems.copper_gear, 10));
             techType = TechType.Mining;
             health = 500;
@@ -1324,7 +1301,7 @@ public class TBlocks {
 
             drillTime = 9 * 0.5f * Fr.time; // for full ore connection is 0.5
             hardnessDrillMultiplier = 400f;
-            tier = 2;
+            tier = 3;
 
             maxEfficiency = 2;
             efficiencyCap = 100;
@@ -1338,8 +1315,6 @@ public class TBlocks {
             // RequiredExtensions = T.mapIntOf(
             //     ExtensionType.Cooler, 10
             // );
-
-            drawer = new DrawMulti(new DrawDefault(), new DrawBlurSpin("-rotator", 1f){{blurThresh = 100f;}}, new DrawRegion("-top"));
         }};
 
         stone_crusher = new ExtendableWallCrafter("stone-crusher"){{
@@ -1461,7 +1436,7 @@ public class TBlocks {
 
         iron_trap_hook = new TrapHook("iron-trap-hook"){{
             requirements(Category.defense, with(TItems.iron_plate, 20, TItems.iron_gear, 5, TItems.precision_mechanism, 3));
-            techType = TechType.Traping;
+            techType = TechType.Trapping;
             health = 50;
             size = 1;
 
@@ -1472,7 +1447,7 @@ public class TBlocks {
 
         stone_boulder_trap = new BoulderTrap("stone-boulder-trap"){{
             requirements(Category.defense, with(TItems.iron_plate, 10, TItems.iron_gear, 10, TItems.stone, 150));
-            techType = TechType.Traping;
+            techType = TechType.Trapping;
             health = 50;
             size = 2;
 
@@ -1485,7 +1460,7 @@ public class TBlocks {
 
         basic_spike_trap = new SpikeTrap("basic-spike-trap"){{
             requirements(Category.defense, with(TItems.iron_plate, 20, TItems.flint, 10, TItems.precision_mechanism, 3));
-            techType = TechType.Traping;
+            techType = TechType.Trapping;
             health = 300;
             size = 2;
 
@@ -1494,7 +1469,7 @@ public class TBlocks {
 
         sickle_trap = new SickleTrap("sickle-trap"){{
             requirements(Category.defense, with(TItems.iron_plate, 60, TItems.flint, 30, TItems.precision_mechanism, 20));
-            techType = TechType.Traping;
+            techType = TechType.Trapping;
             health = 300;
             size = 2;
 
@@ -1503,7 +1478,7 @@ public class TBlocks {
 
         dart_trap = new DartTrap("dart-trap"){{
             requirements(Category.defense, with(TItems.iron_plate, 10, TItems.flint, 10, TItems.precision_mechanism, 3));
-            techType = TechType.Traping;
+            techType = TechType.Trapping;
             health = 300;
             size = 2;
 
@@ -1828,6 +1803,30 @@ public class TBlocks {
         ///           ENVIRONMENT            ///
         ////////////////////////////////////////
 
+        water_floor = new Floor("water-floor"){{
+            variants = 0;
+            liquidDrop = TLiquids.water;
+            cacheLayer = CacheLayer.water;
+            isLiquid = true;
+            albedo = 0.9f;
+            supportsOverlay = true;
+            status = TStatuses.wet;
+
+            speedMultiplier = 0.5f;
+        }};
+
+        water_deep = new Floor("water-deep"){{
+            variants = 0;
+            liquidDrop = TLiquids.water;
+            cacheLayer = CacheLayer.water;
+            isLiquid = true;
+            albedo = 0.9f;
+            supportsOverlay = true;
+            status = TStatuses.wet;
+
+            speedMultiplier = 0.2f;
+        }};
+
         copper_ore = new OreBlock("copper-ore", TItems.raw_copper){{
             variants = 3;
         }};
@@ -1856,6 +1855,23 @@ public class TBlocks {
         stone_wall = new StaticWall("stone-wall"){{
             variants = 2;
             attributes.set(TAttributes.stone, 0.8f);
+        }};
+
+        sandstone_boulder = new Prop("sandstone-boulder"){{
+            variants = 2;
+        }};
+
+        sandstone_floor = new Floor("sandstone-floor"){{
+            variants = 3;
+        }};
+
+        sandstone_water = new TShallowLiquid("sandstone-water"){{
+            set(water_floor, sandstone_floor);
+        }};
+
+        sandstone_wall = new StaticWall("sandstone-wall"){{
+            variants = 2;
+            attributes.set(TAttributes.sand, 1f);
         }};
 
         slate_boulder = new Prop("slate-boulder"){{

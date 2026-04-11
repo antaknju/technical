@@ -1,9 +1,13 @@
 package technical;
 
 import arc.Core;
+import arc.Events;
 import arc.graphics.Texture;
+import arc.graphics.g2d.TextureRegion;
+import arc.util.Log;
 import mindustry.Vars;
 import mindustry.content.UnitTypes;
+import mindustry.game.EventType;
 import mindustry.mod.*;
 import technical.content.*;
 import technical.debug.Debugger;
@@ -60,7 +64,8 @@ public class Technical extends Mod
 
         TVars.load();
 
-        /// VANILLA CHANGES
+        /// VANILLA DEBUG CHANGES
+        Vars.renderer.maxZoom = 10f;
         
         // UnitTypes.mace.weapons.clear();
         // UnitTypes.elude.weapons.clear();
@@ -68,28 +73,19 @@ public class Technical extends Mod
         // UnitTypes.scepter.weapons.clear();
         // UnitTypes.reign.weapons.clear();
 
-        Vars.renderer.maxZoom = 10f;
 
         // Vars.testMobile = true;
 
-        // Events.on(ClientLoadEvent.class, event -> {
-        //     BaseDialog dialog = new BaseDialog("Welcome to Technical!");
-
-        //     Table content = dialog.cont;
-            
-        //     Image icon = new Image(Items.copper.uiIcon);
-        //     content.add(icon).size(64f).pad(10f);
-
-        //     content.add(new Image(TIcons.question)).size(64f).pad(10f);
-
-        //     content.row();
-        //     content.add(new Label("Hello! This window opens on game start.")).pad(10f);
-            
-        //     dialog.buttons.defaults().size(160f, 50f);
-        //     dialog.buttons.button("Close", dialog::hide);
-            
-        //     dialog.show();
-        // });
+        Events.on(EventType.ContentInitEvent.class, e -> {
+             var info = TStatuses.wet.uiIcon;
+             Log.info("Region: " + info);
+             Log.info("Region: " + info);
+             Log.info("Region: " + info);
+             Log.info("Region: " + info);
+             Log.info("Region: " + info);
+             Log.info("Region: " + info);
+             Log.info("Region: " + info);
+         });
     }
 }
 

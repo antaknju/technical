@@ -1,6 +1,6 @@
 package technical.content;
 
-import technical.TCol;
+import technical.utility.TCol;
 import technical.expansion.RecipeItem;
 import mindustry.type.*;
 
@@ -14,126 +14,153 @@ public class TItems
     // Technology
     metallurgy_xp
     ;
-    public static RecipeItem basic_circuit, precision_mechanism;
+    public static RecipeItem precision_mechanism;
 
     public static void load() 
     {
         // Mine able
 
-        uranium = new Item("uranium", TCol.uranium) {{
+        uranium = new Item("uranium") {{
             hardness = 6;
             radioactivity = 1f;
             buildable = false;
+            hardness = 67;
+
+            color = TCol.uranium;
         }};
 
-        raw_copper = new Item("raw-copper", TCol.copper) {{
+        raw_copper = new Item("raw-copper") {{
             cost = 0.4f;
             buildable = false;
-            hardness = 3;
+            hardness = 2;
+            color = TCol.copper;
         }};
 
-        clay = new Item("clay", TCol.clay) {{
-            hardness = 1;
+        clay = new Item("clay") {{
+            hardness = 0;
             buildable = false;
+            color = TCol.clay;
         }};
 
-        coal = new Item("coal", TCol.coal) {{
+        coal = new Item("coal") {{
             buildable = false;
             flammability = 0.5f;
             explosiveness = 0.1f;
+            hardness = 0;
+
+            color = TCol.coal;
         }};
 
-        raw_iron = new Item("raw-iron", TCol.iron) {{
+        raw_iron = new Item("raw-iron") {{
             cost = 0.5f;
-            buildable = true;
-            hardness = 2;
-            healthScaling = 0.5f;
-        }};
-
-        raw_zinc = new Item("raw-zinc", TCol.zinc) {{
-            cost = 0.6f;
-            buildable = false;
-            hardness = 4;
-        }};
-
-        stone = new Item("stone", TCol.stone) {{
-            cost = 0.1f;
             buildable = true;
             hardness = 1;
             healthScaling = 0.5f;
+
+            color = TCol.iron;
+        }};
+
+        raw_zinc = new Item("raw-zinc") {{
+            cost = 0.6f;
+            buildable = false;
+            hardness = 4;
+
+            color = TCol.zinc;
+        }};
+
+        stone = new Item("stone") {{
+            cost = 0.1f;
+            buildable = true;
+            hardness = 0;
+            healthScaling = 0.5f;
+            color = TCol.stone;
         }};
 
         // Craftable
 
-        iron_plate = new Item("iron-plate", TCol.iron) {{
+        iron_plate = new Item("iron-plate") {{
             cost = 3f;
             buildable = true;
             healthScaling = 1f;
+            color = TCol.iron;
         }};
 
-        porcelain = new Item("porcelain", TCol.porcelain) {{
+        porcelain = new Item("porcelain") {{
             cost = 3f;
             buildable = true;
             healthScaling = 0.2f;
+            color = TCol.porcelain;
         }};
 
-        copper_plate = new Item("copper-plate", TCol.copper) {{
+        copper_plate = new Item("copper-plate") {{
             cost = 2f;
             buildable = true;
+            color = TCol.copper;
         }};
 
-        brick = new Item("brick", TCol.brick) {{
+        brick = new Item("brick") {{
             cost = 3f;
             buildable = true;
+            color = TCol.brick;
         }};
 
-        flint = new Item("flint", TCol.flint) {{
+        flint = new Item("flint") {{
             cost = 3f;
             buildable = true;
+            color = TCol.flint;
         }};
 
-        dense_ammo = new Item("dense-ammo", TCol.dense_ammo) {{
+        dense_ammo = new Item("dense-ammo") {{
             buildable = false;
+            color = TCol.dense_ammo;
         }};
 
-        copper_wire = new Item("copper-wire", TCol.copper) {{
+        copper_wire = new Item("copper-wire") {{
             cost = 3f;
             buildable = true;
+            color = TCol.copper;
         }};
 
-        precision_mechanism = new RecipeItem("precision-mechanism", TCol.circuit) {{
+        precision_mechanism = new RecipeItem("precision-mechanism") {{
             cost = 15f;
             buildable = true;
+            color = TCol.circuit;
         }};
 
-        copper_gear = new Item("copper-gear", TCol.copper) {{
+        copper_gear = new Item("copper-gear") {{
             buildable = false;
             cost = 5f;
+            color = TCol.copper;
         }};
 
-        iron_gear = new Item("iron-gear", TCol.iron) {{
+        iron_gear = new Item("iron-gear") {{
             buildable = false;
             cost = 5f;
+            color = TCol.iron;
         }};
 
-        brass_ingot = new Item("brass-ingot", TCol.brass) {{
+        brass_ingot = new Item("brass-ingot") {{
             buildable = true;
             cost = 5f;
+            color = TCol.brass;
         }};
 
-        zinc_ingot = new Item("zinc-ingot", TCol.zinc) {{
+        zinc_ingot = new Item("zinc-ingot") {{
             buildable = true;
             cost = 3f;
+            color = TCol.zinc;
         }};
 
-        copper_rod = new Item("copper-rod", TCol.copper) {{
+        copper_rod = new Item("copper-rod") {{
             buildable = false;
             cost = 5f;
+            color = TCol.copper;
         }};
 
-        iron_rod = new Item("iron-rod", TCol.iron) {{
+        iron_rod = new Item("iron-rod") {{
             buildable = true;
             cost = 5f;
+            color = TCol.iron;
         }};
 
         // XP

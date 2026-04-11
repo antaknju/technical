@@ -5,17 +5,14 @@ package technical.content;
 // import technical.TPlanetGenerator;
 import arc.graphics.*;
 // import arc.struct.Seq;
-import arc.util.*;
 import mindustry.graphics.Pal;
-import mindustry.graphics.g3d.*;
 import mindustry.maps.planet.SerpuloPlanetGenerator;
 import mindustry.type.*;
 import mindustry.world.meta.Env;
-import technical.TCol;
+import technical.utility.TCol;
 import technical.expansion.TPlanetMesh;
 import mindustry.content.*;
 import mindustry.game.Team;
-import mindustry.gen.Musics;
 
 public class TPlanets 
 {

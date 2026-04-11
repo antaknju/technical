@@ -10,26 +10,21 @@ import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.struct.ObjectSet;
 import arc.util.Strings;
-import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.type.Item;
-import mindustry.type.ItemStack;
 import mindustry.ui.Bar;
 import mindustry.world.draw.DrawBlock;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
-import mindustry.world.meta.StatValue;
-import mindustry.world.meta.StatValues;
-import technical.Fr;
-import technical.T;
+import technical.utility.Fr;
 import technical.content.TIcons;
-import technical.expansion.TechLab.TechLabBuild;
 import technical.expansion.kinetic.ConsumeKineticDynamic;
 import technical.expansion.kinetic.KineticBlock;
 import technical.expansion.kinetic.KineticEnergy;
 import technical.expansion.tech.TechStat;
 import technical.expansion.tech.TechType;
+import technical.utility.TDraw;
 
 public class TechLab extends KineticBlock
 {    
@@ -222,7 +217,7 @@ public class TechLab extends KineticBlock
 
             for (var tb : getResearchedBuilds())
             {
-                T.outline(tb, Pal.accent);
+                TDraw.highlight(tb, Pal.accent);
             }
         }
 

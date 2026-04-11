@@ -19,8 +19,7 @@ import mindustry.world.draw.DrawBlock;
 import mindustry.world.meta.Env;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
-import technical.T;
-import technical.expansion.ThermalPump.ThermalPumpBuild;
+import technical.utility.T;
 
 public class ThermalPump extends ThermalLiquidBlock 
 {

@@ -1,7 +1,6 @@
 package technical.expansion.kinetic;
 
 import arc.struct.Seq;
-import arc.util.Log;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
@@ -9,8 +8,8 @@ import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.graphics.Pal;
 import mindustry.world.Block;
-import technical.T;
 import technical.expansion.TBlock;
+import technical.utility.TDraw;
 
 public class KineticBlock extends TBlock 
 {
@@ -96,7 +95,7 @@ public class KineticBlock extends TBlock
             {
                 for (Building other : kinetic.graph().builds) 
                 {
-                    T.outline(other, (other != this ? Pal.place : Pal.accent));
+                    TDraw.highlight(other, (other != this ? Pal.place : Pal.accent));
                 }
             }
         }

@@ -8,7 +8,6 @@ import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.*;
 import arc.scene.ui.layout.Table;
-import arc.util.*;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
@@ -18,7 +17,7 @@ import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.TileBitmask;
 import mindustry.world.meta.*;
-import technical.T;
+import technical.utility.T;
 import technical.content.TBlocks;
 import technical.debug.Debugger.DebugLine;
 

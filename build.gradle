@@ -81,8 +81,27 @@ tasks.register('jarAndroid'){
     }
 }
 
+def getModVersion() {
+    def modFile = file('mod.hjson')
+    if (!modFile.exists()) return 'unknown'
+    def matcher = Pattern.compile(/version\s*[:=]\s*["']?([0-9a-zA-Z.+-]+)["']?/).matcher(modFile.text)
+    return matcher.find() ? matcher.group(1) : 'unknown'
+}
+
+
 jar{
     archiveFileName = "${project.name}Desktop.jar"
+
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': getModVersion(),
+                'Created-By': 'AnTakNju',
+                'Build-Jdk': System.getProperty('java.version'),
+                'Built-By': "Gradle ${gradle.gradleVersion}",
+                'License': 'GNU AGPLv3'
+        )
+    }
 
     from{
         configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
@@ -180,5 +199,119 @@ tasks.register('inject', Copy) {
         def name = base.archivesName.get()
         fileTree(destDir).include("${name}*.jar").forEach { it.delete() }
         println "Cleared previous builds of $name"
+    }
+}
+
+tasks.register('bungen') {
+    doLast {
+        def contentDir = file("${project.projectDir}/src/technical/content")
+        def bundleFile = file("${project.projectDir}/assets/bundles/bundle.properties")
+
+        if (!bundleFile.exists()) {
+            bundleFile.parentFile.mkdirs()
+            bundleFile.createNewFile()
+        }
+
+        def lines = bundleFile.readLines()
+
+        // Normalize keys
+        def normalize = { it.replaceAll("\\s+", "") }
+
+        def existingKeys = lines
+                .findAll { it.contains("=") }
+                .collect { normalize(it.split("=")[0]) }
+                .toSet()
+
+        def existingSections = lines
+                .findAll { it ==~ /#+\s+[A-Z]+\s+#+/ }
+                .collect { it.replaceAll("#", "").trim().toLowerCase() }
+                .toSet()
+
+        def fileMap = [
+                "TBlocks.java"  : "block",
+                "TUnits.java"   : "unit",
+                "TItems.java"   : "item",
+                "TLiquids.java" : "liquid",
+                "TSectors.java" : "sector",
+                "TStatuses.java": "status"
+        ]
+
+        def outputSections = [:].withDefault { [] }
+
+        fileMap.each { fileName, prefix ->
+            def file = new File(contentDir, fileName)
+            if (!file.exists()) return
+
+            def fileLines = file.readLines()
+
+            for (int i = 0; i < fileLines.size(); i++) {
+                def line = fileLines[i]
+
+                // Ignore marker
+                if (i > 0 && fileLines[i - 1].contains("/// BUNGEN IGNORE")) {
+                    continue
+                }
+
+                // exactly 8 spaces
+                def matcher = line =~ /^ {8}[a-zA-Z0-9_]+\s*=\s*new\s+\w+\("([^"]+)"\)\s*\{\{/
+                if (!matcher.find()) continue
+
+                def name = matcher.group(1)
+
+                def keyBase = "${prefix}.technical-${name}"
+                def nameKey = normalize("${keyBase}.name")
+
+                // duplicate protection
+                if (existingKeys.contains(nameKey)) continue
+
+                existingKeys.add(nameKey)
+
+                def formattedName = name
+                        .replace("-", " ")
+                        .split(" ")
+                        .collect { it.capitalize() }
+                        .join(" ")
+
+                outputSections[prefix] += [
+                        "${keyBase}.name = ${formattedName}",
+                        "${keyBase}.description = GEN",
+                        "# ${keyBase}.details = "
+                ]
+            }
+        }
+
+        if (outputSections.isEmpty()) {
+            println "No new entries added. Terminating."
+            return
+        }
+
+        def builder = new StringBuilder()
+
+        outputSections.each { prefix, entries ->
+            if (entries.isEmpty()) return
+
+            def sectionHeader = "######################### ${prefix.toUpperCase()} #########################"
+
+            if (!existingSections.contains(prefix)) {
+                builder.append("\n${sectionHeader}\n\n")
+            } else {
+                builder.append("\n")
+            }
+
+            for (int i = 0; i < entries.size(); i += 3) {
+                builder.append(entries[i]).append("\n")
+                builder.append(entries[i + 1]).append("\n")
+                builder.append(entries[i + 2]).append("\n\n")
+            }
+        }
+
+        def output = builder.toString()
+
+        println "\nBUNGEN ENTRIES ADDED"
+        println output
+
+        bundleFile << output
+
+        println "Bundle generation complete."
     }
 }

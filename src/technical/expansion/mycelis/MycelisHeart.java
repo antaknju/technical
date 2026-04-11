@@ -13,7 +13,7 @@ import mindustry.Vars;
 import mindustry.gen.Building;
 import mindustry.type.Liquid;
 import mindustry.world.Tile;
-import technical.T;
+import technical.utility.T;
 import technical.content.TBlocks;
 import technical.expansion.mycelis.MycelisCord.MycelisCordBuild;
 

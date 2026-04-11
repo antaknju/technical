@@ -7,26 +7,20 @@ import arc.math.*;
 import arc.math.geom.Vec2;
 import arc.util.Time;
 import arc.util.Tmp;
-import mindustry.Vars;
 import mindustry.content.Liquids;
 import mindustry.entities.*;
-import mindustry.gen.Puddle;
-import mindustry.gen.Sounds;
-import mindustry.gen.Unit;
-import mindustry.gen.UnitEntity;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import mindustry.world.Tile;
 
 import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.*;
 import static mindustry.Vars.world;
 
-import technical.T;
-// import technical.T;
-import technical.TCol;
+import technical.utility.T;
+// import technical.utility.T;
+import technical.utility.TCol;
 
 public class TFx {
     public static final Rand rand = new Rand();
@@ -57,6 +51,33 @@ public class TFx {
         });
     }),
 
+    wet = new Effect(80f, e -> {
+        color(e.color);
+
+        alpha(Mathf.clamp(e.finpow() * 1.5f));
+
+        randLenVectors(e.id, 6, e.finpow() * 15f, (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, e.foutpow() * 2f);
+        });
+    }),
+
+    mineRound = new Effect(40, e -> {
+        float ringRadius = 2f;
+        rand.setSeed(e.id);
+
+        for(int i = 0; i < 6; i++)
+        {
+            float angle = rand.random(0, 360f);
+
+            float len = ringRadius + (e.finpow() * 4f);
+
+            Tmp.v1.trns(angle, len);
+
+            color(e.color, Color.gray, e.fin());
+            Fill.circle(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.fout() * 0.8f);
+        }
+    }),
+
     smoke = new Effect(140f, e -> {
         color(e.color, Pal.vent2, e.fin());
 
@@ -71,7 +92,7 @@ public class TFx {
     }).layer(Layer.flyingUnit - 1),
 
     littleSmoke = new Effect(60f, e -> {
-        color(e.color, T.c("#949494ff"), e.fin());
+        color(e.color, TCol.from("#949494ff"), e.fin());
 
         alpha(e.fslope() * 0.78f);
 

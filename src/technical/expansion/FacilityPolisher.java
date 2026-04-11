@@ -5,7 +5,7 @@ import arc.math.geom.Vec2;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.entities.Effect;
-import technical.T;
+import technical.utility.T;
 import technical.content.TFx;
 
 public class FacilityPolisher extends FacilityArm

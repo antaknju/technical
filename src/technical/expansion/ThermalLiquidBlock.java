@@ -32,15 +32,15 @@ import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
-import technical.T;
-import technical.TCol;
+import technical.utility.T;
+import technical.utility.TCol;
 
 public class ThermalLiquidBlock extends TBlock implements Autotiler
 {
     public Color botColor = Color.valueOf("#5b6977");
 
-    public Color coolColor = T.c("#002fffff");
-    public Color heatColor = T.c("#ff1e00ff");
+    public Color coolColor = TCol.from("#002fffff");
+    public Color heatColor = TCol.from("#ff1e00ff");
     public float heatPulse = 0.3f, heatPulseScl = 50f;
 
     public final int timerFlow = timers++;
@@ -117,7 +117,7 @@ public class ThermalLiquidBlock extends TBlock implements Autotiler
         super.setBars();
 
         addBar("heat", (ThermalLiquidBuild b) -> new Bar(
-            () -> Core.bundle.format(b.heat >= 0 ? "bar.heatamount" : "bar.coolamount", Math.round(Math.abs(b.heat))),
+            () -> Core.bundle.format(b.heat >= 0 ? "bar.heatamount" : "bar.cool-amount", Math.round(Math.abs(b.heat))),
             () -> heatColor(b),
             () -> Math.abs(b.heat) / maxHeat
         ));

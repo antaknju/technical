@@ -17,8 +17,8 @@
 // import mindustry.world.Tile;
 // import mindustry.world.blocks.Autotiler;
 // import mindustry.world.meta.*;
-// import technical.T;
-// import technical.TCol;
+// import technical.utility.T;
+// import technical.utility.TCol;
 // import technical.expansion.ai.TPathfinder;
 
 // public class MycelisCordOld extends MycelisBlock implements Autotiler {

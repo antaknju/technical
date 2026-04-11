@@ -7,7 +7,7 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.geom.Point2;
 import mindustry.entities.bullet.BulletType;
-import technical.T;
+import technical.utility.T;
 import technical.content.TWeapons;
 
 public class DartTrap extends TrapBlock {

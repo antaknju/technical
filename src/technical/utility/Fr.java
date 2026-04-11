@@ -1,4 +1,4 @@
-package technical;
+package technical.utility;
 
 // Used for var scaling 
 // to get X power / sec use X * Fr.power

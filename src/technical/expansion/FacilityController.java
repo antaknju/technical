@@ -1,12 +1,9 @@
 package technical.expansion;
 
-import static mindustry.Vars.content;
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 import static technical.debug.Debugger.print;
 
-import arc.Core;
-import arc.func.Cons;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.math.geom.Point2;
@@ -20,7 +17,6 @@ import arc.util.Time;
 import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import mindustry.core.UI;
 import mindustry.ctype.UnlockableContent;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
@@ -41,18 +37,15 @@ import mindustry.world.blocks.payloads.Payload;
 import mindustry.world.blocks.payloads.UnitPayload;
 import mindustry.world.consumers.ConsumeItemDynamic;
 import mindustry.world.consumers.ConsumeLiquidsDynamic;
-import mindustry.world.consumers.ConsumePayloadDynamic;
 import mindustry.world.consumers.ConsumePowerDynamic;
 import mindustry.world.meta.Stat;
-import technical.T;
+import technical.utility.T;
 import technical.expansion.FacilityAddapter.FacilityAddapterBuild;
 import technical.expansion.FacilityFloorTile.FacilityFloorTileBuild;
 import technical.expansion.FacilityLoader.FacilityLoaderBuild;
 import technical.expansion.FacilityStep.FacilityStepType;
-import technical.expansion.RecipeCrafter.RecipeCrafterBuild;
-import technical.expansion.ext.ExtensionType;
 import technical.expansion.kinetic.ConsumeKineticDynamic;
-import technical.expansion.kinetic.KineticEnergy;
+import technical.utility.TUI;
 
 public class FacilityController extends TPayloadBlock
 {

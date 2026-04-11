@@ -10,12 +10,13 @@ import mindustry.ui.Bar;
 import mindustry.world.Tile;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
-import technical.Fr;
-import technical.T;
+import technical.utility.Fr;
+import technical.utility.T;
 import technical.content.TCustom;
 import technical.content.TFx;
 import technical.expansion.RollerConveyor.RollerConveyorBuild;
 import technical.expansion.tech.TechStat;
+import technical.utility.TDraw;
 
 public class ConveyorCrafter extends TBlock
 {
@@ -180,8 +181,8 @@ public class ConveyorCrafter extends TBlock
         {
             if (!isConnectionValid()) return;
 
-            T.outline(this);
-            T.outline(connection, Pal.place);
+            TDraw.highlight(this);
+            TDraw.highlight(connection, Pal.place);
         }
 
         @Override

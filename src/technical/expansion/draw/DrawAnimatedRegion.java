@@ -8,7 +8,7 @@ import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
 import mindustry.world.Block;
 import mindustry.world.draw.DrawBlock;
-import technical.T;
+import technical.utility.T;
 
 public class DrawAnimatedRegion extends DrawBlock {
     public TextureRegion[] regions;

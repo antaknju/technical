@@ -29,7 +29,7 @@ public enum TechType
 
     Mining,
 
-    Traping,
+    Trapping,
     // HardAmmoTurrets,
     // Defense,
 

@@ -7,7 +7,7 @@ import arc.struct.ObjectMap;
 import mindustry.Vars;
 import mindustry.entities.Effect;
 import mindustry.type.Item;
-import technical.T;
+import technical.utility.T;
 
 public class MycelisDrill extends MycelisBlock {
 

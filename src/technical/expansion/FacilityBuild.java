@@ -1,8 +1,9 @@
 package technical.expansion;
 
 import mindustry.gen.Building;
-import technical.T;
+import technical.utility.T;
 import technical.expansion.FacilityController.FacilityControllerBuild;
+import technical.utility.TDraw;
 
 public interface FacilityBuild
 {
@@ -13,6 +14,6 @@ public interface FacilityBuild
     {
         if (controller() == null) return;
 
-        T.outline(controller());
+        TDraw.highlight(controller());
     }
 }

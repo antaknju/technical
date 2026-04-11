@@ -2,7 +2,6 @@ package technical.expansion.train;
 
 import mindustry.world.Tile;
 import mindustry.world.meta.BlockGroup;
-import technical.T;
 import technical.expansion.TBlock;
 
 import static mindustry.Vars.tilesize;
@@ -20,6 +19,9 @@ import mindustry.Vars;
 import mindustry.gen.Building;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
+import technical.utility.TBundle;
+import technical.utility.TCol;
+import technical.utility.TDraw;
 
 public class RailConnector extends TBlock 
 {
@@ -78,18 +80,18 @@ public class RailConnector extends TBlock
             } 
 
             if (links.size >= 2 || other.links.size >= 2) {
-                Vars.ui.showInfoToast(T.bundle("err.links", "scarlet"), 1f);
+                Vars.ui.showInfoToast(TBundle.color(TBundle.error("links"), TCol.error), 1f);
                 return false;
             }
 
             float dst = Mathf.dst(x, y, other.x, other.y) / Vars.tilesize;
             if (dst < minRange || dst > maxRange) {
-                Vars.ui.showInfoToast(T.bundle("err.range", "scarlet"), 1f);
+                Vars.ui.showInfoToast(TBundle.color(TBundle.error("range"), TCol.error), 1f);
                 return false;
             }
 
             if (!isPathClear(this, other)) {
-                Vars.ui.showInfoToast(T.bundle("err.path-blocked", "scarlet"), 1f);
+                Vars.ui.showInfoToast(TBundle.color(TBundle.error("path-blocked"), TCol.error), 1f);
                 return false;
             }
 
@@ -110,7 +112,7 @@ public class RailConnector extends TBlock
             Lines.circle(x, y, minRange * tilesize);
 
             for (RailConnectorBuild link : links) {
-                T.outline(link, Pal.place);
+                TDraw.highlight(link, Pal.place);
             }
 
             Draw.reset();
@@ -129,10 +131,10 @@ public class RailConnector extends TBlock
         {
             if (links.size <= 0 || configuring) return;
 
-            T.outline(this);
+            TDraw.highlight(this);
 
             for (RailConnectorBuild link : links) {
-                T.outline(link, Pal.place);
+                TDraw.highlight(link, Pal.place);
             }
 
             Draw.reset();

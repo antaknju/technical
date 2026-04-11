@@ -7,9 +7,10 @@ import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.type.Item;
 import mindustry.type.ItemStack;
-import technical.T;
+import technical.utility.T;
 import technical.content.TFx;
 import technical.expansion.FacilityLoader.FacilityLoaderBuild;
+import technical.utility.TDraw;
 
 public class FacilityInserter extends FacilityArm
 {
@@ -112,7 +113,7 @@ public class FacilityInserter extends FacilityArm
         {
             super.drawAddapter();
 
-            T.drawItemStack(carriedStack, currentHandPos.x, currentHandPos.y, itemTime);
+            TDraw.drawItemStack(carriedStack, currentHandPos.x, currentHandPos.y, itemTime);
         }
     }
 }

@@ -3,9 +3,8 @@ package technical.content;
 import arc.graphics.Color;
 import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
-import mindustry.type.StatusEffect;
-import technical.T;
-import technical.TCol;
+import technical.utility.T;
+import technical.utility.TCol;
 import technical.expansion.CellTLiquid;
 import technical.expansion.TLiquid;
 
@@ -37,8 +36,8 @@ public class TLiquids
             canStayOn.addAll(Liquids.water);
 
             color = TCol.uranium;
-            colorFrom = T.c("#2bff00ff");
-            colorTo = T.c("#079c0eff");
+            colorFrom = TCol.from("#2bff00ff");
+            colorTo = TCol.from("#079c0eff");
         }};
 
         bio_fluid = new CellTLiquid("bio-fluid") {{
@@ -59,8 +58,8 @@ public class TLiquids
             canStayOn.addAll(Liquids.water);
 
             color = TCol.bioOrange;
-            colorFrom = T.c("#ffcd66");
-            colorTo = T.c("#ffb166");
+            colorFrom = TCol.from("#ffcd66");
+            colorTo = TCol.from("#ffb166");
         }};
 
         crude_oil = new TLiquid("crude-oil"){{
@@ -74,7 +73,7 @@ public class TLiquids
 
             canStayOn.addAll(Liquids.water);
 
-            color = T.c("#202020ff");
+            color = TCol.from("#202020ff");
         }};
 
         metan = new TLiquid("metan"){{
@@ -86,7 +85,7 @@ public class TLiquids
             heatCapacity = 0f;
             explosiveness = 0.6f;
 
-            color = T.c("#ff7d49ff");
+            color = TCol.from("#ff7d49ff");
         }};
 
         wide_oil_fraction = new TLiquid("wide-oil-fraction"){{
@@ -99,7 +98,7 @@ public class TLiquids
 
             canStayOn.addAll(Liquids.water);
 
-            color = T.c("#222222ff");
+            color = TCol.from("#222222ff");
         }};
 
         solidified_iron = new TLiquid("solidified-iron"){{
@@ -123,7 +122,7 @@ public class TLiquids
             heatCapacity = 0;
             explosiveness = 0;
 
-            color = T.c("#c7734c");
+            color = TCol.from("#c7734c");
 
             setupLower(solidified_iron, 100, 5);
         }};
@@ -149,7 +148,7 @@ public class TLiquids
             heatCapacity = 0.5f;
             explosiveness = 0;
 
-            color = T.c("#ff7e00");
+            color = TCol.from("#ff7e00");
 
             setupLower(solidified_zinc, 70, 5);
         }};
@@ -175,7 +174,7 @@ public class TLiquids
             heatCapacity = 0.5f;
             explosiveness = 0;
 
-            color = T.c("#ff3600");
+            color = TCol.from("#ff3600");
 
             setupLower(solidified_brass, 80, 5);
         }};
@@ -201,7 +200,7 @@ public class TLiquids
             heatCapacity = 0.5f;
             explosiveness = 0;
 
-            color = T.c("#ec4b00");
+            color = TCol.from("#ec4b00");
 
             setupLower(solidified_copper, 80, 5);
         }};
@@ -232,7 +231,7 @@ public class TLiquids
             boilPoint = 999;
             canMove = false;
 
-            color = T.c("#9aacffff");
+            color = TCol.from("#9aacffff");
         }};
 
         water = new TLiquid("water"){{
@@ -242,7 +241,7 @@ public class TLiquids
             gasColor = Color.grays(0.9f);
             canMove = true;
 
-            color = T.c("#596ab8");
+            color = TCol.water;
 
             setupLower(ice, -20, 3);
         }};
@@ -256,7 +255,7 @@ public class TLiquids
             heatCapacity = 0.3f;
             explosiveness = 0f;
 
-            color = T.c("#a0a0a0ff");
+            color = TCol.from("#a0a0a0ff");
 
             setupLower(water, 20, 3);
         }};

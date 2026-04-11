@@ -28,7 +28,7 @@ import mindustry.world.blocks.distribution.ChainedBuilding;
 import mindustry.world.blocks.distribution.DirectionBridge;
 import mindustry.world.blocks.distribution.ItemBridge;
 import mindustry.world.blocks.liquid.LiquidJunction;
-import technical.T;
+import technical.utility.T;
 
 public class ThermalConduit extends ThermalLiquidBlock 
 {

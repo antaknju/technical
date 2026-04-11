@@ -1,34 +1,21 @@
 package technical.content;
 
-import arc.graphics.Color;
-import arc.graphics.g2d.Lines;
-import arc.math.Mathf;
 import arc.math.geom.Rect;
-import arc.math.geom.Vec2;
 import mindustry.Vars;
 import mindustry.ai.types.BuilderAI;
 import mindustry.ai.types.CommandAI;
 import mindustry.ai.types.HugAI;
-import mindustry.content.Fx;
-import mindustry.entities.Effect;
-import mindustry.entities.bullet.RailBulletType;
-import mindustry.entities.part.DrawPart.PartProgress;
 import mindustry.entities.part.RegionPart;
-import mindustry.entities.pattern.ShootAlternate;
 import mindustry.gen.CrawlUnit;
 import mindustry.gen.LegsUnit;
 import mindustry.gen.MechUnit;
 import mindustry.gen.Sounds;
 import mindustry.gen.TankUnit;
-import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
-import mindustry.type.Weapon;
 import mindustry.type.ammo.ItemAmmoType;
-import mindustry.type.unit.TankUnitType;
-import mindustry.world.meta.Env;
-import technical.TCol;
+import technical.utility.TCol;
 import technical.expansion.train.RailVehicle;
 import technical.expansion.train.RailVehicleUnit;
 
@@ -75,7 +62,7 @@ public class TUnits {
 
             targetBuildingsMobile = false;
             mineSpeed = 3.5f;
-            mineTier = 1;
+            mineTier = 0;
 
             constructor = MechUnit::create;
 

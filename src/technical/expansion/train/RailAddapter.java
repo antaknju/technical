@@ -7,10 +7,9 @@ import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import mindustry.game.Team;
-import mindustry.gen.Building;
 import mindustry.world.Tile;
 import mindustry.world.meta.BlockGroup;
-import technical.T;
+import technical.utility.T;
 import technical.expansion.TBlock;
 
 public class RailAddapter extends TBlock

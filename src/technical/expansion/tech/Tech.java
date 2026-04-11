@@ -7,7 +7,7 @@ import mindustry.ctype.UnlockableContent;
 import mindustry.type.ItemStack;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
-import technical.T;
+import technical.utility.TBundle;
 
 public class Tech extends UnlockableContent
 {
@@ -33,7 +33,7 @@ public class Tech extends UnlockableContent
 
         Stat s1 = new Stat("tech-type", techStatCat);
         super.stats.add(s1, table -> {
-            table.add("[blue]" + T.bundle(type) + "[]");
+            table.add("[blue]" + TBundle.get_enum(type) + "[]");
         });
 
         for (TechStat tstat : TechStat.values()) {
@@ -41,7 +41,7 @@ public class Tech extends UnlockableContent
 
             if (value <= tstat.defVal()) continue;
 
-            Stat stat = new Stat(T.kebab("tstat-" + tstat.name()), techStatCat);
+            Stat stat = new Stat(TBundle.kebab("tstat-" + tstat.name()), techStatCat);
             super.stats.add(stat, table -> {
                 table.add("[blue]" + (value >= 0 ? "+" : "-")  + String.format("%.2f", (value - tstat.defVal()) * 100f) + "%[]");
             });

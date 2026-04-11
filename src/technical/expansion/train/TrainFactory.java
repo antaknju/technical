@@ -30,7 +30,7 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.UnitTetherBlock;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatValues;
-import technical.T;
+import technical.utility.T;
 import technical.content.TUnits;
 import technical.expansion.train.RailConnector.RailConnectorBuild;
 

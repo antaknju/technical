@@ -21,8 +21,8 @@ import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.ui.Fonts;
 import mindustry.world.Tile;
-import technical.T;
-import technical.TCol;
+import technical.utility.T;
+import technical.utility.TCol;
 
 import static mindustry.Vars.tilesize;
 

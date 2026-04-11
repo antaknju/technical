@@ -1,9 +1,5 @@
 package technical.expansion;
 
-import arc.func.Boolp;
-import arc.func.Cons;
-import arc.func.Func;
-import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
 import arc.util.io.Reads;
@@ -16,6 +12,7 @@ import mindustry.world.consumers.*;
 import mindustry.world.meta.Stat;
 import technical.expansion.ext.ExtendableCrafter;
 import technical.expansion.kinetic.ConsumeKineticDynamic;
+import technical.utility.TUI;
 
 /* Thanks to multicrafterlib for example use of DynamicConsumers */
 public class RecipeCrafter extends ExtendableCrafter 

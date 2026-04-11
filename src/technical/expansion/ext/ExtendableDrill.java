@@ -31,7 +31,7 @@ import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
 import technical.expansion.tech.TechStat;
 
-public class ExtendableDrill extends Extendable 
+public class ExtendableDrill extends Extendable
 {
     protected final ObjectIntMap<Item> oreCount = new ObjectIntMap<>();
     protected final Seq<Item> itemArray = new Seq<>();
@@ -217,7 +217,7 @@ public class ExtendableDrill extends Extendable
         @Override
         public boolean shouldConsume()
         {
-            return enabled && dominantItem != null && hasRequiredExtensions();
+            return items.total() < itemCapacity && enabled && dominantItem != null && hasRequiredExtensions();
         }
 
         @Override
@@ -280,24 +280,24 @@ public class ExtendableDrill extends Extendable
                 }
             }
 
+            if(timer(timerDump, dumpTime / timeScale) && items.has(dominantItem) && !consumesDrills)
+            {
+                dump(dominantItem);
+            }
+
             if(dominantItem == null || dominantItems <= 0 || efficiency <= 0 || !hasRequiredExtensions())
             {
                 warmup = Mathf.approachDelta(warmup, 0f, warmupSpeed);
                 return;
             }
 
-            if (consumeTime <= 0f) 
+            if (consumeTime <= 0f)
             {
                 consumeTime = itemDuration();
                 consumeEffect.at(x, y);
 
                 if (!chance(TechStat.materialSaveChance))
                     consume();
-            }
-
-            if(timer(timerDump, dumpTime / timeScale) && items.has(dominantItem) && !consumesDrills)
-            {
-                dump(dominantItem);
             }
 
             totalProgress += warmup * delta();

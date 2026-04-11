@@ -7,8 +7,7 @@ import mindustry.gen.Building;
 import mindustry.ui.ReqImage;
 import mindustry.world.Block;
 import mindustry.world.consumers.Consume;
-import technical.Fr;
-import technical.T;
+import technical.utility.Fr;
 import technical.content.TIcons;
 import technical.expansion.kinetic.KineticBlock.KineticBuild;
 

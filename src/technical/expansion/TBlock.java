@@ -3,11 +3,9 @@ package technical.expansion;
 import static mindustry.Vars.content;
 import static mindustry.Vars.world;
 
-import arc.Core;
 import arc.math.Mathf;
 import arc.struct.ObjectMap;
 import arc.util.Nullable;
-import mindustry.Vars;
 import mindustry.ctype.Content;
 import mindustry.ctype.ContentType;
 import mindustry.game.Team;
@@ -17,12 +15,13 @@ import mindustry.world.Tile;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
-import technical.T;
 import technical.expansion.ThermalLiquidBlock.ThermalLiquidBuild;
 import technical.expansion.tech.Tech;
 import technical.expansion.tech.TechStat;
 import technical.expansion.tech.TechStatType;
 import technical.expansion.tech.TechType;
+import technical.utility.TBundle;
+import technical.utility.TCol;
 
 public class TBlock extends Block
 {
@@ -57,7 +56,7 @@ public class TBlock extends Block
 
         Stat s1 = new Stat("tech-type", techStatCat);
         stats.add(s1, table -> {
-            table.add("[blue]" + T.bundle(techType) + "[]");
+            table.add(TBundle.highlight(TBundle.get_enum(techType)));
         });
 
         for (TechStat tstat : TechStat.values()) 
@@ -66,9 +65,9 @@ public class TBlock extends Block
 
             if (Math.abs(value - tstat.defVal()) < 0.001) continue;
 
-            Stat stat = new Stat(T.kebab("tstat-" + tstat.name()), techStatCat);
+            Stat stat = new Stat(TBundle.build("tech", TBundle.kebab(tstat.name())), techStatCat);
             stats.add(stat, table -> {
-                table.add("[blue]" + (value >= 0 ? "+" : "-")  + String.format("%.2f", (value - tstat.defVal()) * 100f) + "%[]");
+                table.add(TBundle.color((value >= 0 ? "+" : "-")  + String.format("%.2f", (value - tstat.defVal()) * 100f) + "%[]", TCol.highlight));
             });
         }
     }
@@ -83,9 +82,9 @@ public class TBlock extends Block
         float sum = world.tile(x, y).getLinkedTilesAs(this, tempTiles).sumf(other -> other.floor().attributes.get(RequiredAttribute));
 
         if (sum < 0.001f)
-            drawPlaceText(T.bundle("err.attribute-all"), x, y, valid);
+            drawPlaceText(TBundle.error("attribute-all"), x, y, valid);
         else if (sum < MinimumAttribute)
-            drawPlaceText(T.bundle("err.attribute-part"), x, y, valid);
+            drawPlaceText(TBundle.error("attribute-part"), x, y, valid);
     }
 
     public boolean chance(TechStat stat) 
