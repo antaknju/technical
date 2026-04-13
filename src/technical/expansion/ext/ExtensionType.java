@@ -1,5 +1,6 @@
 package technical.expansion.ext;
 
+/// BUNGEN ENUM
 public enum ExtensionType
 {
     Chimney,

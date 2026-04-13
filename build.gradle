@@ -203,6 +203,10 @@ tasks.register('inject', Copy) {
 }
 
 tasks.register('bungen') {
+    dependsOn 'bungen-content', 'bungen-enum'
+}
+
+tasks.register('bungen-content') {
     doLast {
         def contentDir = file("${project.projectDir}/src/technical/content")
         def bundleFile = file("${project.projectDir}/assets/bundles/bundle.properties")
@@ -274,7 +278,7 @@ tasks.register('bungen') {
 
                 outputSections[prefix] += [
                         "${keyBase}.name = ${formattedName}",
-                        "${keyBase}.description = GEN",
+                        "${keyBase}.description = GENERATED",
                         "# ${keyBase}.details = "
                 ]
             }
@@ -313,5 +317,130 @@ tasks.register('bungen') {
         bundleFile << output
 
         println "Bundle generation complete."
+    }
+}
+
+tasks.register('bungen-enum') {
+    doLast {
+        def srcDir = file("${project.projectDir}/src")
+        def bundleFile = file("${project.projectDir}/assets/bundles/bundle.properties")
+
+        if (!bundleFile.exists()) {
+            bundleFile.parentFile.mkdirs()
+            bundleFile.createNewFile()
+        }
+
+        def lines = bundleFile.readLines()
+        def normalize = { it.replaceAll("\\s+", "") }
+
+        def existingKeys = lines
+                .findAll { it.contains("=") }
+                .collect { normalize(it.split("=")[0]) }
+                .toSet()
+
+        def enumHeader = "######################### ENUM #########################"
+        def hasEnumSection = lines.any { it == enumHeader }
+
+        def outputMap = [:].withDefault { [] }
+
+        srcDir.eachFileRecurse { file ->
+            if (!file.name.endsWith(".java")) return
+
+            def fileLines = file.readLines()
+
+            boolean shouldProcessNextEnum = false
+            String currentEnum = null
+
+            for (int i = 0; i < fileLines.size(); i++) {
+                def line = fileLines[i].trim()
+
+                if (line.contains("/// BUNGEN ENUM")) {
+                    shouldProcessNextEnum = true
+                    continue
+                }
+
+                def enumMatch = line =~ /enum\s+([a-zA-Z0-9_\-]+)/
+                if (shouldProcessNextEnum && enumMatch.find()) {
+                    currentEnum = enumMatch.group(1)
+                    shouldProcessNextEnum = false
+                    continue
+                }
+
+                if (currentEnum && line.contains("}")) {
+                    currentEnum = null
+                    continue
+                }
+
+                if (!currentEnum) continue
+
+                if (i > 0 && fileLines[i - 1].contains("/// BUNGEN IGNORE")) {
+                    continue
+                }
+
+                def constant = line
+                        .replace(",", "")
+                        .replaceAll(/\(.*\)/, "")
+                        .trim()
+
+                if (!constant.matches(/[A-Za-z0-9_]+/)) continue
+
+                def kebab = constant
+                        .replaceAll(/([a-z])([A-Z])/, '$1-$2')
+                        .toLowerCase()
+
+                def kebabEnum = currentEnum
+                        .replaceAll(/([a-z])([A-Z])/, '$1-$2')
+                        .toLowerCase()
+
+                def key = normalize("enum.${kebabEnum}.${kebab}")
+                if (existingKeys.contains(key)) continue
+                existingKeys.add(key)
+
+                def formatted = kebab
+                        .split("-")
+                        .collect { it.capitalize() }
+                        .join(" ")
+
+                outputMap[kebabEnum] << "enum.${kebabEnum}.${kebab} = ${formatted}"
+            }
+        }
+
+        if (outputMap.isEmpty()) {
+            println "No new enum entries. Terminating."
+            return
+        }
+
+        // build grouped output with spacing
+        StringBuilder builder = new StringBuilder()
+
+        outputMap.each { enumName, entries ->
+            entries.each {
+                builder.append(it).append("\n")
+            }
+            builder.append("\n") // spacing between enum types
+        }
+
+        def output = builder.toString()
+
+        println "\nBUNGEN ENUM ENTRIES ADDED"
+        println output
+
+        if (!hasEnumSection) {
+            // create section if missing
+            bundleFile << "\n${enumHeader}\n\n${output}"
+        } else {
+            // insert right after ENUM header
+            def index = lines.findIndexOf { it == enumHeader }
+
+            def newLines = []
+            newLines.addAll(lines[0..index])
+            newLines.add("") // spacing
+            newLines.addAll(output.readLines())
+            newLines.addAll(lines[(index + 1)..<lines.size()])
+
+            bundleFile.text = newLines.join("\n")
+        }
+
+        println "Enum bundle generation complete."
     }
 }

@@ -1,5 +1,6 @@
 package technical.expansion.tech;
 
+/// BUNGEN ENUM
 public enum TechType 
 {
     Null,
