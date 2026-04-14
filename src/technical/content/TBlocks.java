@@ -1364,8 +1364,6 @@ public class TBlocks {
             isFirstTier = true;
             unitType = TUnits.onset;
 
-            thrusterLength = 35/4f;
-
             armor = 6f;
 
             alwaysUnlocked = true;

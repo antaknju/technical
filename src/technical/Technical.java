@@ -23,6 +23,7 @@ public class Technical extends Mod
     @Override
     public void init()
     {
+        TVars.init();
         TUnits.init();
 
         // Adding linear interpolation of custom atlas pages
