@@ -16,16 +16,10 @@
 ---
 
 ## About the project
-Technical is a complete overhaul of the standard Mindustry experience. My primary goal was to add content that diverges significantly from the base game, providing a fresh experience while still retaining the core "Mindustry" feel.
+Technical is a complete overhaul of the standard Mindustry experience. My primary goal was to add content that differs significantly from the base game, providing a fresh experience while still retaining the core "Mindustry" feel.
 
 While the mod focuses on quality over quantity, every block introduces unique mechanics, so every block gives new, fair challenge.
 
 ### Key features
 * **Completely Custom World:** Explore a new planet with unique environments, original mechanics, and custom environmental hazards.
 * **Completely Custom Mechanics:** Master deep systems including a belt crafting system, thermal pipes, mechanical power, and trains.
-
----
-
-<div align="center">
-    Created by AnTakNju
-</div>
