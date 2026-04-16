@@ -27,17 +27,23 @@ public class RecipeCrafter extends ExtendableCrafter
 
     public RecipeCrafter(String name) {
         super(name);
+
         configurable = true;
         saveConfig = true;
         ignoreLiquidFullness = true;
 
-        config(Integer.class, (RecipeCrafterBuild b, Integer i) -> b.changePlan(i));
+        config(Integer.class, RecipeCrafterBuild::changePlan);
     }
 
     @Override
     public void init() 
     {
         defaultRecipeIndex = 0;
+
+        if (recipes.size <= 1)
+        {
+            configurable = false;
+        }
 
         setupFromRecipes();
         setupConsumers();

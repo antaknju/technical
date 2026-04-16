@@ -38,7 +38,7 @@ public class TMusic
         });
 
         Events.on(WorldLoadEvent.class, e -> {
-            if (Vars.state.rules.planet == TPlanets.tertaris) {
+            if (Vars.state.rules.planet == TPlanets.mycelius) {
                 // Inject custom music here.
                 control.ambientMusic = TMusic.ambient;
                 control.darkMusic = TMusic.dark;

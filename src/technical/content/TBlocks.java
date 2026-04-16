@@ -78,9 +78,9 @@ public class TBlocks {
 
     low_temperature_oil_still, gear_bender, rod_roller, porcelain_router, // middle_temperature_oil_still, high_temperature_oil_still
 
-    small_helper_turret, furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe,
+    furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe, arrow_press,
 
-    pebbles, clay, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber,
+    pebbles, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber,
     
     stone_crusher, roller_conveyor, brick_furnace, flint_extractor, iron_inserter, electric_inserter, mechanical_inserter, basic_ammo_forge, iron_chaingun, sickle_trap, flywheel, iron_gear_applicator, copper_gear_applicator, brick_crucible, basic_mold, mechanical_pump,
 
@@ -96,9 +96,10 @@ public class TBlocks {
     limestone_floor, limestone_wall, limestone_boulder, limestone_large_boulder,
     zinc_ore, copper_ore, coal_ore, iron_ore,
     stone_floor, stone_wall, stone_boulder,
-    sandstone_floor, sandstone_wall, sandstone_boulder, sandstone_water,
+    sandstone_floor, sandstone_wall, sandstone_boulder,
     rusted_floor, oxidized_floor,
     slate_floor, slate_wall, slate_boulder, slate_vent,
+    clay_floor, clay_water, clay_wall,
 
     // MYCELIS
     mycelis_heart, mycelis_cord, mycelis_cord_iron_plated, mycelis_brutal_drill, mycelis_oxidizer;
@@ -108,7 +109,7 @@ public class TBlocks {
         ////////////////////////////////////////
         ///            EXTENSIONS            ///
         ////////////////////////////////////////
-        
+
         flywheel = new Extension("flywheel"){{
             requirements(Category.crafting, with());
             techType = TechType.MechanicalWorking;
@@ -190,7 +191,7 @@ public class TBlocks {
             type = ExtensionType.Heater;
             additionalStorage = 0;
             efficiencyBoost = 5;
-            
+
             drawer = new DrawMulti(new DrawDefault(), new DrawEffect(Color.white, 0.5f, TFx.solarFlare));
         }};
 
@@ -256,10 +257,10 @@ public class TBlocks {
             consumeEffect = Fx.none;
 
             drawer = new DrawMulti(
-                new DrawRegion("-bottom"), 
+                new DrawRegion("-bottom"),
                 new DrawLiquidCustom(false, false),
-                new DrawDefault(), 
-                new DrawBlurSpin("-rotator", -12f){{blurThresh = 0.8f;}}, 
+                new DrawDefault(),
+                new DrawBlurSpin("-rotator", -12f){{blurThresh = 0.8f;}},
                 new DrawRegion("-top"),
                 new DrawSlapLiquid()
             );
@@ -301,7 +302,7 @@ public class TBlocks {
         ////////////////////////////////////////
 
         /// CONVEYOR CRAFTERS
-        
+
         iron_gear_applicator = new ConveyorCrafter("iron-gear-applicator"){{
             requirements(Category.crafting, with(TItems.iron_plate, 20, TItems.iron_gear, 10));
             techType = TechType.MechanicalWorking;
@@ -336,7 +337,7 @@ public class TBlocks {
         }};
 
         /// STILL
-        
+
         low_temperature_oil_still = new ExtendableCrafter("low-temperature-oil-still"){{
             requirements(Category.crafting, with(TItems.stone, 20, TItems.copper_wire, 10));
             techType = TechType.CrudeWorking;
@@ -395,7 +396,40 @@ public class TBlocks {
         }};
 
         /// OTHER
-        
+
+        arrow_press = new RecipeCrafter("arrow-press"){{
+            requirements(Category.crafting, with(TItems.iron_plate, 60, TItems.stone, 60));
+            techType = TechType.CrudeWorking;
+            size = 2;
+            health = 200;
+
+            itemCapacity = 20;
+            liquidCapacity = 0f;
+            craftEffect = TFx.roll;
+
+            maxEfficiency = 2;
+
+            AllowedExtensions = Seq.with(
+                ExtensionType.Storage,
+                ExtensionType.MechanicalEnergyCapacitor
+            );
+
+            recipes = Seq.with(
+                new Recipe(
+                    ItemStack.with(TItems.iron_plate, 1, TItems.flint, 1), null,
+                    ItemStack.with(TItems.flint_arrow, 3), null,
+                    2 * Fr.time, 0, 100, new KineticEnergy(5 * Fr.speed, 10 * Fr.torque)
+                )
+            );
+
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawTransformRegion("-rammer", new Transform(0, 1, 7f, 0, 0), new Transform(1, 1, 7f, 0, 0), Interp.pow2In, 0.5f),
+                    new DrawTransformRegion("-rammer", new Transform(0, -1, -7f, 0, 0), new Transform(-1, -1, -7f, 0, 0), Interp.pow2In, 0.5f),
+                    new DrawDefault()
+            );
+        }};
+
         gear_bender = new RecipeCrafter("gear-bender"){{
             requirements(Category.crafting, with(TItems.iron_plate, 30, TItems.brick, 30));
             techType = TechType.CrudeWorking;
@@ -409,21 +443,21 @@ public class TBlocks {
             maxEfficiency = 2;
 
             AllowedExtensions = Seq.with(
-                ExtensionType.Storage,
-                ExtensionType.MechanicalEnergyCapacitor
+                    ExtensionType.Storage,
+                    ExtensionType.MechanicalEnergyCapacitor
             );
-            
+
             recipes = Seq.with(
-                new Recipe(
-                    ItemStack.with(TItems.copper_plate, 1), null,
-                    ItemStack.with(TItems.copper_gear, 1), null,
-                    2 * Fr.time, 0, 100, null
-                ),
-                new Recipe(
-                    ItemStack.with(TItems.iron_plate, 1), null,
-                    ItemStack.with(TItems.iron_gear, 1), null,
-                    4 * Fr.time, 0, 150, null
-                )
+                    new Recipe(
+                            ItemStack.with(TItems.copper_plate, 1), null,
+                            ItemStack.with(TItems.copper_gear, 1), null,
+                            2 * Fr.time, 0, 100, null
+                    ),
+                    new Recipe(
+                            ItemStack.with(TItems.iron_plate, 1), null,
+                            ItemStack.with(TItems.iron_gear, 1), null,
+                            4 * Fr.time, 0, 150, null
+                    )
             );
 
             drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawAnimatedRegion("-top", 30), new DrawDefault());
@@ -445,7 +479,7 @@ public class TBlocks {
                 ExtensionType.Storage,
                 ExtensionType.MechanicalEnergyCapacitor
             );
-            
+
             recipes = Seq.with(
                 new Recipe(
                     ItemStack.with(TItems.copper_plate, 3), null,
@@ -592,9 +626,9 @@ public class TBlocks {
             outputItems = with(TItems.flint, 1);
 
             drawer = new DrawMulti(
-                new DrawRegion("-bottom"), 
+                new DrawRegion("-bottom"),
                 new DrawLiquidCustom(false, false),
-                new DrawMovingRegion("-grid", Vec2.ZERO, Vec2.ZERO, 180),
+                new DrawMovingRegion("-grid", Vec2.ZERO.cpy(), Vec2.ZERO.cpy(), 180),
                 new DrawDefault()
             );
         }};
@@ -650,7 +684,7 @@ public class TBlocks {
             workingTemperature = 110;
 
             drawer = new DrawMulti(
-                new DrawRegion("-bottom"), 
+                new DrawRegion("-bottom"),
                 new DrawLiquidCustom(true, false),
                 new DrawLiquidBubbles(){{
                     sides = 10;
@@ -659,7 +693,7 @@ public class TBlocks {
                     radius = 1.5f;
                     amount = 20;
                 }},
-                new DrawRingBurning(){{particleLife = 60f; particleSize = 0.4f; ringRadius = 10f; clusters = 12; clusterSizeMin = 6; clusterSizeMax = 12; particleGrow = 2.4f;}}, 
+                new DrawRingBurning(){{particleLife = 60f; particleSize = 0.4f; ringRadius = 10f; clusters = 12; clusterSizeMin = 6; clusterSizeMax = 12; particleGrow = 2.4f;}},
                 new DrawDefault()
             );
         }};
@@ -787,7 +821,7 @@ public class TBlocks {
             // workingTemperature = 110;
 
             drawer = new DrawMulti(
-                new DrawRegion("-bottom"), 
+                new DrawRegion("-bottom"),
                 new DrawLiquidCustom(false, false),
                 new DrawEffect((Building build) -> ((RecipeCrafterBuild)build).recipe() != null ? ((RecipeCrafterBuild)build).recipe().outputItems[0].item.color : Color.white, 10f, TFx.smoke),
                 new DrawDefault()
@@ -901,7 +935,7 @@ public class TBlocks {
         ////////////////////////////////////////
         ///          KINETIC ENERGY          ///
         ////////////////////////////////////////
-        
+
         kinetic_energy_source = new KineticBlock("kinetic-energy-source"){{
             requirements(Category.power, BuildVisibility.sandboxOnly, with());
             alwaysUnlocked = true;
@@ -934,7 +968,7 @@ public class TBlocks {
                 ))
             );
         }};
-        
+
         steam_engine = new ExtendableCrafter("steam-engine"){{
             requirements(Category.power, with(TItems.iron_plate, 30, TItems.precision_mechanism, 3, TItems.copper_gear, 30));
             techType = TechType.MechanicalPowerProduction;
@@ -963,7 +997,7 @@ public class TBlocks {
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
                 new DrawRegion("-half-0"),
-                new DrawMovingRegion("-rod", Vec2.ZERO, new Vec2(0, 4f), 0, Interp.fastSlow){{orthoLayering=true;}},
+                new DrawMovingRegion("-rod", Vec2.ZERO.cpy(), new Vec2(0, 4f), 0, Interp.fastSlow){{orthoLayering=true;}},
                 new DrawRegion("-half-1"),
                 new DrawEffect(Color.white, 0.5f, TFx.steamLeak){{groupMax = 3; randomRotation = true; offset = 4f;}}
             );
@@ -1028,7 +1062,7 @@ public class TBlocks {
         ////////////////////////////////////////
         ///              LIQUID              ///
         ////////////////////////////////////////
-        
+
         porcelain_pipe = new ThermalConduit("porcelain-pipe"){{
             requirements(Category.liquid, with(TItems.iron_gear, 1, TItems.porcelain, 1));
             techType = TechType.LiquidTransportation;
@@ -1123,7 +1157,7 @@ public class TBlocks {
         ////////////////////////////////////////
         ///            TRANSPORT             ///
         ////////////////////////////////////////
-        
+
         ///////// NOT TRAINS ///////////
 
         roller_tunnel = new RollerTunnel("roller-tunnel"){{
@@ -1366,50 +1400,12 @@ public class TBlocks {
 
             armor = 6f;
 
-            alwaysUnlocked = true;
             incinerateNonBuildable = true;
             requiresCoreZone = true;
 
-            unitCapModifier = 10;
+            unitCapModifier = 8;
 
             researchCostMultiplier = 0.07f;
-        }};
-
-
-        ////////////////////////////////////////
-        ///              UNITS               ///
-        ////////////////////////////////////////
-
-        small_helper_turret = new HelperTurret("small-helper-turret"){{
-            requirements(Category.turret, with(TItems.iron_plate, 50, TItems.copper_wire, 30));
-            health = 150;
-            size = 2;
-
-            shootSound = Sounds.shootCyclone;
-            targetUnderBlocks = false;
-            shake = 2f;
-
-            reload = 60f;
-            recoil = 5f;
-            range = 100;
-            shootCone = 1f;
-            rotateSpeed = 0.5f;
-            inaccuracy = 2f;
-
-            drawer = new DrawTurret("t"){{
-                parts.add(new RegionPart("-barrel"){{
-                    progress = PartProgress.recoil;
-                    under = true;
-                    moveY = -1f;
-                }});
-            }};
-            
-            ammo(
-                TItems.dense_ammo,
-                TWeapons.helper_package
-            );
-
-            limitRange();
         }};
 
         ////////////////////////////////////////
@@ -1500,6 +1496,8 @@ public class TBlocks {
             rotateSpeed = 1f;
             inaccuracy = 2f;
 
+            shootY = 3f;
+
             // minWarmup = 0.5f;
             // shootWarmupSpeed = 0.03f;
 
@@ -1518,10 +1516,10 @@ public class TBlocks {
                     layerOffset = 2;
                 }});
             }};
-            
+
             ammo(
-                TItems.iron_plate,
-                TWeapons.iron_arrow
+                TItems.flint_arrow,
+                TWeapons.crude_arrow
             );
 
             // limitRange();
@@ -1566,7 +1564,7 @@ public class TBlocks {
                     heatProgress = PartProgress.warmup;
                 }});
             }};
-            
+
             ammo(
                 TLiquids.metan,
                 TWeapons.metan_beam
@@ -1600,7 +1598,7 @@ public class TBlocks {
                 new DrawRegion("-half-1"),
                 new DrawEffect(TCol.brass, 0.5f, TFx.steamLeak){{groupMin = 2; groupMax = 4; randomRotation = true; offset = 6f;}}
             );
-            
+
             ammo(
                 TItems.iron_rod,
                 TWeapons.ground_crack
@@ -1648,7 +1646,7 @@ public class TBlocks {
                     moveY = -1f;
                 }});
             }};
-            
+
             ammo(
                 TItems.dense_ammo,
                 TWeapons.dense_iron_bullet
@@ -1658,63 +1656,9 @@ public class TBlocks {
         }};
 
         ////////////////////////////////////////
-        ///             MYCELIS              ///
-        ////////////////////////////////////////
-        
-        mycelis_heart = new MycelisHeart("mycelis-heart"){{
-            requirements(Category.effect, with());
-            size = 3;
-        }};
-
-        mycelis_cord_iron_plated = new MycelisCord("mycelis-cord-iron-plated"){{
-            requirements(Category.effect, with());
-            health = 200;
-            size = 1;
-            regionName = "technical-mycelis-cord";
-            platingRegionName = "technical-mycelis-iron-plating";
-        }};
-
-        mycelis_cord = new MycelisCord("mycelis-cord"){{
-            requirements(Category.effect, with());
-            health = 50;
-            size = 1;
-            evolution = mycelis_cord_iron_plated;
-            platingRegionName = null;
-            regionName = null;
-        }};
-
-        mycelis_brutal_drill = new MycelisDrill("mycelis-brutal-drill"){{
-            requirements(Category.effect, with());
-            health = 150;
-            size = 3;
-        }};
-
-        mycelis_oxidizer = new MycelisRecipeCrafter("mycelis-oxidizer"){{
-            requirements(Category.effect, with());
-            health = 350;
-            size = 3;
-
-            itemCapacity = 30;
-            liquidCapacity = 60f;
-
-            recipes = Seq.with(
-                new MycelisRecipe(
-                    new ItemStack(TItems.raw_iron, 1), null,
-                    new ItemStack(TItems.iron_plate, 1), null,
-                    Fr.time * 2
-                ),
-                new MycelisRecipe(
-                    new ItemStack(TItems.clay, 1), null,
-                    new ItemStack(TItems.brick, 1), null,
-                    Fr.time * 2
-                )
-            );
-        }};
-
-        ////////////////////////////////////////
         ///        FACILITY ASSEMBLING       ///
         ////////////////////////////////////////
-        
+
         facility_floor = new FacilityFloorTile("facility-floor"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
@@ -1798,6 +1742,60 @@ public class TBlocks {
         }};
 
         ////////////////////////////////////////
+        ///             MYCELIS              ///
+        ////////////////////////////////////////
+
+        mycelis_heart = new MycelisHeart("mycelis-heart"){{
+            requirements(Category.effect, with());
+            size = 3;
+        }};
+
+        mycelis_cord_iron_plated = new MycelisCord("mycelis-cord-iron-plated"){{
+            requirements(Category.effect, with());
+            health = 200;
+            size = 1;
+            regionName = "technical-mycelis-cord";
+            platingRegionName = "technical-mycelis-iron-plating";
+        }};
+
+        mycelis_cord = new MycelisCord("mycelis-cord"){{
+            requirements(Category.effect, with());
+            health = 50;
+            size = 1;
+            evolution = mycelis_cord_iron_plated;
+            platingRegionName = null;
+            regionName = null;
+        }};
+
+        mycelis_brutal_drill = new MycelisDrill("mycelis-brutal-drill"){{
+            requirements(Category.effect, with());
+            health = 150;
+            size = 3;
+        }};
+
+        mycelis_oxidizer = new MycelisRecipeCrafter("mycelis-oxidizer"){{
+            requirements(Category.effect, with());
+            health = 350;
+            size = 3;
+
+            itemCapacity = 30;
+            liquidCapacity = 60f;
+
+            recipes = Seq.with(
+                    new MycelisRecipe(
+                            new ItemStack(TItems.raw_iron, 1), null,
+                            new ItemStack(TItems.iron_plate, 1), null,
+                            Fr.time * 2
+                    ),
+                    new MycelisRecipe(
+                            new ItemStack(TItems.clay, 1), null,
+                            new ItemStack(TItems.brick, 1), null,
+                            Fr.time * 2
+                    )
+            );
+        }};
+
+        ////////////////////////////////////////
         ///           ENVIRONMENT            ///
         ////////////////////////////////////////
 
@@ -1863,7 +1861,7 @@ public class TBlocks {
             variants = 3;
         }};
 
-        sandstone_water = new TShallowLiquid("sandstone-water"){{
+        clay_water = new TShallowLiquid("sandstone-water"){{
             set(water_floor, sandstone_floor);
         }};
 
@@ -1992,10 +1990,6 @@ public class TBlocks {
             variants = 3;
         }};
 
-//        spongy_scoria_floor = new Floor("spongy-scoria-floor"){{
-//            variants = 3;
-//        }};
-
         scoria_boulder = new Prop("scoria-boulder"){{
             variants = 2;
         }};
@@ -2039,20 +2033,35 @@ public class TBlocks {
             forceDrawLight = true;
         }};
 
-
-        clay = new Floor("clay-floor"){{
+        clay_floor = new Floor("clay-floor"){{
             itemDrop = TItems.clay;
             playerUnmineable = false;
             variants = 3;
             attributes.set(TAttributes.clay, 1f);
         }};
-    }   
+
+        clay_wall = new StaticWall("clay-wall"){{
+            variants = 2;
+            attributes.set(TAttributes.clay, 1f);
+        }};
+
+        clay_water = new TShallowLiquid("clay-water"){{
+            set(water_floor, clay_floor);
+        }};
+    }
 }
 
+/*
 
-        
+
+//        spongy_scoria_floor = new Floor("spongy-scoria-floor"){{
+//            variants = 3;
+//        }};
+
+
+
         // /// CIRCUIT
-        
+
         // circuit_cutter = new ConveyorCrafter("circuit-cutter"){{
         //     requirements(Category.crafting, with(TItems.copper_wire, 10, TItems.iron_plate, 20));
         //     techType = TechType.CircuitCrafting;
@@ -2083,8 +2092,6 @@ public class TBlocks {
         //     consumeItem(TItems.coal, 1);
         //     itemDuration = 360f;
         // }};
-
-/*
 
 
 
@@ -2141,5 +2148,44 @@ stone_furnace = new ExtendableCrafter("stone-furnace"){{
             
             health = 100;
             size = 1;
+        }};
+
+
+
+
+        ////////////////////////////////////////
+        ///              UNITS               ///
+        ////////////////////////////////////////
+
+        small_helper_turret = new HelperTurret("small-helper-turret"){{
+            requirements(Category.turret, with(TItems.iron_plate, 50, TItems.copper_wire, 30));
+            health = 150;
+            size = 2;
+
+            shootSound = Sounds.shootCyclone;
+            targetUnderBlocks = false;
+            shake = 2f;
+
+            reload = 60f;
+            recoil = 5f;
+            range = 100;
+            shootCone = 1f;
+            rotateSpeed = 0.5f;
+            inaccuracy = 2f;
+
+            drawer = new DrawTurret("t"){{
+                parts.add(new RegionPart("-barrel"){{
+                    progress = PartProgress.recoil;
+                    under = true;
+                    moveY = -1f;
+                }});
+            }};
+
+            ammo(
+                TItems.dense_ammo,
+                TWeapons.helper_package
+            );
+
+            limitRange();
         }};
  */

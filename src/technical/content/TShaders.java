@@ -16,6 +16,7 @@ public class TShaders
 {
     public static @Nullable ModSurfaceShader lava;
     public static CacheLayer.ShaderLayer lavaLayer;
+
     protected static boolean loaded;
 
     public static void load()
@@ -25,11 +26,13 @@ public class TShaders
             lava = new ModSurfaceShader("lava");
             loaded = true;
         }
+
         lavaLayer = new CacheLayer.ShaderLayer(lava);
         CacheLayer.add(lavaLayer);
     }
 
-    public static class ModSurfaceShader extends Shader{
+    public static class ModSurfaceShader extends Shader
+    {
         Texture noiseTex;
 
         public ModSurfaceShader(String frag){

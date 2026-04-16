@@ -2,6 +2,7 @@ package technical.expansion.kinetic;
 
 import arc.func.Func;
 import arc.scene.ui.layout.Table;
+import arc.util.Log;
 import arc.util.Strings;
 import mindustry.gen.Building;
 import mindustry.ui.ReqImage;
@@ -28,6 +29,7 @@ public class ConsumeKineticDynamic extends Consume
         {
             if (kblock.kineticData == null)
             {
+                Log.warn("Not safe init of 30 inertia inside  block: @", block);
                 kblock.kineticData = new KineticComponentData(null, 30 * Fr.inertia);
             }
 

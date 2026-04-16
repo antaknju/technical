@@ -10,7 +10,7 @@ public class TItems
     // Mineable
     uranium, raw_copper, stone, clay, coal, raw_iron, raw_zinc,
     // Craftable
-    brick, iron_plate, dense_ammo, copper_wire, iron_gear, copper_gear, copper_plate, porcelain, flint, copper_rod, iron_rod, zinc_ingot, brass_ingot,
+    brick, iron_plate, dense_ammo, copper_wire, iron_gear, copper_gear, copper_plate, porcelain, flint, copper_rod, iron_rod, zinc_ingot, brass_ingot, flint_arrow,
     // Technology
     metallurgy_xp
     ;
@@ -83,6 +83,11 @@ public class TItems
             buildable = true;
             healthScaling = 1f;
             color = TCol.iron;
+        }};
+
+        flint_arrow = new Item("flint-arrow") {{
+            buildable = false;
+            color = TCol.flint;
         }};
 
         porcelain = new Item("porcelain") {{

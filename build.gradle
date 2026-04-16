@@ -256,8 +256,8 @@ tasks.register('bungen-content') {
                     continue
                 }
 
-                // exactly 8 spaces
-                def matcher = line =~ /^ {8}[a-zA-Z0-9_]+\s*=\s*new\s+\w+\("([^"]+)"\)\s*\{\{/
+                // 4 spaces for one tab
+                def matcher = line =~ /^ {8}[a-zA-Z0-9_]+\s*=\s*new\s+\w+\("([^"]+)"[^)]*\)\s*\{\{/
                 if (!matcher.find()) continue
 
                 def name = matcher.group(1)

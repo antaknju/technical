@@ -6,6 +6,7 @@ import static technical.debug.Debugger.print;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.math.Angles;
+import arc.math.Interp;
 import arc.math.Mathf;
 import arc.util.Log;
 import arc.util.Time;
@@ -356,7 +357,7 @@ public class TWeapons
     archer_bow = new Weapon("technical-archer-bow"){{
         x = 0f;
         y = 0f;
-        shootY = 2f;
+        shootY = -2f;
 
         layerOffset = 0.01f;
 
@@ -379,14 +380,17 @@ public class TWeapons
         parts.add(new RegionPart("-arrow"){{
             progress = PartProgress.reload;
 
-            color = TCol.from("#ffffff");
+            color = new Color(1, 1, 1, 1);
+            colorTo = new Color(1, 1, 1, 0);
 
-            outline = true;
+            outline = false;
             y = 2;
 
             moveY = -3;
 
             layerOffset = 1;
+
+            mirror = false;
         }});
     }},
 

@@ -16,11 +16,11 @@ import mindustry.game.Team;
 
 public class TPlanets 
 {
-    public static Planet tertaris;
+    public static Planet mycelius;
 
     public static void load()
     {
-        tertaris = new Planet("tertaris", Planets.sun, 0.98f, 3){{
+        mycelius = new Planet("mycelius", Planets.sun, 0.98f, 3){{
             generator = new SerpuloPlanetGenerator();
 
             meshLoader = () -> new TPlanetMesh(this, 67, 6);
@@ -42,11 +42,9 @@ public class TPlanets
 
             launchMusic = TMusic.launch;
 
-            sectorSeed = 3;
-            
             alwaysUnlocked = true;
 
-            iconColor = TCol.iron;
+            iconColor = TCol.bioPurple;
             
             atmosphereRadIn = 0.1f;
             atmosphereRadOut = 0.4f;
@@ -59,22 +57,29 @@ public class TPlanets
             updateLighting = true;
 
             prebuildBase = true;
+
             ruleSetter = r -> {
-                r.waveTeam = Team.crux;
-                r.placeRangeCheck = true;
-                r.onlyDepositCore = false;
-                r.showSpawns = false;
-                r.coreDestroyClear = true;
-                r.unitAmmo = true;
-                r.coreIncinerates = true;
+                r.waveTeam = Team.malis;
+                r.placeRangeCheck = false;
+                r.showSpawns = true;
                 r.fog = true;
                 r.staticFog = true;
+                r.unitAmmo = true;
+                r.lighting = true;
+                r.coreDestroyClear = true;
+                r.onlyDepositCore = false;
+
+                r.coreIncinerates = true;
             };
 
-            defaultEnv = Env.terrestrial;
+            clearSectorOnLose = true;
+            campaignRuleDefaults.fog = true;
+            campaignRuleDefaults.showSpawns = true;
+            campaignRuleDefaults.rtsAI = true;
 
-            allowWaves = true;
-            // allowWaveSimulation = true;
+            unlockedOnLand.add(TBlocks.basic_core);
+
+            defaultEnv = Env.terrestrial;
 
             allowSectorInvasion = true;
             clearSectorOnLose = true;
@@ -86,8 +91,7 @@ public class TPlanets
             allowLaunchToNumbered = false;
             launchCapacityMultiplier = 0.5f;
             
-            startSector = 0;
-            bloom = true;
+            startSector = 2;
         }};
     }
 }

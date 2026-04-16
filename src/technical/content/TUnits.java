@@ -22,7 +22,7 @@ import technical.expansion.train.RailVehicleUnit;
 
 public class TUnits {
     public static RailVehicle basic_train;
-    public static UnitType gatherdix, sporin, onset, vermiphorus, cravlon, incinerator, vapor, archer;
+    public static UnitType onset, vermiphorus, cravlon, incinerator, vapor, archer;
 
     public static void init()
     {
@@ -73,7 +73,9 @@ public class TUnits {
 
             alwaysUnlocked = true;
 
-            speed = 0.75f;
+            accel = 0.2f;
+
+            speed = 1.5f;
             hitSize = 8f;
             health = 150;
 
@@ -83,7 +85,7 @@ public class TUnits {
             buildSpeed = 0.5f;
 
             canBoost = true;
-            boostMultiplier = 0.5f;
+            boostMultiplier = 0.25f;
             boostWhenBuilding = false;
             boostWhenMining = false;
 
@@ -115,7 +117,7 @@ public class TUnits {
             alwaysUnlocked = true;
 
             speed = 0.5f;
-            hitSize = 9f;
+            hitSize = 11f;
             health = 300;
 
             fogRadius = 3f;
