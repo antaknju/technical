@@ -127,14 +127,14 @@ public class KineticBlock extends TBlock
                 kinetic.update();
         }
 
-        public float systemSpeed()
+        public float systemSpeedBalance()
         {
-            return kinetic != null && kinetic.graph() != null ? kinetic.graph().currentSpeed() : 0;
+            return kinetic != null && kinetic.graph() != null ? kinetic.graph().targetSpeed() : 0;
         }
 
-        public float systemTorque()
+        public float systemTorqueBalance()
         {
-            return kinetic != null && kinetic.graph() != null ? kinetic.graph().currentTorque() : 0;
+            return kinetic != null && kinetic.graph() != null ? kinetic.graph().targetTorque() : 0;
         }
 
         public float systemEfficiency()

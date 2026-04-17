@@ -155,7 +155,7 @@ public class DroneCoreExpansion extends Expansion {
 
         @Override
         public boolean shouldConsume(){
-            return unit == null;
+            return super.shouldConsume() && unit == null;
         }
 
         // @Override

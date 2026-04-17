@@ -1,6 +1,8 @@
 package technical.utility;
 
 import arc.func.Boolp;
+import arc.func.Cons;
+import arc.func.Prov;
 import arc.graphics.Color;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Interp;
@@ -305,5 +307,22 @@ public class TUI
 
             table.add("[accent]" + recipe.times + "x").bottom().left().padLeft(-40).padBottom(12);
         });
+    }
+
+    public static void addSelectableIcon(Table table, TextureRegion icon, Prov<Boolean> holder, Cons<Boolean> consumer)
+    {
+        ImageButton button = new ImageButton(Styles.clearTogglei);
+
+        button.getStyle().imageUp = new TextureRegionDrawable(icon);
+
+        button.update(() -> {
+            button.setChecked(holder.get());
+        });
+
+        button.changed(() -> {
+            consumer.get(button.isChecked());
+        });
+
+        table.add(button).size(40f);
     }
 }

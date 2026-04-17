@@ -159,7 +159,8 @@ public class ExtendableCrafter extends Extendable
         }
 
         @Override
-        public boolean shouldConsume(){
+        public boolean shouldConsume()
+        {
             if(outputItems() != null){
                 for(var output : outputItems()){
                     if(items.get(output.item) + output.amount > itemCapacity){

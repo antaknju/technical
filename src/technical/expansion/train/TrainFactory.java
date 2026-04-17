@@ -253,7 +253,7 @@ public class TrainFactory extends RailAddapter
 
         @Override
         public boolean shouldConsume(){
-            return unit == null;
+            return super.shouldConsume() && unit == null;
         }
 
         // @Override

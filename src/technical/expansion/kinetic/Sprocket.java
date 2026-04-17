@@ -68,33 +68,33 @@ public class Sprocket extends KineticBlock
     {
         addBar("angularSpeed", (SprocketBuild build) ->
             new Bar(
-                () -> Core.bundle.format("bar.angular-speed", String.format("%.2f", build.systemSpeed() / Fr.angularSpeed)),
+                () -> Core.bundle.format("bar.angular-speed", String.format("%+.1f", build.systemSpeedBalance() / Fr.angularSpeed)),
                 () -> Pal.lightOrange,
-                () -> build.systemSpeed()
+                    build::systemSpeedBalance
             )
         );
 
         addBar("torque", (SprocketBuild build) ->
             new Bar(
-                () -> Core.bundle.format("bar.torque", String.format("%.2f", build.systemTorque() / Fr.torque)),
+                () -> Core.bundle.format("bar.torque", String.format("%+.1f", build.systemTorqueBalance() / Fr.torque)),
                 () -> Pal.lightishOrange,
-                () -> build.systemTorque()
+                    build::systemTorqueBalance
             )
         );
 
         addBar("kineticEfficiency", (SprocketBuild build) ->
             new Bar(
-                () -> Core.bundle.format("bar.kinetic-efficiency", String.format("%.2f", build.systemEfficiency() * 100)),
+                () -> Core.bundle.format("bar.kinetic-efficiency", String.format("%.1f", build.systemEfficiency() * 100)),
                 () -> Pal.graphiteAmmoBack,
-                () -> build.systemEfficiency()
+                    build::systemEfficiency
             )
         );
 
         addBar("inertia", (SprocketBuild build) ->
             new Bar(
-                () -> Core.bundle.format("bar.inertia", String.format("%.2f", build.systemInertia() / Fr.inertia)),
+                () -> Core.bundle.format("bar.inertia", String.format("%.1f", build.systemInertia() / Fr.inertia)),
                 () -> Pal.items,
-                () -> build.systemInertia()
+                    build::systemInertia
             )
         );
     }

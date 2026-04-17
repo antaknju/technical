@@ -165,7 +165,7 @@ public class KineticGraph
 
             for (var neighbor : cur.proximity()) 
             {
-                if (neighbor.isValid() && neighbor instanceof KineticBuild kb && kb.kinetic != null && kb.kinetic != null) 
+                if (neighbor.isValid() && neighbor instanceof KineticBuild kb && kb.kinetic != null)
                 {
                     if (kb.kinetic.graph() == null && !visited.contains(kb)) 
                     {
@@ -215,12 +215,22 @@ public class KineticGraph
         k = Mathf.clamp(k, 0f, 1f);
 
         // first-order inertial response
-        currentSpeed  += (targetSpeed  - currentSpeed)  * k;
+        currentSpeed += (targetSpeed - currentSpeed) * k;
         currentTorque += (targetTorque - currentTorque) * k;
 
         // kill denormals
-        if (currentSpeed < 0) currentSpeed  = 0f;
+        if (currentSpeed < 0) currentSpeed = 0f;
         if (currentTorque < 0) currentTorque = 0f;
+    }
+
+    public float targetTorque()
+    {
+        return targetTorque;
+    }
+
+    public float targetSpeed()
+    {
+        return targetSpeed;
     }
 
     public float currentSpeed()

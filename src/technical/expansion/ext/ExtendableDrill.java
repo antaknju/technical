@@ -217,7 +217,7 @@ public class ExtendableDrill extends Extendable
         @Override
         public boolean shouldConsume()
         {
-            return items.total() < itemCapacity && enabled && dominantItem != null && hasRequiredExtensions();
+            return super.shouldConsume() && items.total() < itemCapacity && enabled && dominantItem != null && hasRequiredExtensions();
         }
 
         @Override

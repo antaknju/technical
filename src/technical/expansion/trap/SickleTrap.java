@@ -14,14 +14,18 @@ import arc.math.geom.Vec2;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.Table;
+import arc.util.Eachable;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.entities.Units;
+import mindustry.entities.units.BuildPlan;
 import mindustry.graphics.Layer;
 import mindustry.ui.Styles;
 import mindustry.world.Tile;
 import technical.content.TIcons;
+import technical.utility.TDraw;
+import technical.utility.TUI;
 
 public class SickleTrap extends TrapBlock 
 {
@@ -47,6 +51,9 @@ public class SickleTrap extends TrapBlock
         drawArrow = false;
 
         configurable = true;
+        saveConfig = true;
+        copyConfig = true;
+
         config(Boolean.class, (SickleTrapBuild build, Boolean f) -> build.flipped = f);
         configClear((SickleTrapBuild build) -> build.flipped = false);
     }
@@ -57,6 +64,27 @@ public class SickleTrap extends TrapBlock
         super.load();
         topRegion = Core.atlas.find(name + "-top");
         topBlurRegion = Core.atlas.find(name + "-top-blur");
+    }
+
+    @Override
+    public void drawPlanRegion(BuildPlan plan, Eachable<BuildPlan> list)
+    {
+        Draw.rect(region, plan.drawx(), plan.drawy());
+
+        float scl_x = Draw.xscl;
+        float scl_y = Draw.yscl;
+
+        Draw.scl(1, (boolean)plan.config ? -1 : 1);
+
+        float base_rot = plan.rotation * 90f;
+
+        float off_x = ((sickleSize - size) * tilesize) / 2f;
+        float px = plan.drawx() + Angles.trnsx(base_rot, off_x);
+        float py = plan.drawy() + Angles.trnsy(base_rot, off_x);
+
+        Draw.rect(topRegion, px, py, base_rot);
+
+        Draw.scl(scl_x, scl_y);
     }
 
     @Override
@@ -75,24 +103,7 @@ public class SickleTrap extends TrapBlock
         @Override
         public void buildConfiguration(Table table)
         {
-            addSelectableIcon(table, TIcons.flip, () -> flipped, this::configure);
-        }
-
-        public void addSelectableIcon(Table table, TextureRegion icon, Prov<Boolean> holder, Cons<Boolean> consumer)
-        {
-            ImageButton button = new ImageButton(Styles.clearTogglei);
-
-            button.getStyle().imageUp = new TextureRegionDrawable(icon);
-
-            button.update(() -> {
-                button.setChecked(holder.get());
-            });
-
-            button.changed(() -> {
-                consumer.get(button.isChecked());
-            });
-
-            table.add(button).size(40f);
+            TUI.addSelectableIcon(table, TIcons.flip, () -> flipped, this::configure);
         }
 
         public int dir()
@@ -107,12 +118,12 @@ public class SickleTrap extends TrapBlock
 
             float base = rotation * 90f;
 
-            float offx = ((sickleSize - size) * tilesize) / 2f;
-            float px = x + Angles.trnsx(base + currentAngle, offx);
-            float py = y + Angles.trnsy(base + currentAngle, offx);
+            float off_x = ((sickleSize - size) * tilesize) / 2f;
+            float px = x + Angles.trnsx(base + currentAngle, off_x);
+            float py = y + Angles.trnsy(base + currentAngle, off_x);
 
             Draw.scl(1, dir());
-            Draw.z(Layer.bullet - 1);
+            Draw.z(Layer.blockOver);
 
             if (spinning)
                 Draw.rect(topBlurRegion, px, py, base + currentAngle);
@@ -121,7 +132,6 @@ public class SickleTrap extends TrapBlock
 
             Draw.reset();
         }
-
         @Override
         public void updateTile()
         {
@@ -145,7 +155,7 @@ public class SickleTrap extends TrapBlock
                         float ux = x + Angles.trnsx(base + currentAngle + rotationSpeed * dir(), d);
                         float uy = y + Angles.trnsy(base + currentAngle + rotationSpeed * dir(), d);
 
-                        u.damage(damage);
+                        u.damagePierce(damage);
 
                         Tile tile = Vars.world.tileWorld(ux, uy);
 
@@ -163,6 +173,12 @@ public class SickleTrap extends TrapBlock
                     currentAngle = 0f;
                 }
             }
+        }
+
+        @Override
+        public Object config()
+        {
+            return flipped;
         }
 
         @Override

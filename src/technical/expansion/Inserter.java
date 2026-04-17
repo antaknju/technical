@@ -1,6 +1,7 @@
 package technical.expansion;
 
 import static mindustry.Vars.content;
+import static mindustry.Vars.tilesize;
 
 import arc.Core;
 import arc.graphics.g2d.Draw;
@@ -9,11 +10,13 @@ import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.scene.ui.layout.Table;
+import arc.util.Eachable;
 import arc.util.Nullable;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;
+import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
@@ -75,11 +78,30 @@ public class Inserter extends KineticBlock
         stats.add(Stat.productionTime, itemDuration / 60f, StatUnit.seconds);
     }
 
+    @Override
+    public void drawPlanRegion(BuildPlan plan, Eachable<BuildPlan> list)
+    {
+        float angle = plan.rotation * 90;
+
+        Draw.rect(region, plan.drawx(), plan.drawy(), angle);
+
+        float halfWidth = 32f / tilesize;
+
+        float pivotOffsetX = -halfWidth;
+        float pivotOffsetY = 0f;
+
+        float drawX = plan.drawx() + Angles.trnsx(angle, pivotOffsetX, pivotOffsetY);
+        float drawY = plan.drawy() + Angles.trnsy(angle, pivotOffsetX, pivotOffsetY);
+
+        Draw.rect(armRegion, drawX, drawY, angle);
+    }
 
     public class InserterBuild extends KineticBuild 
     {
         public float progress = 0;
+
         public ItemStack carriedStack = new ItemStack();
+
         public int armDirection = -1;
         public float itemTime = 0;
         public int itemTimeTendency = 0;
@@ -250,7 +272,7 @@ public class Inserter extends KineticBlock
 
             float angle = Mathf.lerp(0f, 180f, progress / moveTime) + rotation * 90;
 
-            float halfWidth = 32f / 8f;
+            float halfWidth = 32f / tilesize;
 
             float pivotOffsetX = -halfWidth;
             float pivotOffsetY = 0f;
@@ -263,8 +285,8 @@ public class Inserter extends KineticBlock
 
             Draw.z(Layer.blockOver+1);
 
-            float itemX = x + Angles.trnsx(angle, -32f / 4, 0);
-            float itemY = y + Angles.trnsy(angle, -32f / 4, 0);
+            float itemX = x + Angles.trnsx(angle, halfWidth / 2, 0);
+            float itemY = y + Angles.trnsy(angle, halfWidth / 2, 0);
 
             TDraw.drawItemStack(carriedStack, itemX, itemY, itemTime);
         }

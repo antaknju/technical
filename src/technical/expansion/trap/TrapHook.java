@@ -1,5 +1,7 @@
 package technical.expansion.trap;
 
+import arc.func.Cons;
+import mindustry.graphics.Drawf;
 import mindustry.world.Tile;
 import technical.utility.TBundle;
 import technical.utility.TCol;
@@ -45,15 +47,29 @@ public class TrapHook extends KineticBlock
 
     public boolean detectsDestruction = true;
 
-    public TrapHook(String name) 
+    public TrapHook(String name)
     {
         super(name);
-        update = true;
-        configurable = true;
-        
-        solid = true;
-        
         swapDiagonalPlacement = true;
+
+        configurable = true;
+        copyConfig = true;
+        saveConfig = true;
+
+        config(Point2.class, (TrapHookBuild build, Point2 point) -> {
+            Building other = world.build(build.tile.x + point.x, build.tile.y + point.y);
+            if (other instanceof TrapHookBuild hook && other != build) {
+                build.connectionPos = hook.pos();
+                hook.connectionPos = build.pos();
+            }
+        });
+
+        configClear((TrapHookBuild build) -> {
+            if (build.connection() != null) {
+                build.connection().connectionPos = -1;
+                build.connectionPos = -1;
+            }
+        });
     }
 
     public float cooldownTime()
@@ -76,13 +92,15 @@ public class TrapHook extends KineticBlock
     }
     
     @Override
-    public void changePlacementPath(Seq<Point2> points, int rotation){
+    public void changePlacementPath(Seq<Point2> points, int rotation)
+    {
         Placement.calculateNodes(points, this, rotation, 
             (point, other) -> overlaps(world.tile(point.x, point.y), world.tile(other.x, other.y))
         );
     }
 
-    public boolean overlaps(@Nullable Tile src, @Nullable Tile other){
+    public boolean overlaps(@Nullable Tile src, @Nullable Tile other)
+    {
         if(src == null || other == null) return true;
 
         float sx = src.worldx() + offset;
@@ -99,25 +117,36 @@ public class TrapHook extends KineticBlock
 
     public class TrapHookBuild extends KineticBuild
     {
-        public TrapHookBuild connection;
-        public boolean configuring = false;
-
         public boolean isCut = false;
 
         public float cooldownTimer = cooldownTime();
 
+        private int connectionPos = -1;
+
+        public TrapHookBuild connection()
+        {
+            if (connectionPos == -1)
+                return null;
+
+            if (world.tile(connectionPos).build instanceof TrapHookBuild thb)
+                return thb;
+
+            return null;
+        }
+
         @Override
         public void updateTile()
         {
+            if (efficiency <= 0) return;
+
             if(isMain() && !isCut)
             {
                 Groups.unit.each(u -> {
-
-                    if (u.isGrounded() && u.team != team) // && u.team != team
+                    if (u.team != team)
                     {
-                        if(Intersector.intersectSegmentCircle(new Vec2(x, y), new Vec2(connection.x, connection.y), new Vec2(u.x, u.y), u.hitSize))
+                        if(Intersector.intersectSegmentCircle(new Vec2(x, y), new Vec2(connection().x, connection().y), new Vec2(u.x, u.y), u.hitSize))
                         {
-                            onCut();
+                            Main().onCut();
 
                             stringBreakEffect.at(u.x, u.y);
                             cooldownTimer = 0;
@@ -136,19 +165,18 @@ public class TrapHook extends KineticBlock
 
                     if (isMain())
                     {
-                        drawLineEffects(x, y, connection.x, connection.y, tilesize, stringReplaceEffect);
+                        drawLineEffects(x, y, connection().x, connection().y, stringReplaceEffect);
                     }
                 }
             }
-
-            configuring = false;
         }
 
-        void drawLineEffects(float x1, float y1, float x2, float y2, float spacing, Effect fx){
+        void drawLineEffects(float x1, float y1, float x2, float y2, Effect fx)
+        {
             float dx = x2 - x1, dy = y2 - y1;
             float len = Mathf.len(dx, dy);
 
-            int count = (int)(len / spacing);
+            int count = (int)(len / (float) Vars.tilesize);
 
             float stepX = dx / count;
             float stepY = dy / count;
@@ -160,13 +188,15 @@ public class TrapHook extends KineticBlock
             }
         }
 
-
         public void onCut()
         {
             isCut = true;
             cooldownTimer = 0;
 
-            if (isMain()) connection.onCut();
+            consume();
+
+            if (!connection().isCut)
+                connection().onCut();
 
             for (var b : proximity)
             {
@@ -174,38 +204,14 @@ public class TrapHook extends KineticBlock
                 {
                     t.trap();
                 }
+                else if (b instanceof TrapHookBuild t)
+                {
+                    if (!t.isCut)
+                    {
+                        t.onCut();
+                    }
+                }
             }
-        }
-
-
-        @Override
-        public boolean onConfigureBuildTapped(Building otherbuild)
-        {
-            if (!(otherbuild instanceof TrapHookBuild) || otherbuild == null || otherbuild == this) return false;
-            
-            TrapHookBuild other = (TrapHookBuild)otherbuild;
-
-            if (other == connection) {
-                connection.connection = null;
-                connection = null;
-                return false;
-            } 
-
-            if (connection != null || other.connection != null) {
-                Vars.ui.showInfoToast(TBundle.color(TBundle.error("links"), TCol.error), 1f);
-                return false;
-            }
-
-            float dst = Mathf.dst(x, y, other.x, other.y) / Vars.tilesize;
-            if (dst > range) {
-                Vars.ui.showInfoToast(TBundle.color(TBundle.error("range"), TCol.error), 1f);
-                return false;
-            }
-
-            connection = other;
-            connection.connection = this;
-
-            return false;
         }
 
         @Override
@@ -214,32 +220,40 @@ public class TrapHook extends KineticBlock
             super.drawConfigure();
 
             Draw.color(Pal.accent);
-            Lines.stroke(0.8F);
-            Lines.circle(x, y, range * tilesize);
-            Draw.color();
 
-            if (connection != null)
-                TDraw.highlight(connection, Pal.place);
+            Drawf.dashCircle(x, y, range * tilesize, Pal.accent);
+
+            if (connection() != null)
+                TDraw.highlight(connection(), Pal.place);
 
             Draw.reset();
-
-            configuring = true;
         }
 
         @Override
         public void drawSelect()
         {
-            if (connection == null || configuring) return;
+            if (connection() == null) return;
 
             TDraw.highlight(this, Pal.accent);
-            TDraw.highlight(connection, Pal.place);
+            TDraw.highlight(connection(), Pal.place);
 
             Draw.reset();
         }
 
         public boolean isMain()
         {
-            return connection != null && (connection.x > x || (connection.x == x && connection.y > y));
+            return Main() == this;
+        }
+
+        public TrapHookBuild Main()
+        {
+            if (connection() == null)
+                return null;
+
+            if (connection().x > x || connection().x == x && connection().y > y)
+                return this;
+
+            return connection();
         }
 
         @Override
@@ -247,58 +261,93 @@ public class TrapHook extends KineticBlock
         {
             super.draw();
 
-            if (connection == null) return;
+            if (connection() == null) return;
 
             Draw.z(Layer.block + 1);
-            if (isMain())
-            {
-                if (!isCut)
-                {
-                    Draw.color(TCol.iron);
-                    Lines.stroke(2);
-                    Lines.line(x, y, connection.x, connection.y);
-                    Draw.color(Color.white);
-                    Lines.stroke(1);
-                }
-                else
-                {
-                    Draw.color(TCol.from("#aaaaaa7a"));
-                    Lines.stroke(1);
-                }
 
-                Lines.line(x, y, connection.x, connection.y);
+            if (!isCut)
+            {
+                Draw.color(TCol.iron);
+                Lines.stroke(2);
+                Lines.line(x, y, connection().x, connection().y);
+                Draw.color(Color.white);
+                Lines.stroke(1);
             }
+            else
+            {
+                Draw.color(TCol.from("#aaaaaa7a"));
+                Lines.stroke(1);
+            }
+
+            Lines.line(x, y, connection().x, connection().y);
             
             Draw.reset();
         }
 
         @Override
-        public void onRemoved() 
+        public boolean onConfigureBuildTapped(Building other_build)
         {
-            if (connection == null) return;
+            if (!(other_build instanceof TrapHookBuild other) || other_build == this) return false;
 
-            if (detectsDestruction) 
-            {
-                // A little hacky method...
-                onCut();
-                if (!isMain()) connection.onCut();
-                drawLineEffects(x, y, connection.x, connection.y, tilesize, stringReplaceEffect);
+            if (other == connection()) {
+                deselect();
+                configure(null);
+                return false;
             }
 
-            connection.connection = null;
-            connection = null;
+            if (connection() != null || other.connection() != null)
+            {
+                Vars.ui.showInfoToast(TBundle.color(TBundle.error("links"), TCol.error), 1f);
+                return false;
+            }
+
+            float dst = Mathf.dst(x, y, other.x, other.y);
+            if (dst > range * Vars.tilesize)
+            {
+                Vars.ui.showInfoToast(TBundle.color(TBundle.error("range"), TCol.error), 1f);
+                return false;
+            }
+
+            deselect();
+            configure(new Point2(other.tile.x - tile.x, other.tile.y - tile.y));
+
+            return false;
+        }
+
+        @Override
+        public void onRemoved()
+        {
+            if (connection() != null)
+            {
+                if (detectsDestruction)
+                {
+                    Main().onCut();
+                    drawLineEffects(x, y, connection().x, connection().y, stringReplaceEffect);
+                }
+
+                connection().connectionPos = -1;
+                connectionPos = -1;
+            }
+            super.onRemoved();
+        }
+
+        @Override
+        public Object config()
+        {
+            if (connection() == null) return null;
+            return new Point2(connection().tile.x - tile.x, connection().tile.y - tile.y);
         }
 
 
         @Override
-        public void write(Writes write) {
+        public void write(Writes write)
+        {
             super.write(write);
-            
-            write.i(connection != null ? connection.tile.x : -1);
-            write.i(connection != null ? connection.tile.y : -1);
 
             write.bool(isCut);
             write.f(cooldownTimer);
+
+            write.i(connection() == null ? -1 : connectionPos);
         }
 
         @Override
@@ -306,18 +355,9 @@ public class TrapHook extends KineticBlock
         {
             super.read(read, revision);
 
-            int x = read.i();
-            int y = read.i();
-
-            Building b = world.build(x, y);
-            if (b != null)
-            {
-                connection = (TrapHookBuild)b;
-                connection.connection = this;
-            }
-
             isCut = read.bool();
             cooldownTimer = read.f();
+            connectionPos = read.i();
         }
     }
 }

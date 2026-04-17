@@ -1,32 +1,32 @@
 package technical.expansion.trap;
 
-import static mindustry.Vars.tilesize;
+import static technical.debug.Debugger.print;
 
 import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
-import arc.util.Time;
 import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
-import mindustry.gen.Building;
-import mindustry.gen.Groups;
 import mindustry.gen.Unit;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import technical.content.TFx;
-import technical.expansion.TBlock;
 import technical.expansion.kinetic.KineticBlock;
 
-public class SpikeTrap extends KineticBlock {
+public class SpikeTrap extends KineticBlock
+{
     public float damage = 5f;
 
     public float hitInterval = 20f;
-    public float slowDuration = 25f;
+//    public float slowDuration = 25f;
+
+    public float overlayTime = 20f;
 
     public Effect damageEffect = TFx.stringBreak;
 
-    public SpikeTrap(String name){
+    public SpikeTrap(String name)
+    {
         super(name);
         solid = false;
         update = true;
@@ -37,7 +37,8 @@ public class SpikeTrap extends KineticBlock {
     }
 
     @Override
-    public void load(){
+    public void load()
+    {
         super.load();
         topRegion = Core.atlas.find(name + "-top");
     }
@@ -45,53 +46,51 @@ public class SpikeTrap extends KineticBlock {
     public TextureRegion topRegion;
 
     @Override
-    public void setStats(){
+    public void setStats()
+    {
         super.setStats();
         stats.add(Stat.damage, damage / hitInterval, StatUnit.perSecond);
     }
 
     public class SpikeTrapBuild extends KineticBuild
     {
-        float overlayTime = 0f;
+        float overlayTimer = 0f;
 
         @Override
         public void updateTile()
         {
-            if(timer(0, hitInterval)){
-                applyTrapEffects();
-            }
-
-            if(overlayTime > 0f){
-                overlayTime -= Time.delta;
+            if(overlayTimer > 0f)
+            {
+                overlayTimer -= delta();
             }
         }
 
-        void applyTrapEffects()
-        {
-            float s = size * tilesize;
-
-            float left   = x - s/2f;
-            float bottom = y - s/2f;
-
-            for(Unit unit : Groups.unit.intersect(left, bottom, s, s))
+        public void unitOnAny(Unit unit) {
+            if (efficiency >= 0 && !unit.type.flying && timer(0, hitInterval))
             {
-                if(unit.team != team && unit.isGrounded()){
-                    unit.damage(damage);
-                    unit.apply(StatusEffects.slow, slowDuration);
+                consume();
+
+                if (unit.team != team && unit.isGrounded()) {
+                    unit.damagePierce(damage);
                     damageEffect.at(unit.x, unit.y);
 
-                    overlayTime = 20f;
+                    consume();
+
+                    overlayTimer = overlayTime;
                 }
             }
+
+            unit.apply(StatusEffects.slow, 4f);
         }
 
         @Override
-        public void draw(){
+        public void draw()
+        {
             super.draw();
 
-            if(overlayTime > 0f && ((SpikeTrap)block).topRegion != null)
+            if(overlayTimer > 0f && ((SpikeTrap)block).topRegion != null)
             {
-                Draw.alpha(Mathf.clamp(overlayTime / 12f));
+                Draw.alpha(Mathf.clamp(overlayTimer / 12f));
                 Draw.rect(((SpikeTrap)block).topRegion, x, y);
                 Draw.reset();
             }

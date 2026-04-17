@@ -263,7 +263,7 @@ public class ExtendableWallCrafter extends Extendable
 
         @Override
         public boolean shouldConsume(){
-            return items.get(output) < itemCapacity && hasRequiredExtensions();
+            return super.shouldConsume() && items.get(output) < itemCapacity && hasRequiredExtensions();
         }
 
         @Override

@@ -17,7 +17,9 @@ public class TIcons
 
     public static int lastIconCode = 6000;
 
-    public static int boostPowerIcon = ++lastIconCode
+    public static int boostPowerIcon = ++lastIconCode,
+            angularSpeedIcon = ++lastIconCode,
+            torqueIcon = ++lastIconCode
     ;
 
     public static void load()
@@ -44,6 +46,8 @@ public class TIcons
     public static void loadIcons()
     {
         registerIcon(boostPowerIcon, "boost-power", boostPower);
+        registerIcon(angularSpeedIcon, "angular-speed", speed);
+        registerIcon(torqueIcon, "torque", torque);
     }
 
     private static void registerIcon(int code, String name, TextureRegion region)

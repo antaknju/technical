@@ -47,17 +47,25 @@ public class TrapBlock extends KineticBlock
         public float cooldownTimer;
 
         @Override
+        public boolean shouldConsume()
+        {
+            return super.shouldConsume() && canTrap();
+        }
+
+        @Override
         public void updateTile() 
         {
+            if (efficiency <= 0) return;
+
             if(cooldownTimer < cooldownTime())
                 cooldownTimer += Time.delta;
             else
                 cooldownTimer = cooldownTime();
         }
 
-        public boolean trap() 
+        public boolean trap()
         {
-            if(efficiency > 0 && cooldownTimer < cooldownTime() || !canTrap()) return false;
+            if(cooldownTimer < cooldownTime() || !canTrap()) return false;
 
             onTrap();
 
