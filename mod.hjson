@@ -3,7 +3,7 @@ description: "A Mindustry mod that adds new campaign with a lot new mechanisms t
 subtitle: "Isn't Mindustry Technical enough?"
 author: "AnTakNju"
 
-version: 1.5.2-alpha+628
+version: 1.5.2-alpha+632
 
 name: "technical"
 main: "technical.Technical"

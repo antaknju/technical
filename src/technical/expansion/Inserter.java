@@ -272,26 +272,21 @@ public class Inserter extends KineticBlock
 
             float angle = Mathf.lerp(0f, 180f, progress / moveTime) + rotation * 90;
 
-            float halfWidth = 32f / tilesize;
+            float pivotOffset = -32f / tilesize;
 
-            float pivotOffsetX = -halfWidth;
-            float pivotOffsetY = 0f;
-
-            float drawX = x + Angles.trnsx(angle, pivotOffsetX, pivotOffsetY);
-            float drawY = y + Angles.trnsy(angle, pivotOffsetX, pivotOffsetY);
+            float drawX = x + Angles.trnsx(angle, pivotOffset, 0);
+            float drawY = y + Angles.trnsy(angle, pivotOffset, 0);
 
             Draw.z(Layer.blockOver);
             Draw.rect(armRegion, drawX, drawY, angle);
 
             Draw.z(Layer.blockOver+1);
 
-            float itemX = x + Angles.trnsx(angle, halfWidth / 2, 0);
-            float itemY = y + Angles.trnsy(angle, halfWidth / 2, 0);
+            float itemX = x + Angles.trnsx(angle, pivotOffset * 2, 0);
+            float itemY = y + Angles.trnsy(angle, pivotOffset * 2, 0);
 
             TDraw.drawItemStack(carriedStack, itemX, itemY, itemTime);
         }
-
-
 
         @Override
         public void write(Writes write)
