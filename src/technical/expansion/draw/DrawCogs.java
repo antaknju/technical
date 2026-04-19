@@ -4,6 +4,8 @@ import arc.Core;
 import arc.graphics.g2d.*;
 import arc.math.geom.Point2;
 import arc.struct.Seq;
+import arc.util.Eachable;
+import mindustry.entities.units.BuildPlan;
 import mindustry.gen.*;
 import mindustry.world.Block;
 import mindustry.world.draw.*;
@@ -54,14 +56,42 @@ public class DrawCogs extends DrawBlock {
         Draw.reset();
     }
 
+    @Override
+    public void drawPlan(Block block, BuildPlan plan, Eachable<BuildPlan> list)
+    {
+        super.drawPlan(block, plan, list);
+
+        for (DrawCog cog : cogs)
+        {
+            float rotation = cog.offset;
+
+            Draw.scl(cog.scale);
+
+            Draw.rect(
+                    cog.toothSprite,
+                    plan.drawx() + cog.position.x,
+                    plan.drawy() + cog.position.y,
+                    rotation
+            );
+
+            Draw.rect(
+                    cog.screwSprite,
+                    plan.drawx() + cog.position.x,
+                    plan.drawy() + cog.position.y
+            );
+        }
+
+        Draw.reset();
+    }
+
     /** Helper class to store all cog-related values */
     public static class DrawCog {
         public TextureRegion screwSprite;
         public TextureRegion toothSprite;
         public String sprite;
-        public float scale = 1f;
-        public float speed = 90f; // degrees per second
-        public float offset = 0f; // initial rotation offset
+        public float scale;
+        public float speed;
+        public float offset;
         public Point2 position = new Point2();
 
         public DrawCog(String sprite, Point2 pos, float scale, float speed, float offset) {

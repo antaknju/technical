@@ -202,34 +202,39 @@ tasks.register('inject', Copy) {
     }
 }
 
+// BUNGEN UTILS
+
+def normalize = { String s -> s.replaceAll("\\s+", "").trim() }
+def toKebab = { String s -> s.replaceAll(/([a-z0-9])([A-Z])/, '$1-$2').toLowerCase() }
+def toTitle = { String s -> s.replaceAll(/([a-z0-9])([A-Z])/, '$1 $2').trim().capitalize() }
+def bungenIgnore = "/// BUNGEN IGNORE"
+def bungenEnum = "/// BUNGEN ENUM"
+def titlePrefix = "#########################"
+
+def getBundleFile = {
+    def f = file("${project.projectDir}/assets/bundles/bundle.properties")
+    if (!f.exists()) { f.parentFile.mkdirs(); f.createNewFile() }
+    return f
+}
+
+def loadExistingKeys = { File bundleFile ->
+    bundleFile.readLines()
+            .findAll { it.contains("=") }
+            .collect { normalize(it.split("=")[0]) }
+            .toSet()
+}
+
 tasks.register('bungen') {
+    group = 'distribution'
     dependsOn 'bungen-content', 'bungen-enum'
 }
 
 tasks.register('bungen-content') {
+    group = 'distribution'
     doLast {
-        def contentDir = file("${project.projectDir}/src/technical/content")
-        def bundleFile = file("${project.projectDir}/assets/bundles/bundle.properties")
-
-        if (!bundleFile.exists()) {
-            bundleFile.parentFile.mkdirs()
-            bundleFile.createNewFile()
-        }
-
-        def lines = bundleFile.readLines()
-
-        // Normalize keys
-        def normalize = { it.replaceAll("\\s+", "") }
-
-        def existingKeys = lines
-                .findAll { it.contains("=") }
-                .collect { normalize(it.split("=")[0]) }
-                .toSet()
-
-        def existingSections = lines
-                .findAll { it ==~ /#+\s+[A-Z]+\s+#+/ }
-                .collect { it.replaceAll("#", "").trim().toLowerCase() }
-                .toSet()
+        def contentDir   = file("${project.projectDir}/src/technical/content")
+        def bundleFile   = getBundleFile()
+        def existingKeys = loadExistingKeys(bundleFile)
 
         def fileMap = [
                 "TBlocks.java"  : "block",
@@ -243,38 +248,27 @@ tasks.register('bungen-content') {
         def outputSections = [:].withDefault { [] }
 
         fileMap.each { fileName, prefix ->
-            def file = new File(contentDir, fileName)
-            if (!file.exists()) return
+            def srcFile = new File(contentDir, fileName)
+            if (!srcFile.exists()) return
 
-            def fileLines = file.readLines()
+            def fileLines = srcFile.readLines()
 
             for (int i = 0; i < fileLines.size(); i++) {
                 def line = fileLines[i]
 
-                // Ignore marker
-                if (i > 0 && fileLines[i - 1].contains("/// BUNGEN IGNORE")) {
-                    continue
-                }
+                if (i > 0 && fileLines[i - 1].contains(bungenIgnore)) continue
 
-                // 4 spaces for one tab
                 def matcher = line =~ /^ {8}[a-zA-Z0-9_]+\s*=\s*new\s+\w+\("([^"]+)"[^)]*\)\s*\{\{/
                 if (!matcher.find()) continue
 
-                def name = matcher.group(1)
-
+                def name    = matcher.group(1)
                 def keyBase = "${prefix}.technical-${name}"
                 def nameKey = normalize("${keyBase}.name")
 
-                // duplicate protection
                 if (existingKeys.contains(nameKey)) continue
-
                 existingKeys.add(nameKey)
 
-                def formattedName = name
-                        .replace("-", " ")
-                        .split(" ")
-                        .collect { it.capitalize() }
-                        .join(" ")
+                def formattedName = name.replace("-", " ").split(" ").collect { it.capitalize() }.join(" ")
 
                 outputSections[prefix] += [
                         "${keyBase}.name = ${formattedName}",
@@ -285,162 +279,131 @@ tasks.register('bungen-content') {
         }
 
         if (outputSections.isEmpty()) {
-            println "No new entries added. Terminating."
+            println "BUNGEN: No new content entries added."
             return
         }
 
-        def builder = new StringBuilder()
+        def updatedLines = bundleFile.readLines()
 
         outputSections.each { prefix, entries ->
-            if (entries.isEmpty()) return
+            def header = "${titlePrefix} ${prefix.toUpperCase()} ${titlePrefix}"
+            def idx    = updatedLines.findIndexOf { it == header }
 
-            def sectionHeader = "######################### ${prefix.toUpperCase()} #########################"
-
-            if (!existingSections.contains(prefix)) {
-                builder.append("\n${sectionHeader}\n\n")
-            } else {
-                builder.append("\n")
+            if (idx == -1) {
+                updatedLines << ""
+                updatedLines << header
+                idx = updatedLines.size() - 1
             }
 
+            def insertAt = idx + 1
+            while (insertAt < updatedLines.size() && updatedLines[insertAt].isEmpty()) insertAt++
+
+            def toInsert = []
             for (int i = 0; i < entries.size(); i += 3) {
-                builder.append(entries[i]).append("\n")
-                builder.append(entries[i + 1]).append("\n")
-                builder.append(entries[i + 2]).append("\n\n")
+                toInsert << entries[i]
+                toInsert << entries[i + 1]
+                toInsert << entries[i + 2]
+                toInsert << ""
             }
+
+            updatedLines.addAll(insertAt, toInsert)
         }
 
-        def output = builder.toString()
-
-        println "\nBUNGEN ENTRIES ADDED"
-        println output
-
-        bundleFile << output
-
-        println "Bundle generation complete."
+        bundleFile.text = updatedLines.join("\n")
+        println "BUNGEN: Content generation complete."
     }
 }
 
 tasks.register('bungen-enum') {
+    group = 'distribution'
     doLast {
-        def srcDir = file("${project.projectDir}/src")
-        def bundleFile = file("${project.projectDir}/assets/bundles/bundle.properties")
-
-        if (!bundleFile.exists()) {
-            bundleFile.parentFile.mkdirs()
-            bundleFile.createNewFile()
-        }
-
+        def bundleFile = getBundleFile()
         def lines = bundleFile.readLines()
-        def normalize = { it.replaceAll("\\s+", "") }
+        def existingKeys = loadExistingKeys(bundleFile)
 
-        def existingKeys = lines
-                .findAll { it.contains("=") }
-                .collect { normalize(it.split("=")[0]) }
-                .toSet()
-
-        def enumHeader = "######################### ENUM #########################"
+        def enumHeader = titlePrefix + " ENUM " + titlePrefix
         def hasEnumSection = lines.any { it == enumHeader }
-
         def outputMap = [:].withDefault { [] }
 
-        srcDir.eachFileRecurse { file ->
-            if (!file.name.endsWith(".java")) return
+        file("${project.projectDir}/src").eachFileRecurse { srcFile ->
+            if (!srcFile.name.endsWith(".java")) return
 
-            def fileLines = file.readLines()
-
-            boolean shouldProcessNextEnum = false
-            String currentEnum = null
+            def     fileLines        = srcFile.readLines()
+            boolean triggerFound     = false
+            boolean parsingConstants = false
+            String  currentEnumKebab = null
 
             for (int i = 0; i < fileLines.size(); i++) {
                 def line = fileLines[i].trim()
 
-                if (line.contains("/// BUNGEN ENUM")) {
-                    shouldProcessNextEnum = true
+                if (line.contains(bungenEnum)) { triggerFound = true; continue }
+                if (!triggerFound) continue
+                if (line.isEmpty() || (line.startsWith("//") && !line.contains("///")) || line.startsWith("*")) continue
+
+                if (!parsingConstants) {
+                    def enumMatch = line =~ /enum\s+([a-zA-Z0-9]+)/
+                    if (enumMatch.find()) {
+                        currentEnumKebab = toKebab(enumMatch.group(1))
+                        parsingConstants = true
+                    }
                     continue
                 }
 
-                def enumMatch = line =~ /enum\s+([a-zA-Z0-9_\-]+)/
-                if (shouldProcessNextEnum && enumMatch.find()) {
-                    currentEnum = enumMatch.group(1)
-                    shouldProcessNextEnum = false
+                // Termination
+                if (line == "}" || line == "};") {
+                    triggerFound = false; parsingConstants = false; currentEnumKebab = null
+                    continue
+                }
+                if (line == ";") {
+                    parsingConstants = false; currentEnumKebab = null; triggerFound = false
                     continue
                 }
 
-                if (currentEnum && line.contains("}")) {
-                    currentEnum = null
-                    continue
+                // Parse constant
+                if (i > 0 && fileLines[i - 1].trim().contains(bungenIgnore)) continue
+
+                def constantPart = line.split(/[(\s,;]/)[0].trim()
+                if (!constantPart || constantPart == "{" || !constantPart.matches(/[A-Za-z][A-Za-z0-9]*/)) continue
+
+                def fullKey       = "enum.${currentEnumKebab}.${toKebab(constantPart)}"
+                def normalizedKey = normalize(fullKey)
+
+                if (!existingKeys.contains(normalizedKey)) {
+                    existingKeys.add(normalizedKey)
+                    outputMap[currentEnumKebab] << "${fullKey} = ${toTitle(constantPart)}"
                 }
 
-                if (!currentEnum) continue
-
-                if (i > 0 && fileLines[i - 1].contains("/// BUNGEN IGNORE")) {
-                    continue
+                // Inline semicolon = last constant in list
+                if (line.endsWith(";")) {
+                    parsingConstants = false; currentEnumKebab = null; triggerFound = false
                 }
-
-                def constant = line
-                        .replace(",", "")
-                        .replaceAll(/\(.*\)/, "")
-                        .trim()
-
-                if (!constant.matches(/[A-Za-z0-9_]+/)) continue
-
-                def kebab = constant
-                        .replaceAll(/([a-z])([A-Z])/, '$1-$2')
-                        .toLowerCase()
-
-                def kebabEnum = currentEnum
-                        .replaceAll(/([a-z])([A-Z])/, '$1-$2')
-                        .toLowerCase()
-
-                def key = normalize("enum.${kebabEnum}.${kebab}")
-                if (existingKeys.contains(key)) continue
-                existingKeys.add(key)
-
-                def formatted = kebab
-                        .split("-")
-                        .collect { it.capitalize() }
-                        .join(" ")
-
-                outputMap[kebabEnum] << "enum.${kebabEnum}.${kebab} = ${formatted}"
             }
         }
 
         if (outputMap.isEmpty()) {
-            println "No new enum entries. Terminating."
+            println "BUNGEN: No new enum entries found."
             return
         }
 
-        // build grouped output with spacing
-        StringBuilder builder = new StringBuilder()
-
+        def builder = new StringBuilder()
         outputMap.each { enumName, entries ->
-            entries.each {
-                builder.append(it).append("\n")
-            }
-            builder.append("\n") // spacing between enum types
+            entries.each { builder.append(it).append("\n") }
+            builder.append("\n")
         }
-
-        def output = builder.toString()
-
-        println "\nBUNGEN ENUM ENTRIES ADDED"
-        println output
+        def output = builder.toString().trim()
 
         if (!hasEnumSection) {
-            // create section if missing
-            bundleFile << "\n${enumHeader}\n\n${output}"
+            bundleFile << "\n\n${enumHeader}\n${output}\n"
         } else {
-            // insert right after ENUM header
-            def index = lines.findIndexOf { it == enumHeader }
-
+            def index    = lines.findIndexOf { it == enumHeader }
             def newLines = []
             newLines.addAll(lines[0..index])
-            newLines.add("") // spacing
+            newLines.add("")
             newLines.addAll(output.readLines())
-            newLines.addAll(lines[(index + 1)..<lines.size()])
-
+            newLines.addAll(lines[(index + 1)..(lines.size() - 1)])
             bundleFile.text = newLines.join("\n")
         }
 
-        println "Enum bundle generation complete."
+        println "BUNGEN: Enum synchronization complete."
     }
 }

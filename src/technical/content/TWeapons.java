@@ -171,9 +171,7 @@ public class TWeapons
         keepVelocity = false;
         ammoMultiplier = 1;
 
-        // Spawns the arrow as a unit
         spawnUnit = new MissileUnitType("crude-arrow"){{
-            // Map original bullet stats to the unit
             speed = 10f;
             lifetime = 30f;
             drag = 0.03f;
@@ -185,11 +183,11 @@ public class TWeapons
             pierce = true;
             pierceCap = 3;
 
-            health = 15; // Missiles need health so they can be shot down (or survive long enough to hit)
+            health = 15;
             lowAltitude = true;
             outlineColor = Pal.darkOutline;
 
-            trailColor = engineColor = TCol.arrow;
+            trailColor = engineColor = TCol.iron;
             engineSize = 1;
 
             deathExplosionEffect = hitEffect = despawnEffect = Fx.none;
@@ -205,14 +203,13 @@ public class TWeapons
 
                 deathExplosionEffect = hitEffect = despawnEffect = Fx.none;
 
-                bullet = new ExplosionBulletType(15f, 12f){{ // 15 damage, 12f splash radius (approximate to original hitSize)
-                    buildingDamageMultiplier = 0.5f;
+                bullet = new ExplosionBulletType(30f, 3 * tilesize){{
                     knockback = 0.5f;
 
                     shootEffect = Fx.none;
                     smokeEffect = Fx.none;
 
-                    deathExplosionEffect = hitEffect = despawnEffect = TFx.crudeExplosion;
+                    deathExplosionEffect = hitEffect = despawnEffect = TFx.ironExplosion;
                 }};
             }});
         }};
@@ -358,12 +355,13 @@ public class TWeapons
         x = 0f;
         y = 0f;
         shootY = -2f;
+        shootSound = TSounds.crossbow;
 
         layerOffset = 0.01f;
 
         cooldownTime = 20f;
 
-        rotationLimit = 180f;
+        rotationLimit = 30f;
         rotateSpeed = 1f;
         inaccuracy = 5f;
         rotate = true;

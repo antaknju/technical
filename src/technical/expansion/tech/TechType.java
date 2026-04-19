@@ -5,6 +5,9 @@ public enum TechType
 {
     Null,
 
+    UnitProduction,
+    PayloadTransport,
+
     Research,
     Metallurgy,
     CrudeWorking,

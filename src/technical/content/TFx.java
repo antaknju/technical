@@ -593,11 +593,68 @@ public class TFx {
         });
     }),
 
+    edgeCloud = new Effect(45f, e -> {
+        float length = e.data instanceof Float ? (Float)e.data : 16f;
+        float rot = e.rotation;
+
+        int points = Mathf.ceil(length / 2.5f);
+
+//        Draw.z(Layer.debris);
+
+        rand.setSeed(e.id);
+
+        for(int i = 0; i < points; i++)
+        {
+            float t = points == 1 ? 0.5f : (float)i / (points - 1);
+            float offset = (t - 0.5f) * length;
+
+            float driftAngle = rand.random(360f);
+            float driftDist = rand.random(2f, 8f) * e.fin();
+
+            float spreadX = rand.range(2f);
+            float spreadY = rand.range(2f);
+
+            float baseX = e.x + Angles.trnsx(rot, offset) + Angles.trnsx(driftAngle, driftDist) + spreadX;
+            float baseY = e.y + Angles.trnsy(rot, offset) + Angles.trnsy(driftAngle, driftDist) + spreadY;
+
+            float shade = rand.random(0.4f, 0.85f);
+            float alpha = rand.random(0.5f, 1f) * e.fout();
+
+            Draw.color(shade, shade, shade, alpha);
+
+            float size = rand.random(1f, 2.8f) * e.fout();
+            Fill.circle(baseX, baseY, size);
+        }
+    }).layer(Layer.groundUnit),
+
+    ironExplosion = new Effect(30, e -> {
+        color(TCol.iron);
+
+        e.scaled(7, i -> {
+            stroke(3f * i.fout());
+            Lines.circle(e.x, e.y, 3f + i.fin() * 10f);
+        });
+
+        color(TCol.coal);
+
+        randLenVectors(e.id, 10, 4f + 24f * e.finpow(), (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, e.fout() * 3f + 0.5f);
+            Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
+        });
+
+        color(TCol.ironDark);
+        stroke(3f * e.fout());
+
+        randLenVectors(e.id + 1, 8, 1f + 23f * e.finpow(), (x, y) -> {
+            lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f);
+        });
+    }),
+
     smallCrudeExplosion = new Effect(30, e -> {
         color(TCol.stone);
 
         e.scaled(5, i -> {
-            stroke(1f * i.fout());
+            stroke(i.fout());
             Lines.circle(e.x, e.y, 2f + i.fin() * 8f);
         });
 

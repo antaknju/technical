@@ -320,7 +320,6 @@ public class RollerConveyor extends TBlock implements Autotiler
             }
         }
 
-
         @Override
         public boolean shouldAmbientSound(){
             return clogHeat <= 0.5f;

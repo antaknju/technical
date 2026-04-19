@@ -35,23 +35,24 @@ public class ConveyorRecipe
         for (int i = 0; i < actions.length; i++) {
             actions[i] = new Action(
                 (Item)itemAndType[i * 2],
-                (Action.Type)itemAndType[i * 2 + 1]
+                (Action.ActionType)itemAndType[i * 2 + 1]
             );
         }
     }
 
     public static class Action
     {
-        public Type type;
+        public ActionType actionType;
         public @Nullable Item item;
 
-        public Action(Item item, Type type)
+        public Action(Item item, ActionType actionType)
         {
-            this.type = type;
+            this.actionType = actionType;
             this.item = item;
         }
 
-        public enum Type
+        /// BUNGEN ENUM
+        public enum ActionType
         {
             Cutting,
             Applying
@@ -63,7 +64,7 @@ public class ConveyorRecipe
             if (this == obj) return true;
             if (obj == null || !(obj instanceof Action other)) return false;
 
-            return type == other.type && Objects.equals(item, other.item);
+            return actionType == other.actionType && Objects.equals(item, other.item);
         }
     }
 }

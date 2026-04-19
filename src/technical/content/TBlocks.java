@@ -29,6 +29,7 @@ import mindustry.world.blocks.defense.turrets.ContinuousLiquidTurret;
 import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.blocks.storage.StorageBlock;
 import mindustry.world.draw.DrawArcSmelt;
 import mindustry.world.draw.DrawBlurSpin;
 import mindustry.world.draw.DrawDefault;
@@ -78,13 +79,13 @@ public class TBlocks {
 
     low_temperature_oil_still, gear_bender, rod_roller, porcelain_router, // middle_temperature_oil_still, high_temperature_oil_still
 
-    furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe, arrow_press,
+    furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe, arrow_press, primitive_factory, roller_router,
 
-    pebbles, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber,
+    pebbles, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber, iron_vault,
     
     stone_crusher, roller_conveyor, brick_furnace, flint_extractor, iron_inserter, electric_inserter, mechanical_inserter, basic_ammo_forge, iron_chaingun, sickle_trap, flywheel, iron_gear_applicator, copper_gear_applicator, brick_crucible, basic_mold, mechanical_pump,
 
-    porcelain_furnace, steam_engine, brass_arm, brass_welder, brass_polisher, brass_smasher, ingot_mold,
+    porcelain_furnace, steam_engine, brass_arm, brass_welder, brass_polisher, brass_smasher, ingot_mold, payload_conveyor, payload_router,
 
     // ENVIRONMENT
     water_floor, water_deep,
@@ -99,7 +100,7 @@ public class TBlocks {
     sandstone_floor, sandstone_wall, sandstone_boulder,
     rusted_floor, oxidized_floor,
     slate_floor, slate_wall, slate_boulder, slate_vent,
-    clay_floor, clay_water, clay_wall,
+    clay_floor, clay_water, clay_wall, cogwheel,
 
     // MYCELIS
     mycelis_heart, mycelis_cord, mycelis_cord_iron_plated, mycelis_brutal_drill, mycelis_oxidizer;
@@ -309,7 +310,7 @@ public class TBlocks {
             size = 1;
             health = 100;
 
-            performedAction = new ConveyorRecipe.Action(TItems.iron_gear, ConveyorRecipe.Action.Type.Applying);
+            performedAction = new ConveyorRecipe.Action(TItems.iron_gear, ConveyorRecipe.Action.ActionType.Applying);
 
             consumeItem(TItems.iron_gear);
         }};
@@ -320,7 +321,7 @@ public class TBlocks {
             size = 1;
             health = 100;
 
-            performedAction = new ConveyorRecipe.Action(TItems.copper_gear, ConveyorRecipe.Action.Type.Applying);
+            performedAction = new ConveyorRecipe.Action(TItems.copper_gear, ConveyorRecipe.Action.ActionType.Applying);
 
             consumeItem(TItems.copper_gear);
         }};
@@ -331,7 +332,7 @@ public class TBlocks {
             size = 1;
             health = 100;
 
-            performedAction = new ConveyorRecipe.Action(TItems.iron_plate, ConveyorRecipe.Action.Type.Applying);
+            performedAction = new ConveyorRecipe.Action(TItems.iron_plate, ConveyorRecipe.Action.ActionType.Applying);
 
             consumeItem(TItems.iron_plate);
         }};
@@ -944,7 +945,7 @@ public class TBlocks {
         }};
 
         copper_gearbox = new ExtendableCrafter("copper-gearbox"){{
-            requirements(Category.crafting, with(TItems.copper_gear, 10, TItems.copper_plate, 20));
+            requirements(Category.power, with(TItems.copper_gear, 10, TItems.copper_plate, 20));
             techType = TechType.MechanicalPowerTransport;
             size = 2;
             health = 200;
@@ -1182,6 +1183,18 @@ public class TBlocks {
             displayedSpeed = 5f;
         }};
 
+        roller_router = new RollerRouter("roller-router"){{
+            requirements(Category.distribution, with(TItems.iron_plate, 10, TItems.precision_mechanism, 10));
+            techType = TechType.Transportation;
+            size = 1;
+            health = 100;
+
+            tunnelReplacement = roller_tunnel;
+
+            speed = 0.05f;
+            displayedSpeed = 5f;
+        }};
+
         iron_inserter = new Inserter("iron-inserter"){{
             requirements(Category.distribution, with(TItems.iron_plate, 5, TItems.iron_gear, 5));
             techType = TechType.Transportation;
@@ -1408,6 +1421,13 @@ public class TBlocks {
             researchCostMultiplier = 0.07f;
         }};
 
+        iron_vault = new StorageBlock("iron-vault"){{
+            requirements(Category.effect, with(TItems.iron_plate, 200, TItems.stone, 100));
+            health = 3000;
+            itemCapacity = 300;
+            size = 2;
+        }};
+
         ////////////////////////////////////////
         ///             DEFENSE              ///
         ////////////////////////////////////////
@@ -1481,7 +1501,6 @@ public class TBlocks {
 
         crossbow = new ItemTurret("crossbow"){{
             requirements(Category.turret, with(TItems.iron_plate, 50, TItems.precision_mechanism, 10));
-            // techType = TechType.HardAmmoTurrets;
             health = 150;
             size = 3;
 
@@ -1493,13 +1512,10 @@ public class TBlocks {
             recoil = 1f;
             range = 300;
             shootCone = 5f;
-            rotateSpeed = 1f;
-            inaccuracy = 2f;
+            rotateSpeed = 0.6f;
+            inaccuracy = 10f;
 
             shootY = 3f;
-
-            // minWarmup = 0.5f;
-            // shootWarmupSpeed = 0.03f;
 
             drawer = new DrawTurret("t"){{
                 parts.add(new RegionPart("-arrow"){{
@@ -1653,6 +1669,35 @@ public class TBlocks {
             );
 
             limitRange();
+        }};
+
+        ////////////////////////////////////////
+        ///              UNITS               ///
+        ////////////////////////////////////////
+
+        primitive_factory = new TUnitFactory("primitive-factory"){{
+            requirements(Category.units, with(TItems.copper_gear, 50, TItems.precision_mechanism, 10, TItems.stone, 100));
+            techType = TechType.UnitProduction;
+            health = 100;
+            size = 3;
+
+            plans = Seq.with(
+                    new TUnitPlan(TUnits.archer, Fr.time * 20, with(TItems.stone, 50, TItems.iron_gear, 10, TItems.precision_mechanism, 5), PayloadStack.with(TBlocks.crossbow, 1))
+            );
+        }};
+
+        payload_conveyor = new PayloadRollerConveyor("payload-conveyor"){{
+            requirements(Category.units, with(TItems.iron_rod, 10, TItems.precision_mechanism, 5));
+            techType = TechType.PayloadTransport;
+            health = 100;
+            size = 3;
+        }};
+
+        payload_router = new PayloadRollerRouter("payload-router"){{
+            requirements(Category.units, with(TItems.iron_rod, 30, TItems.precision_mechanism, 10));
+            techType = TechType.PayloadTransport;
+            health = 100;
+            size = 3;
         }};
 
         ////////////////////////////////////////
@@ -2060,6 +2105,14 @@ public class TBlocks {
 
 
 
+
+        cogwheel = new Cogwheel("cogwheel"){{
+            requirements(Category.power, with());
+
+            health = 100;
+            size = 1;
+        }};
+
         // /// CIRCUIT
 
         // circuit_cutter = new ConveyorCrafter("circuit-cutter"){{
@@ -2141,14 +2194,6 @@ stone_furnace = new ExtendableCrafter("stone-furnace"){{
             drawer = new DrawMulti(new DrawDefault(), new DrawFlame());
         }};
 
-
-
-        cogwheel = new Cogwheel("cogwheel"){{
-            requirements(Category.power, with());
-            
-            health = 100;
-            size = 1;
-        }};
 
 
 

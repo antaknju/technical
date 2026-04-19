@@ -65,12 +65,14 @@ public class SpikeTrap extends KineticBlock
             }
         }
 
-        public void unitOnAny(Unit unit) {
-            if (efficiency >= 0 && !unit.type.flying && timer(0, hitInterval))
+        public void unitOnAny(Unit unit)
+        {
+            if (efficiency >= 0 && unit.team != team && unit.isGrounded())
             {
-                consume();
+                unit.apply(StatusEffects.slow, 4f);
 
-                if (unit.team != team && unit.isGrounded()) {
+                if (timer(0, hitInterval))
+                {
                     unit.damagePierce(damage);
                     damageEffect.at(unit.x, unit.y);
 
@@ -79,8 +81,6 @@ public class SpikeTrap extends KineticBlock
                     overlayTimer = overlayTime;
                 }
             }
-
-            unit.apply(StatusEffects.slow, 4f);
         }
 
         @Override

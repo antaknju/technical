@@ -92,7 +92,7 @@ public class TUnits {
             riseSpeed = 0.01f;
             fallSpeed = 0.02f;
 
-            buildBeamOffset = Float.MAX_VALUE;
+            buildBeamOffset = Float.POSITIVE_INFINITY;
             buildRange = Vars.buildingRange * 0.7f;
 
             weapons.add(TWeapons.onset_weapon);
@@ -100,36 +100,23 @@ public class TUnits {
 
         archer = new UnitType("archer"){{
             outlineColor = Pal.darkOutline;
-
-            coreUnitDock = true;
-
-            targetBuildingsMobile = false;
-            mineSpeed = 3.5f;
-            mineTier = 1;
-
             constructor = MechUnit::create;
 
-            rotateSpeed = 2f;
+            rotateSpeed = 1f;
 
             faceTarget = true;
-            rotateToBuilding = true;
-
-            alwaysUnlocked = true;
 
             speed = 0.5f;
-            hitSize = 11f;
+
+            hitSize = 8f;
             health = 300;
 
-            fogRadius = 3f;
-            itemCapacity = 100;
-
-            riseSpeed = 0.01f;
-            fallSpeed = 0.02f;
-
-            buildBeamOffset = Float.MAX_VALUE;
-            buildRange = Vars.buildingRange * 0.7f;
-
             weapons.add(TWeapons.archer_bow);
+
+            fogRadius = TWeapons.archer_bow.range();
+
+            ammoType = new ItemAmmoType(TItems.flint_arrow, 1);
+            ammoCapacity = 60;
         }};
 
         vapor = new UnitType("vapor"){{
@@ -216,7 +203,7 @@ public class TUnits {
             legForwardScl = 0.7f;
 
             legMoveSpace = 1f;
-            hovering = true;
+            hovering = false;
 
             shadowElevation = 0.2f;
             groundLayer = Layer.legUnit - 1f;

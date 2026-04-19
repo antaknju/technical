@@ -4,7 +4,6 @@ import arc.struct.ObjectMap;
 import mindustry.type.Item;
 import technical.utility.T;
 import technical.expansion.ConveyorRecipe;
-import technical.expansion.ConveyorRecipe.Action.Type;
 import technical.expansion.tech.Tech;
 import technical.expansion.tech.TechStat;
 import technical.expansion.tech.TechType;
@@ -21,9 +20,14 @@ public class TCustom
         /// BUNGEN IGNORE
         ConveyorRecipes = T.mapOf(
             TItems.iron_plate, new ConveyorRecipe(3, TItems.precision_mechanism,
-                TItems.iron_gear, Type.Applying,
-                TItems.copper_gear, Type.Applying,
-                TItems.iron_plate, Type.Applying
+                TItems.iron_gear, ConveyorRecipe.Action.ActionType.Applying,
+                TItems.copper_gear, ConveyorRecipe.Action.ActionType.Applying,
+                TItems.iron_plate, ConveyorRecipe.Action.ActionType.Applying
+            ),
+            TItems.iron_plate, new ConveyorRecipe(3, TItems.precision_mechanism,
+                    TItems.iron_gear, ConveyorRecipe.Action.ActionType.Applying,
+                    TItems.copper_gear, ConveyorRecipe.Action.ActionType.Applying,
+                    TItems.iron_plate, ConveyorRecipe.Action.ActionType.Applying
             )
         );
 

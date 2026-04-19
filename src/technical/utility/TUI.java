@@ -285,7 +285,7 @@ public class TUI
                     ConveyorRecipe.Action act = recipe.actions[i];
 
                     t.table(arrow -> {
-                        arrow.add(TBundle.get_enum(act.type)).padBottom(4f).row();
+                        arrow.add(TBundle.get_enum(act.actionType)).padBottom(4f).row();
                         arrow.image(Icon.right).size(40);
                         arrow.row();
 

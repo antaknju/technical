@@ -21,7 +21,7 @@ import technical.utility.TDraw;
 public class ConveyorCrafter extends TBlock
 {
     public TextureRegion roofRegion;
-    public ConveyorRecipe.Action performedAction = new ConveyorRecipe.Action(null, ConveyorRecipe.Action.Type.Cutting);
+    public ConveyorRecipe.Action performedAction = new ConveyorRecipe.Action(null, ConveyorRecipe.Action.ActionType.Cutting);
 
     public float craftingCooldown = 1 * Fr.time;
     public Effect craftingEffect = TFx.stringBreak;
@@ -64,7 +64,7 @@ public class ConveyorCrafter extends TBlock
 
         Stat action = new Stat("action", StatCat.crafting);
         stats.add(action, table -> {
-            table.add("[accent]" + performedAction.type.name() + "[]");
+            table.add("[accent]" + performedAction.actionType.name() + "[]");
         });
     }
 
