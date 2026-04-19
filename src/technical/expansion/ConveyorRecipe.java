@@ -55,14 +55,15 @@ public class ConveyorRecipe
         public enum ActionType
         {
             Cutting,
-            Applying
+            Applying,
+            Riveting
         }
 
         @Override
         public boolean equals(Object obj) 
         {
             if (this == obj) return true;
-            if (obj == null || !(obj instanceof Action other)) return false;
+            if (!(obj instanceof Action other)) return false;
 
             return actionType == other.actionType && Objects.equals(item, other.item);
         }

@@ -10,11 +10,11 @@ public class TItems
     // Mineable
     uranium, raw_copper, stone, clay, coal, raw_iron, raw_zinc,
     // Craftable
-    brick, iron_plate, dense_ammo, copper_wire, iron_gear, copper_gear, copper_plate, porcelain, flint, copper_rod, iron_rod, zinc_ingot, brass_ingot, flint_arrow,
+    brick, iron_plate, dense_ammo, copper_wire, iron_gear, copper_gear, copper_plate, porcelain, flint, copper_rod, iron_rod, zinc_ingot, brass_ingot, flint_arrow, iron_rivet,
     // Technology
     metallurgy_xp
     ;
-    public static RecipeItem precision_mechanism;
+    public static RecipeItem precision_mechanism, iron_frame;
 
     public static void load() 
     {
@@ -163,6 +163,18 @@ public class TItems
         }};
 
         iron_rod = new Item("iron-rod") {{
+            buildable = true;
+            cost = 5f;
+            color = TCol.iron;
+        }};
+
+        iron_rivet = new Item("iron-rivet") {{
+            buildable = true;
+            cost = 1f;
+            color = TCol.iron;
+        }};
+
+        iron_frame = new RecipeItem("iron-frame") {{
             buildable = true;
             cost = 5f;
             color = TCol.iron;

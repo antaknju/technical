@@ -20,26 +20,28 @@ public class TCustom
         /// BUNGEN IGNORE
         ConveyorRecipes = T.mapOf(
             TItems.iron_plate, new ConveyorRecipe(3, TItems.precision_mechanism,
-                TItems.iron_gear, ConveyorRecipe.Action.ActionType.Applying,
-                TItems.copper_gear, ConveyorRecipe.Action.ActionType.Applying,
-                TItems.iron_plate, ConveyorRecipe.Action.ActionType.Applying
-            ),
-            TItems.iron_plate, new ConveyorRecipe(3, TItems.precision_mechanism,
                     TItems.iron_gear, ConveyorRecipe.Action.ActionType.Applying,
                     TItems.copper_gear, ConveyorRecipe.Action.ActionType.Applying,
                     TItems.iron_plate, ConveyorRecipe.Action.ActionType.Applying
+            ),
+            TItems.iron_rod, new ConveyorRecipe(5, TItems.iron_frame,
+                    TItems.iron_rivet, ConveyorRecipe.Action.ActionType.Riveting,
+                    TItems.iron_rod, ConveyorRecipe.Action.ActionType.Applying,
+                    TItems.iron_rivet, ConveyorRecipe.Action.ActionType.Riveting,
+                    TItems.iron_rod, ConveyorRecipe.Action.ActionType.Applying,
+                    TItems.iron_rivet, ConveyorRecipe.Action.ActionType.Riveting,
+                    TItems.iron_rod, ConveyorRecipe.Action.ActionType.Applying
             )
         );
 
         crude_metallurgy = new Tech("crude-metallurgy"){{
+            researchCost(with(TItems.metallurgy_xp, 100));
             type = TechType.Metallurgy;
 
             mapStats(T.mapOf(
                 TechStat.speed, 1.05f,
                 TechStat.doubleProductionChance, 0.1f
             ));
-
-            researchCost(with(TItems.metallurgy_xp, 100));
         }};
     }
 }

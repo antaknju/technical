@@ -75,11 +75,11 @@ public class TBlocks {
 
     grill_heater, stone_chimney, basic_crusher, liquid_storage, fan, basic_control_panel,solar_heater, stone_boulder_trap, dart_trap, copper_gearbox, facility_floor, facility_loader, facility_unloader,
     drying_pad, iron_drill, iron_trap_hook, mechanical_drill, iron_alloy_vessel,
-    nuclear_reactor, iron_base_applicator, lab, facility_flame_cutter,
+    nuclear_reactor, iron_base_applicator, lab, facility_flame_cutter, small_riveter, iron_rod_applicator,
 
     low_temperature_oil_still, gear_bender, rod_roller, porcelain_router, // middle_temperature_oil_still, high_temperature_oil_still
 
-    furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe, arrow_press, primitive_factory, roller_router,
+    furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe, arrow_press, primitive_factory, roller_router, rivet_factory,
 
     pebbles, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber, iron_vault,
     
@@ -337,6 +337,30 @@ public class TBlocks {
             consumeItem(TItems.iron_plate);
         }};
 
+        iron_rod_applicator = new ConveyorCrafter("iron-rod-applicator"){{
+            requirements(Category.crafting, with(TItems.brass_ingot, 20, TItems.precision_mechanism, 10));
+            techType = TechType.SimpleManufacturing;
+            size = 1;
+            health = 100;
+
+            performedAction = new ConveyorRecipe.Action(TItems.iron_rod, ConveyorRecipe.Action.ActionType.Applying);
+
+            consumeItem(TItems.iron_rod);
+            consumeKineticEnergy(10 * Fr.speed, 5 * Fr.torque, 10 * Fr.inertia);
+        }};
+
+        small_riveter = new ConveyorCrafter("small-riveter"){{
+            requirements(Category.crafting, with(TItems.brass_ingot, 20, TItems.precision_mechanism, 10));
+            techType = TechType.SimpleManufacturing;
+            size = 1;
+            health = 100;
+
+            performedAction = new ConveyorRecipe.Action(TItems.iron_rivet, ConveyorRecipe.Action.ActionType.Riveting);
+
+            consumeItem(TItems.iron_rivet);
+            consumeKineticEnergy(10 * Fr.speed, 5 * Fr.torque, 10 * Fr.inertia);
+        }};
+
         /// STILL
 
         low_temperature_oil_still = new ExtendableCrafter("low-temperature-oil-still"){{
@@ -427,6 +451,39 @@ public class TBlocks {
                     new DrawRegion("-bottom"),
                     new DrawTransformRegion("-rammer", new Transform(0, 1, 7f, 0, 0), new Transform(1, 1, 7f, 0, 0), Interp.pow2In, 0.5f),
                     new DrawTransformRegion("-rammer", new Transform(0, -1, -7f, 0, 0), new Transform(-1, -1, -7f, 0, 0), Interp.pow2In, 0.5f),
+                    new DrawDefault()
+            );
+        }};
+
+        rivet_factory = new RecipeCrafter("rivet-factory"){{
+            requirements(Category.crafting, with(TItems.brass_ingot, 10, TItems.iron_rod, 20));
+            techType = TechType.SimpleManufacturing;
+            size = 2;
+            health = 200;
+
+            itemCapacity = 30;
+            liquidCapacity = 0f;
+            craftEffect = TFx.rivet;
+
+            maxEfficiency = 2;
+
+            AllowedExtensions = Seq.with(
+                    ExtensionType.Storage,
+                    ExtensionType.MechanicalEnergyCapacitor
+            );
+
+            recipes = Seq.with(
+                    new Recipe(
+                            ItemStack.with(TItems.iron_rod, 1), null,
+                            ItemStack.with(TItems.iron_rivet, 3), null,
+                            4 * Fr.time, 0, 100, new KineticEnergy(10 * Fr.speed, 20 * Fr.torque)
+                    )
+            );
+
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawTransformRegion("-smasher-l", new Transform(0, 1, 6, 0, 0), new Transform(1, 1, 0, 6, 90), Interp.pow5In, 0.5f),
+                    new DrawTransformRegion("-smasher-r", new Transform(0, 1, -6, 0, 0), new Transform(1, 1, 0, -6, 90), Interp.pow5In, 0.5f),
                     new DrawDefault()
             );
         }};

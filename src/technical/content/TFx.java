@@ -248,6 +248,13 @@ public class TFx {
         });
     }),
 
+    rivet = new Effect(40, e -> {
+        randLenVectors(e.id, 10, 1f + e.fin() * 4f, (x, y) -> {
+            color(TCol.brass);
+            Fill.square(e.x + x, e.y + y, 0.5f + e.fout(), 40 + e.fin() * 20f);
+        });
+    }),
+
     missilePoreLaunch = new Effect(280.0F, (e) -> {
         Draw.color(TCol.bioOrange);
         Draw.alpha(0.6F);

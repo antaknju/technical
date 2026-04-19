@@ -3,13 +3,19 @@ package technical.expansion;
 import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import mindustry.entities.Effect;
+import mindustry.gen.Building;
 import mindustry.graphics.Pal;
 import mindustry.type.Item;
 import mindustry.ui.Bar;
 import mindustry.world.Tile;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
+import mindustry.world.modules.ItemModule;
+import technical.expansion.kinetic.KineticBlock;
+import technical.expansion.kinetic.KineticGraph;
 import technical.utility.Fr;
 import technical.utility.T;
 import technical.content.TCustom;
@@ -18,7 +24,7 @@ import technical.expansion.RollerConveyor.RollerConveyorBuild;
 import technical.expansion.tech.TechStat;
 import technical.utility.TDraw;
 
-public class ConveyorCrafter extends TBlock
+public class ConveyorCrafter extends KineticBlock
 {
     public TextureRegion roofRegion;
     public ConveyorRecipe.Action performedAction = new ConveyorRecipe.Action(null, ConveyorRecipe.Action.ActionType.Cutting);
@@ -58,14 +64,10 @@ public class ConveyorCrafter extends TBlock
         super.setStats();
 
         Stat cooldown = new Stat("cooldown", StatCat.crafting);
-        stats.add(cooldown, table -> {
-            table.add("[accent]" + craftingCooldown() / 60f + "sec[]");
-        });
+        stats.add(cooldown, table -> table.add("[accent]" + craftingCooldown() / 60f + "sec[]"));
 
         Stat action = new Stat("action", StatCat.crafting);
-        stats.add(action, table -> {
-            table.add("[accent]" + performedAction.actionType.name() + "[]");
-        });
+        stats.add(action, table -> table.add("[accent]" + performedAction.actionType.name() + "[]"));
     }
 
     @Override
@@ -75,13 +77,22 @@ public class ConveyorCrafter extends TBlock
         roofRegion = Core.atlas.find(name + "-roof", region);
     }
 
-    public class ConveyorCrafterBuild extends TBuild 
+    public class ConveyorCrafterBuild extends KineticBuild
     {
         public ConveyorCrafterBuild connection;
         public RollerConveyorBuild conveyor;
         public int connectionRot = -1;
         public boolean isMain = false;
         public float cooldownTimer = 0;
+        public ItemModule savedModule;
+
+        @Override
+        public void created()
+        {
+            super.created();
+
+            savedModule = items;
+        }
 
         @Override
         public void updateTile() 
@@ -89,15 +100,6 @@ public class ConveyorCrafter extends TBlock
             updateConnection();
 
             cooldownTimer = Math.min(craftingCooldown(), cooldownTimer + delta());
-
-            if (!isMain && isConnectionValid() && hasItems)
-            {
-                if (items.first() != null && connection.acceptItem(this, items.first()))
-                {
-                   connection.handleItem(this, items.first());
-                   items.remove(items.first(), 1);
-                }
-            }
 
             if (isMain && isConnectionValid() && cooldownTimer >= craftingCooldown() && efficiency > 0)
             {
@@ -133,19 +135,20 @@ public class ConveyorCrafter extends TBlock
 
         public boolean isConnectionValid()
         {
-            if (connection == null || connectionRot == -1 || conveyor == null ||
-                !connection.isValid() || !conveyor.isValid() ||
-                conveyor.rotation % 2 == connectionRot % 2 || 
-                connection.connection != this || connection.isMain == isMain
-            ) return false;
-
-            return true;
+            return connection != null && connectionRot != -1 && conveyor != null &&
+                    connection.isValid() && conveyor.isValid() &&
+                    conveyor.rotation % 2 != connectionRot % 2 &&
+                    connection.connection == this && connection.isMain != isMain;
         }
 
         public void updateConnection()
         {
             if (isConnectionValid()) return;
 
+            if (!isMain)
+            {
+                items = savedModule;
+            }
             connection = null;
             conveyor = null;
             connectionRot = -1;
@@ -160,7 +163,6 @@ public class ConveyorCrafter extends TBlock
                 Tile next2 = next1.nearby(rot);
                 if (next2 == null || !(next2.build instanceof ConveyorCrafterBuild ccb) || next2.block() != block || !next2.build.isValid()) continue;
 
-
                 if (ccb.connection == null || !ccb.connection.isValid())
                 {
                     conveyor = rcb;
@@ -172,6 +174,7 @@ public class ConveyorCrafter extends TBlock
                     ccb.connection = this;
                     ccb.connectionRot = rot;
                     ccb.isMain = false;
+                    ccb.items = items;
                 }
             }
         }
@@ -194,6 +197,22 @@ public class ConveyorCrafter extends TBlock
             {
                 Draw.rect(roofRegion, conveyor.x, conveyor.y, connectionRot * 90f);
             }
+        }
+
+        @Override
+        public void write(Writes write)
+        {
+            super.write(write);
+
+            savedModule.write(write);
+        }
+
+        @Override
+        public void read(Reads read, byte revision)
+        {
+            super.read(read, revision);
+
+            savedModule.read(read);
         }
     }
 }

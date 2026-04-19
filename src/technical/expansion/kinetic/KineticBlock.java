@@ -171,7 +171,7 @@ public class KineticBlock extends TBlock
         @Override
         public void read(Reads read, byte revision)
         {
-            super.read(read);
+            super.read(read, revision);
 
             int gid = read.i();
 

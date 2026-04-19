@@ -11,6 +11,7 @@ public enum TechType
     Research,
     Metallurgy,
     CrudeWorking,
+    SimpleManufacturing,
     CircuitCrafting,
     WeaponWorking,
     MechanicalWorking,
