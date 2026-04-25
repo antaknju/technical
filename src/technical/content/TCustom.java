@@ -4,6 +4,7 @@ import arc.struct.ObjectMap;
 import mindustry.type.Item;
 import technical.utility.T;
 import technical.expansion.ConveyorRecipe;
+import technical.expansion.ConveyorRecipe.Action.ActionType;
 import technical.expansion.tech.Tech;
 import technical.expansion.tech.TechStat;
 import technical.expansion.tech.TechType;
@@ -20,17 +21,22 @@ public class TCustom
         /// BUNGEN IGNORE
         ConveyorRecipes = T.mapOf(
             TItems.iron_plate, new ConveyorRecipe(3, TItems.precision_mechanism,
-                    TItems.iron_gear, ConveyorRecipe.Action.ActionType.Applying,
-                    TItems.copper_gear, ConveyorRecipe.Action.ActionType.Applying,
-                    TItems.iron_plate, ConveyorRecipe.Action.ActionType.Applying
+                    TItems.iron_gear,   ActionType.Applying,
+                    TItems.copper_gear, ActionType.Applying,
+                    TItems.iron_plate,  ActionType.Applying
             ),
             TItems.iron_rod, new ConveyorRecipe(5, TItems.iron_frame,
-                    TItems.iron_rivet, ConveyorRecipe.Action.ActionType.Riveting,
-                    TItems.iron_rod, ConveyorRecipe.Action.ActionType.Applying,
-                    TItems.iron_rivet, ConveyorRecipe.Action.ActionType.Riveting,
-                    TItems.iron_rod, ConveyorRecipe.Action.ActionType.Applying,
-                    TItems.iron_rivet, ConveyorRecipe.Action.ActionType.Riveting,
-                    TItems.iron_rod, ConveyorRecipe.Action.ActionType.Applying
+                    TItems.iron_rivet, ActionType.Riveting,
+                    TItems.iron_rod,   ActionType.Applying,
+                    TItems.iron_rivet, ActionType.Riveting,
+                    TItems.iron_rod,   ActionType.Applying,
+                    TItems.iron_rivet, ActionType.Riveting,
+                    TItems.iron_rod,   ActionType.Applying
+            ),
+            TItems.precision_mechanism, new ConveyorRecipe(3, TItems.primitive_radio_unit,
+                    TItems.small_copper_coil, ActionType.Soldering,
+                    TItems.copper_plate, ActionType.Applying,
+                    TItems.iron_rod, ActionType.Applying
             )
         );
 

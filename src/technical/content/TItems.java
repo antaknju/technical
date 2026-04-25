@@ -10,11 +10,11 @@ public class TItems
     // Mineable
     uranium, raw_copper, stone, clay, coal, raw_iron, raw_zinc,
     // Craftable
-    brick, iron_plate, dense_ammo, copper_wire, iron_gear, copper_gear, copper_plate, porcelain, flint, copper_rod, iron_rod, zinc_ingot, brass_ingot, flint_arrow, iron_rivet,
+    brick, iron_plate, dense_ammo, copper_wire, iron_gear, copper_gear, copper_plate, porcelain, flint, copper_rod, iron_rod, zinc_ingot, brass_ingot, flint_arrow, iron_rivet, small_copper_coil,
     // Technology
     metallurgy_xp
     ;
-    public static RecipeItem precision_mechanism, iron_frame;
+    public static RecipeItem precision_mechanism, iron_frame, primitive_radio_unit;
 
     public static void load() 
     {
@@ -168,6 +168,12 @@ public class TItems
             color = TCol.iron;
         }};
 
+        small_copper_coil = new Item("small-copper-coil") {{
+            buildable = false;
+            cost = 5f;
+            color = TCol.copper;
+        }};
+
         iron_rivet = new Item("iron-rivet") {{
             buildable = true;
             cost = 1f;
@@ -178,6 +184,12 @@ public class TItems
             buildable = true;
             cost = 5f;
             color = TCol.iron;
+        }};
+
+        primitive_radio_unit = new RecipeItem("primitive-radio-unit") {{
+            buildable = true;
+            cost = 5f;
+            color = TCol.copper_dark;
         }};
 
         // XP

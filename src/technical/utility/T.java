@@ -7,6 +7,7 @@ import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import arc.Core;
 import arc.graphics.Color;
@@ -23,6 +24,7 @@ import arc.util.Log;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.content.Liquids;
+import mindustry.ctype.Content;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.Team;
 import mindustry.gen.Building;
@@ -43,6 +45,7 @@ import mindustry.world.Tile;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import mindustry.world.meta.Stats;
+import technical.Technical;
 import technical.content.TIcons;
 import technical.content.TLiquids;
 import technical.expansion.ConveyorRecipe;
@@ -71,6 +74,11 @@ public class T
                 return null;
             }
         }
+    }
+
+    public static boolean isTechnical(Content content)
+    {
+        return Objects.equals(content.minfo.mod.name, Technical.name);
     }
 
     @SuppressWarnings("unchecked")

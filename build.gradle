@@ -242,7 +242,8 @@ tasks.register('bungen-content') {
                 "TItems.java"   : "item",
                 "TLiquids.java" : "liquid",
                 "TSectors.java" : "sector",
-                "TStatuses.java": "status"
+                "TStatuses.java": "status",
+//                "TPlanets.java": "planet", not as lazy
         ]
 
         def outputSections = [:].withDefault { [] }

@@ -12,6 +12,7 @@ import mindustry.type.SectorPreset;
 public class TSectors
 {
     public static TSector cradle_slate, technical_test;
+    public static SectorPreset mother_ship;
 
     public static void load()
     {
@@ -24,6 +25,10 @@ public class TSectors
         technical_test = new TSector("technical-test", 10){{
             hideDatabase = true;
             difficulty = 0;
+        }};
+
+        mother_ship = new SectorPreset("mother-ship", TPlanets.mother_ship, 0){{
+            hideDatabase = true;
         }};
     }
 

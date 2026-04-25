@@ -75,9 +75,9 @@ public class TBlocks {
 
     grill_heater, stone_chimney, basic_crusher, liquid_storage, fan, basic_control_panel,solar_heater, stone_boulder_trap, dart_trap, copper_gearbox, facility_floor, facility_loader, facility_unloader,
     drying_pad, iron_drill, iron_trap_hook, mechanical_drill, iron_alloy_vessel,
-    nuclear_reactor, iron_base_applicator, lab, facility_flame_cutter, small_riveter, iron_rod_applicator,
+    nuclear_reactor, iron_base_applicator, lab, facility_flame_cutter, small_riveter, iron_rod_applicator, copper_plate_applicator, small_coil_solderer,
 
-    low_temperature_oil_still, gear_bender, rod_roller, porcelain_router, // middle_temperature_oil_still, high_temperature_oil_still
+    low_temperature_oil_still, gear_bender, rod_roller, porcelain_router, basic_shredder, // middle_temperature_oil_still, high_temperature_oil_still
 
     furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe, arrow_press, primitive_factory, roller_router, rivet_factory,
 
@@ -361,6 +361,30 @@ public class TBlocks {
             consumeKineticEnergy(10 * Fr.speed, 5 * Fr.torque, 10 * Fr.inertia);
         }};
 
+        small_coil_solderer = new ConveyorCrafter("small-coil-solderer"){{
+            requirements(Category.crafting, with(TItems.brass_ingot, 20, TItems.precision_mechanism, 10));
+            techType = TechType.SimpleManufacturing;
+            size = 1;
+            health = 100;
+
+            performedAction = new ConveyorRecipe.Action(TItems.small_copper_coil, ConveyorRecipe.Action.ActionType.Soldering);
+
+            consumeItem(TItems.small_copper_coil);
+            consumeKineticEnergy(10 * Fr.speed, 5 * Fr.torque, 10 * Fr.inertia);
+        }};
+
+        copper_plate_applicator = new ConveyorCrafter("copper-plate-applicator"){{
+            requirements(Category.crafting, with(TItems.brass_ingot, 20, TItems.precision_mechanism, 10));
+            techType = TechType.SimpleManufacturing;
+            size = 1;
+            health = 100;
+
+            performedAction = new ConveyorRecipe.Action(TItems.copper_plate, ConveyorRecipe.Action.ActionType.Applying);
+
+            consumeItem(TItems.copper_plate);
+            consumeKineticEnergy(10 * Fr.speed, 5 * Fr.torque, 10 * Fr.inertia);
+        }};
+
         /// STILL
 
         low_temperature_oil_still = new ExtendableCrafter("low-temperature-oil-still"){{
@@ -521,9 +545,42 @@ public class TBlocks {
             drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawAnimatedRegion("-top", 30), new DrawDefault());
         }};
 
+        basic_shredder = new RecipeCrafter("basic-shredder"){{
+            requirements(Category.crafting, with(TItems.precision_mechanism, 10, TItems.iron_rod, 20, TItems.copper_gear, 30));
+            techType = TechType.SimpleManufacturing;
+            size = 2;
+            health = 200;
+
+            itemCapacity = 30;
+            liquidCapacity = 0f;
+            updateEffect = TFx.bend;
+
+            maxEfficiency = 2;
+
+            AllowedExtensions = Seq.with(
+                    ExtensionType.Storage,
+                    ExtensionType.MechanicalEnergyCapacitor
+            );
+
+            recipes = Seq.with(
+                    new Recipe(
+                            ItemStack.with(TItems.copper_plate, 3), null,
+                            ItemStack.with(TItems.small_copper_coil, 1), null,
+                            6 * Fr.time, 0, 100, new KineticEnergy(10 * Fr.speed, 30 * Fr.torque)
+                    )
+            );
+
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawTransformRegion("-saw-t", new Transform(1, 1, 1.5f, 0, 0), new Transform(1, 1, -1.5f, 0, 0), Interp.linear, 0, 4),
+                    new DrawTransformRegion("-saw-b", new Transform(1, 1, -1.5f, 0, 0), new Transform(1, 1, 1.5f, 0, 0), Interp.linear, 0, 4),
+                    new DrawDefault()
+            );
+        }};
+
         rod_roller = new RecipeCrafter("rod-roller"){{
             requirements(Category.crafting, with(TItems.precision_mechanism, 30, TItems.brick, 30));
-            techType = TechType.CrudeWorking;
+            techType = TechType.SimpleManufacturing;
             size = 3;
             health = 200;
 

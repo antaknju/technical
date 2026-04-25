@@ -24,6 +24,7 @@ public class DrawTransformRegion extends DrawBlock
     public TextureRegion region;
 
     public float progress_offset = 0;
+    public int times = 1;
 
     public boolean orthographicLayering = false;
 
@@ -38,6 +39,18 @@ public class DrawTransformRegion extends DrawBlock
         this.progress_offset = progress_offset;
     }
 
+    public DrawTransformRegion(String suffix, Transform from, Transform to, Interp interp, float progress_offset, int times)
+    {
+        this.suffix = suffix;
+
+        this.from = from;
+        this.to = to;
+
+        this.interp = interp;
+        this.progress_offset = progress_offset;
+        this.times = times;
+    }
+
     @Override
     public void draw(Building build)
     {
@@ -46,17 +59,23 @@ public class DrawTransformRegion extends DrawBlock
         if (orthographicLayering)
             Draw.z(Layer.blockOver - build.tile.y * 0.01f);
 
-        float p = interp.apply(Interp.slope.apply((build.progress() + progress_offset) % 1));
+//        float p = interp.apply(Interp.slope.apply((build.progress() + progress_offset) % 1) * times);
 
-        var t = Transform.progress(from, to, p);
+        float t = ((build.progress() * times) + progress_offset) % 1f;
 
-        Draw.scl(t.scale.x, t.scale.y);
+        float ping_pong = t < 0.5f ? t * 2f : (1f - t) * 2f;
+
+        float p = interp.apply(Interp.slope.apply(ping_pong));
+
+        var tp = Transform.progress(from, to, p);
+
+        Draw.scl(tp.scale.x, tp.scale.y);
 
         Draw.rect(
             region,
-            build.x + t.pos.x,
-            build.y + t.pos.y,
-            t.rotation
+            build.x + tp.pos.x,
+            build.y + tp.pos.y,
+            tp.rotation
         );
 
         Draw.reset();

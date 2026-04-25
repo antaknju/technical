@@ -235,14 +235,14 @@ public class TFx {
     }),
 
     bend = new Effect(30, e -> {
-        randLenVectors(e.id, 12, 4f + e.fin() * 5f, (x, y) -> {
+        randLenVectors(e.id, 12, 1f + e.fin() * 4f, (x, y) -> {
             color(TCol.copper);
             Fill.square(e.x + x, e.y + y, 0.2f + e.fout(), 40 + e.fin() * 10f);
         });
     }),
 
     roll = new Effect(40, e -> {
-        randLenVectors(e.id, 10, 1f + e.fin() * 4f, (x, y) -> {
+        randLenVectors(e.id, 10, 4f + e.fin() * 5f, (x, y) -> {
             color(TCol.iron, TCol.ironDark, e.fin());
             Fill.square(e.x + x, e.y + y, 0.5f + e.fout(), 40 + e.fin() * 20f);
         });

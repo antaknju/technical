@@ -12,6 +12,8 @@ import mindustry.game.EventType.MusicRegisterEvent;
 import mindustry.game.EventType.StateChangeEvent;
 import mindustry.game.EventType.WorldLoadEvent;
 
+import static technical.utility.T.isTechnical;
+
 // Erekir Music Credits for versatile file searching and on planet music changing
 public class TMusic
 {
@@ -26,7 +28,7 @@ public class TMusic
     public static Seq<Music> boss = new Seq<>();
     public static Music launch;
 
-    public static void load() 
+    public static void load()
     {
         control = Vars.control.sound;
 
@@ -38,7 +40,7 @@ public class TMusic
         });
 
         Events.on(WorldLoadEvent.class, e -> {
-            if (Vars.state.rules.planet == TPlanets.mycelius) {
+            if (isTechnical(Vars.state.rules.planet)) {
                 // Inject custom music here.
                 control.ambientMusic = TMusic.ambient;
                 control.darkMusic = TMusic.dark;

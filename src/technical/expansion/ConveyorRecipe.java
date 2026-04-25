@@ -56,7 +56,8 @@ public class ConveyorRecipe
         {
             Cutting,
             Applying,
-            Riveting
+            Riveting,
+            Soldering,
         }
 
         @Override
