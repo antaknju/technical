@@ -23,6 +23,11 @@ public class DialogRunner
         return talks.get(talk);
     }
 
+    public Message getCurrentMessage()
+    {
+        return currentTalk.messages.get(getTalk(currentTalk));
+    }
+
     public void incrementTalk(Talk talk)
     {
         if (!talks.containsKey(talk))
@@ -133,16 +138,8 @@ public class DialogRunner
             write.i(savedProgress);
         }
 
-        Message inProgressMsg;
-        if (currentTalk != null && getTalk(currentTalk) > 0)
-            inProgressMsg = currentTalk.messages.get(getTalk(currentTalk) - 1);
-        else
-            inProgressMsg = null;
-
-        Seq<Message> historyToSave = DialogManager.history.select(msg -> msg != inProgressMsg);
-
-        write.i(historyToSave.size);
-        for (Message msg : historyToSave)
+        write.i(DialogManager.history.size);
+        for (Message msg : DialogManager.history)
         {
             boolean found = false;
 

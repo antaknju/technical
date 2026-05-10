@@ -27,16 +27,18 @@ public class TypewriterAction extends Action
     private int index = 0;
     private boolean initialized = false;
 
-    private boolean requestingSkip = false;
+    private boolean requestingSkip;
+    private final boolean skippingHistory;
 
     private final StringBuilder visibleText = new StringBuilder();
     private final GlyphLayout glyphLayout = new GlyphLayout();
 
-    public TypewriterAction(String text, ScrollPane scroll, boolean requestingSkip)
+    public TypewriterAction(String text, ScrollPane scroll, boolean isGameLoad)
     {
         this.fullText = text;
         this.scroll = scroll;
-        this.requestingSkip = requestingSkip;
+        this.requestingSkip = isGameLoad;
+        this.skippingHistory = isGameLoad;
     }
 
     public void fastForward()
@@ -119,8 +121,6 @@ public class TypewriterAction extends Action
             visibleText.append(c);
         }
 
-//        boolean wasAtBottom = DialogManager.isScrollAtBottom();
-
         String hidden = fullText.substring(index);
         label.setText(visibleText + hideTag + hidden + "[]");
 
@@ -129,6 +129,8 @@ public class TypewriterAction extends Action
         if (index >= fullText.length())
         {
             DialogManager.typingMessage = false;
+            if (!skippingHistory)
+                DialogManager.history.add(DialogManager.runner.getCurrentMessage());
             return true;
         }
         return false;

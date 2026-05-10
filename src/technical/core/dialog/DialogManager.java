@@ -204,7 +204,7 @@ public class DialogManager
 
         for (Message msg : history)
         {
-            appendRow(msg, false);
+            appendRow(msg, true);
         }
 
         scrollToBottom();
@@ -218,8 +218,8 @@ public class DialogManager
 
         typingMessage = true;
 
-        history.add(msg);
-        appendRow(msg, true);
+//        history.add(msg);
+        appendRow(msg, false);
 
         // First message
         if (!alive)
@@ -272,7 +272,7 @@ public class DialogManager
         );
     }
 
-    private static void appendRow(Message msg, boolean animate)
+    private static void appendRow(Message msg, boolean isGameLoad)
     {
         if (!msgContainer.getChildren().isEmpty())
         {
@@ -286,7 +286,7 @@ public class DialogManager
             Label body = t.add("", Styles.outlineLabel).width(boxWidth - 4f).get();
             body.setColor(textCol);
 
-            body.addAction(new TypewriterAction(msg.message, scrollPane, !animate));
+            body.addAction(new TypewriterAction(msg.message, scrollPane, isGameLoad));
         }).fillX().padBottom(2f).row();
     }
 
