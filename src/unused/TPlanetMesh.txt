@@ -1,4 +1,4 @@
-package technical.expansion;
+package technical.core;
 
 import arc.graphics.Color;
 import arc.math.Mathf;

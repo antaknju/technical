@@ -1,4 +1,4 @@
-package technical.expansion.draw;
+package technical.core.draw;
 
 import arc.Core;
 import arc.graphics.g2d.Draw;

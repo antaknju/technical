@@ -1,6 +1,6 @@
-package technical.expansion;
+package technical.core;
 
-import static technical.debug.Debugger.print;
+import static technical.util.Debugger.print;
 
 import arc.struct.Seq;
 import mindustry.Vars;

@@ -1,18 +1,22 @@
 package technical;
 
 import arc.Core;
-import arc.Events;
 import arc.graphics.Texture;
-import arc.graphics.g2d.TextureRegion;
-import arc.util.Log;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import mindustry.Vars;
-import mindustry.content.UnitTypes;
-import mindustry.game.EventType;
+import mindustry.io.SaveFileReader;
+import mindustry.io.SaveVersion;
 import mindustry.mod.*;
 import technical.content.*;
-import technical.debug.Debugger;
-import technical.expansion.kinetic.KineticGraph;
-import technical.expansion.train.RailSplineManager;
+import technical.util.Debugger;
+import technical.core.dialog.DialogManager;
+import technical.core.kinetic.KineticGraph;
+import technical.core.train.RailSplineManager;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 public class Technical extends Mod
 {
@@ -64,29 +68,26 @@ public class Technical extends Mod
         TTechTree.load();
 
         TVars.load();
+        DialogManager.load();
 
         /// VANILLA DEBUG CHANGES
         Vars.renderer.maxZoom = 10f;
-        
-        // UnitTypes.mace.weapons.clear();
-        // UnitTypes.elude.weapons.clear();
-        // UnitTypes.fortress.weapons.clear();
-        // UnitTypes.scepter.weapons.clear();
-        // UnitTypes.reign.weapons.clear();
 
+        SaveVersion.addCustomChunk(name + "-dialogs", new SaveFileReader.CustomChunk() {
+            @Override
+            public void write(DataOutput stream) throws IOException
+            {
+                Writes writes = new Writes(stream);
+                DialogManager.runner.write(writes);
+            }
 
-        // Vars.testMobile = true;
-
-        Events.on(EventType.ContentInitEvent.class, e -> {
-             var info = TStatuses.wet.uiIcon;
-             Log.info("Region: " + info);
-             Log.info("Region: " + info);
-             Log.info("Region: " + info);
-             Log.info("Region: " + info);
-             Log.info("Region: " + info);
-             Log.info("Region: " + info);
-             Log.info("Region: " + info);
-         });
+            @Override
+            public void read(DataInput stream) throws IOException
+            {
+                Reads reads = new Reads(stream);
+                DialogManager.runner.read(reads);
+            }
+        });
     }
 }
 

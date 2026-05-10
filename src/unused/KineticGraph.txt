@@ -1,6 +1,6 @@
-package technical.expansion;
+package technical.core;
 
-import static technical.debug.Debugger.print;
+import static technical.util.Debugger.print;
 
 import arc.Events;
 import arc.math.geom.Vec2;
@@ -9,8 +9,8 @@ import arc.struct.Seq;
 import arc.util.Log;
 import mindustry.Vars;
 import mindustry.game.EventType.ResetEvent;
-import technical.debug.Debugger.DebugLine;
-import technical.expansion.KineticBlock.KineticBuild;
+import technical.util.Debugger.DebugLine;
+import technical.core.KineticBlock.KineticBuild;
 
 public class KineticGraph implements Comparable<KineticGraph>
 {

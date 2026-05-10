@@ -2,12 +2,12 @@ package technical.content;
 
 import arc.struct.ObjectMap;
 import mindustry.type.Item;
-import technical.utility.T;
-import technical.expansion.ConveyorRecipe;
-import technical.expansion.ConveyorRecipe.Action.ActionType;
-import technical.expansion.tech.Tech;
-import technical.expansion.tech.TechStat;
-import technical.expansion.tech.TechType;
+import technical.util.T;
+import technical.core.ConveyorRecipe;
+import technical.core.ConveyorRecipe.Action.ActionType;
+import technical.core.tech.Tech;
+import technical.core.tech.TechStat;
+import technical.core.tech.TechType;
 
 import static mindustry.type.ItemStack.*;
 

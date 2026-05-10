@@ -6,9 +6,9 @@ import mindustry.graphics.Pal;
 import mindustry.maps.planet.SerpuloPlanetGenerator;
 import mindustry.type.*;
 import mindustry.world.meta.Env;
-import technical.expansion.Satellite;
-import technical.utility.TCol;
-import technical.expansion.TPlanetMesh;
+import technical.core.Satellite;
+import technical.util.TCol;
+import technical.core.TPlanetMesh;
 import mindustry.content.*;
 import mindustry.game.Team;
 

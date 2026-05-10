@@ -1,8 +1,8 @@
 package technical.content;
 
 import mindustry.type.StatusEffect;
-import technical.utility.TCol;
-import technical.expansion.TStatus;
+import technical.util.TCol;
+import technical.core.TStatus;
 
 public class TStatuses
 {

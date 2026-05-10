@@ -1,7 +1,7 @@
 package technical.content;
 
-import technical.utility.TCol;
-import technical.expansion.RecipeItem;
+import technical.util.TCol;
+import technical.core.RecipeItem;
 import mindustry.type.*;
 
 public class TItems 
@@ -54,7 +54,7 @@ public class TItems
         raw_iron = new Item("raw-iron") {{
             cost = 0.5f;
             buildable = true;
-            hardness = 1;
+            hardness = 0;
             healthScaling = 0.5f;
 
             color = TCol.iron;

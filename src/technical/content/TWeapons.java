@@ -1,12 +1,10 @@
 package technical.content;
 
 import static mindustry.Vars.tilesize;
-import static technical.debug.Debugger.print;
 
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.math.Angles;
-import arc.math.Interp;
 import arc.math.Mathf;
 import arc.util.Log;
 import arc.util.Time;
@@ -32,12 +30,11 @@ import mindustry.type.unit.MissileUnitType;
 import mindustry.type.weapons.BuildWeapon;
 import mindustry.world.Tile;
 
-import technical.utility.TCol;
-import technical.expansion.BoulderBulletType;
-import technical.expansion.HelperBulletType;
-import technical.expansion.SpawningLaserBulletType;
-import technical.utility.Fr;
-import technical.utility.T;
+import technical.util.TCol;
+import technical.core.BoulderBulletType;
+import technical.core.HelperBulletType;
+import technical.core.SpawningLaserBulletType;
+import technical.util.Fr;
 
 public class TWeapons 
 {
@@ -488,8 +485,6 @@ public class TWeapons
     }},
 
     onset_weapon = new BuildWeapon("technical-onset-weapon"){{
-        display = false;
-
         top = false;
 
         rotate = true;

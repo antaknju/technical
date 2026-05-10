@@ -1,9 +1,9 @@
 displayName: "[#eb7425[]]Technical[white[]]"
-description: "A Mindustry mod that adds new campaign with a lot new mechanisms to learn"
+description: "Complete overhaul of the standard Mindustry experience.\n\nMy primary goal was to add content that differs significantly from the base game, by providing a fresh experience while still retaining the core \"Mindustry\" feel."
 subtitle: "Isn't Mindustry Technical enough?"
 author: "AnTakNju"
 
-version: 1.6.0-alpha+001
+version: 1.6.0-alpha+333
 
 name: "technical"
 main: "technical.Technical"

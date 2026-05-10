@@ -12,7 +12,7 @@ import mindustry.game.EventType.MusicRegisterEvent;
 import mindustry.game.EventType.StateChangeEvent;
 import mindustry.game.EventType.WorldLoadEvent;
 
-import static technical.utility.T.isTechnical;
+import static technical.util.T.isTechnical;
 
 // Erekir Music Credits for versatile file searching and on planet music changing
 public class TMusic

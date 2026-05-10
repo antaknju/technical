@@ -18,9 +18,8 @@ import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.*;
 import static mindustry.Vars.world;
 
-import technical.utility.T;
 // import technical.utility.T;
-import technical.utility.TCol;
+import technical.util.TCol;
 
 public class TFx {
     public static final Rand rand = new Rand();

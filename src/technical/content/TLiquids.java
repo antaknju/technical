@@ -3,10 +3,9 @@ package technical.content;
 import arc.graphics.Color;
 import mindustry.content.Liquids;
 import mindustry.content.StatusEffects;
-import technical.utility.T;
-import technical.utility.TCol;
-import technical.expansion.CellTLiquid;
-import technical.expansion.TLiquid;
+import technical.util.TCol;
+import technical.core.CellTLiquid;
+import technical.core.TLiquid;
 
 public class TLiquids 
 {

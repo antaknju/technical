@@ -15,9 +15,9 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
 import mindustry.type.ammo.ItemAmmoType;
-import technical.utility.TCol;
-import technical.expansion.train.RailVehicle;
-import technical.expansion.train.RailVehicleUnit;
+import technical.util.TCol;
+import technical.core.train.RailVehicle;
+import technical.core.train.RailVehicleUnit;
 
 
 public class TUnits {

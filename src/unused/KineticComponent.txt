@@ -1,6 +1,6 @@
-package technical.expansion;
+package technical.core;
 
-import technical.expansion.KineticBlock.KineticBuild;
+import technical.core.KineticBlock.KineticBuild;
 
 public class KineticComponent 
 {

@@ -2,7 +2,6 @@ package technical.content;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.type.ItemStack.with;
-import static technical.debug.Debugger.printForced;
 
 import arc.graphics.Color;
 import arc.math.Interp;
@@ -40,33 +39,33 @@ import mindustry.world.draw.DrawTurret;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.BuildVisibility;
-import technical.utility.Fr;
-import technical.utility.T;
-import technical.utility.TCol;
-import technical.expansion.*;
-import technical.expansion.FacilityStep.FacilityStepType;
-import technical.expansion.draw.*;
-import technical.expansion.draw.DrawCogs.DrawCog;
-import technical.expansion.ext.*;
-import technical.expansion.kinetic.KineticBlock;
-import technical.expansion.kinetic.KineticComponentData;
-import technical.expansion.kinetic.KineticEnergy;
-import technical.expansion.kinetic.Sprocket;
-import technical.expansion.mycelis.MycelisCord;
-import technical.expansion.mycelis.MycelisDrill;
-import technical.expansion.mycelis.MycelisHeart;
-import technical.expansion.mycelis.MycelisRecipe;
-import technical.expansion.mycelis.MycelisRecipeCrafter;
-import technical.expansion.tech.TechType;
-import technical.expansion.train.RailConnector;
-import technical.expansion.train.TrainFactory;
-import technical.expansion.train.TrainLoader;
-import technical.expansion.train.TrainPayloadLoader;
-import technical.expansion.trap.BoulderTrap;
-import technical.expansion.trap.DartTrap;
-import technical.expansion.trap.SickleTrap;
-import technical.expansion.trap.SpikeTrap;
-import technical.expansion.trap.TrapHook;
+import technical.util.Fr;
+import technical.util.T;
+import technical.util.TCol;
+import technical.core.*;
+import technical.core.FacilityStep.FacilityStepType;
+import technical.core.draw.*;
+import technical.core.draw.DrawCogs.DrawCog;
+import technical.core.extendable.*;
+import technical.core.kinetic.KineticBlock;
+import technical.core.kinetic.KineticComponentData;
+import technical.core.kinetic.KineticEnergy;
+import technical.core.kinetic.Sprocket;
+import technical.core.mycelis.MycelisCord;
+import technical.core.mycelis.MycelisDrill;
+import technical.core.mycelis.MycelisHeart;
+import technical.core.mycelis.MycelisRecipe;
+import technical.core.mycelis.MycelisRecipeCrafter;
+import technical.core.tech.TechType;
+import technical.core.train.RailConnector;
+import technical.core.train.TrainFactory;
+import technical.core.train.TrainLoader;
+import technical.core.train.TrainPayloadLoader;
+import technical.core.trap.BoulderTrap;
+import technical.core.trap.DartTrap;
+import technical.core.trap.SickleTrap;
+import technical.core.trap.SpikeTrap;
+import technical.core.trap.TrapHook;
 
 public class TBlocks {
     public static Block basic_drone_core_expansion, crossbow, flamethrower,
@@ -648,9 +647,9 @@ public class TBlocks {
 
         drying_pad = new ExtendableCrafter("drying-pad"){{
             requirements(Category.crafting, with(TItems.stone, 10));
+            researchCostMultiplier = 0.1f;
             techType = TechType.CrudeWorking;
             size = 2;
-            health = 100;
 
             itemCapacity = 10;
             liquidCapacity = 0f;
@@ -1515,8 +1514,10 @@ public class TBlocks {
 
         basic_core = new CoreBlock("basic-core"){{
             requirements(Category.effect, with(TItems.iron_plate, 1000, TItems.stone, 800));
-            // techType = TechType.Core;
+
             health = 3000;
+            armor = 4f;
+
             itemCapacity = 2000;
             size = 3;
 
@@ -1525,8 +1526,7 @@ public class TBlocks {
             isFirstTier = true;
             unitType = TUnits.onset;
 
-            armor = 6f;
-
+            alwaysUnlocked = true;
             incinerateNonBuildable = true;
             requiresCoreZone = true;
 
@@ -1860,8 +1860,6 @@ public class TBlocks {
                     )
                 )
             );
-
-            printForced(plans.get(0).inputPayloads[0]);
         }};
 
         facility_flame_cutter = new FacilityLaser("facility-flame-cutter"){{

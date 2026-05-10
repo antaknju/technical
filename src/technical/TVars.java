@@ -14,17 +14,19 @@ import mindustry.entities.Sized;
 import mindustry.game.EventType.UnitChangeEvent;
 import mindustry.gen.Call;
 import mindustry.gen.Unit;
-import technical.expansion.TOverlayRenderer;
+import technical.core.TOverlayRenderer;
 
 public class TVars
 {
+    public static final float messageBaseWaitTime = 30f;
+
     public static float ControlRange = 12 * tilesize;
 
     private static Unit lastValidUnit = null;
     private static float lastBlockTick = -9999f;
     private static boolean isRespawning  = false;
 
-    private static final float SUPPRESS_TICKS = 90f;
+    private static final float suppressTicks = 90f;
 
     public static TOverlayRenderer overlays = new TOverlayRenderer();
 
@@ -93,7 +95,7 @@ public class TVars
 
         effect.renderer = e -> {
             if (isRespawning) return;
-            if (Time.time - lastBlockTick < SUPPRESS_TICKS) return;
+            if (Time.time - lastBlockTick < suppressTicks) return;
 
             Unit p = Vars.player.unit();
             if (p == null) return;
