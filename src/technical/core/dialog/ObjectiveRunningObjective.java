@@ -14,13 +14,13 @@ public class ObjectiveRunningObjective extends DialogObjective
     @Override
     public boolean onComplete()
     {
-        return objective.isStarted && !objective.isComplete();
+        return objective.isStarted && !objective.isEnded;
     }
 
     @Override
     public boolean onNegativeComplete()
     {
-        return objective.isComplete();
+        return objective.isEnded;
     }
 
     @Override

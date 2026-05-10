@@ -36,7 +36,6 @@ public class DialogRunner
         talks.put(talk, talks.get(talk) + 1);
     }
 
-    /** faster than isTalkEnded(String name) but needs a reference */
     public boolean isTalkEnded(Talk talk)
     {
         return getTalk(talk) >= talk.messages.size - 1;
@@ -60,8 +59,8 @@ public class DialogRunner
         Talk best = null;
         for (Talk talk : dialog.talks)
         {
-            if (isTalkEnded(talk) || !checkObjectives(talk.objectives)) continue;
-            if (!checkObjectives(talk.messages.get(getTalk(talk) + 1).objectives)) continue; // we will need incremented one
+            if (isTalkEnded(talk) || !checkObjectiveCompletion(talk.objectives)) continue;
+            if (!checkObjectiveCompletion(talk.messages.get(getTalk(talk) + 1).objectives)) continue; // we will need incremented one
 
             if (best == null || talk.priority > best.priority)
                 best = talk;
@@ -71,12 +70,16 @@ public class DialogRunner
 
         if (currentTalk == null || isTalkEnded(currentTalk)) return;
 
+        // finally end objectives that won't be ever needed
+        endObjectives(currentTalk.objectives);
+        endObjectives(currentTalk.messages.get(getTalk(currentTalk) + 1).objectives);
+
         incrementTalk(currentTalk);
 
         DialogManager.showMessage(currentTalk.messages.get(getTalk(currentTalk)));
     }
 
-    private boolean checkObjectives(Seq<DialogObjective> objectives)
+    private boolean checkObjectiveCompletion(Seq<DialogObjective> objectives)
     {
         if (objectives == null || objectives.isEmpty()) return true;
 
@@ -94,6 +97,19 @@ public class DialogRunner
         }
 
         return true;
+    }
+
+    private void endObjectives(Seq<DialogObjective> objectives)
+    {
+        if (objectives == null || objectives.isEmpty()) return;
+
+        for (DialogObjective obj : objectives)
+        {
+            if (!obj.isEnded)
+            {
+                obj.end();
+            }
+        }
     }
 
     public void reset(Dialog dialog)

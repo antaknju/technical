@@ -44,13 +44,13 @@ public class TSectors
                         });
                     });
                     t.addMessage("master", "4", m -> {
-                        m.addObjective(new CoreItemsObjective(new ItemStack(TItems.stone, 29)));
+                        m.addObjective(new CoreItemsObjective(new ItemStack(TItems.stone, 40)));
                     });
                 });
 
                 d.addTalk("stone-waiting", 5, t -> {
                     t.addObjective(new TalkProgressObjective("stone", 2, 3));
-                    t.addMessage("master", "0", Fr.time * 20);
+                    t.addMessage("master", "0", Fr.time * 35);
                     t.addMessage("master", "1");
                 });
 

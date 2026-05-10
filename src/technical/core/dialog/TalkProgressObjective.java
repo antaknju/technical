@@ -15,6 +15,15 @@ public class TalkProgressObjective extends DialogObjective
         this.maxProgress = maxProgress;
     }
 
+    public TalkProgressObjective(Talk talk, int minProgress, int maxProgress)
+    {
+        this.talkName = talk.name;
+        this.talkRef = talk;
+
+        this.minProgress = minProgress;
+        this.maxProgress = maxProgress;
+    }
+
     @Override
     public boolean onComplete()
     {

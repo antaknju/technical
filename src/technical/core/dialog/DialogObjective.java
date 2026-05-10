@@ -10,6 +10,8 @@ public abstract class DialogObjective implements Cloneable
 
     public boolean negative = false;
 
+    public boolean isEnded = false;
+
     public boolean isComplete()
     {
         return isStarted && (negative ? onNegativeComplete() : onComplete());
@@ -29,6 +31,11 @@ public abstract class DialogObjective implements Cloneable
     {
         isStarted = true;
         onStart();
+    }
+
+    public void end()
+    {
+        isEnded = true;
     }
 
     public void reset()
