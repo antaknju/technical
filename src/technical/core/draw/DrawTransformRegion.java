@@ -62,9 +62,9 @@ public class DrawTransformRegion extends DrawBlock
 
         float t = ((build.progress() * times) + progress_offset) % 1f;
 
-        float ping_pong = t < 0.5f ? t * 2f : (1f - t) * 2f;
+//        float ping_pong = t < 0.5f ? t * 2f : (1f - t) * 2f;
 
-        float p = interp.apply(Interp.slope.apply(ping_pong));
+        float p = interp.apply(Interp.slope.apply(t));
 
         var tp = Transform.progress(from, to, p);
 

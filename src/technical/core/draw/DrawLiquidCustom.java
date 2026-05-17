@@ -14,20 +14,23 @@ public class DrawLiquidCustom extends DrawBlock
     public float padLeft = -1, padRight = -1, padTop = -1, padBottom = -1;
     public float alpha = 1f;
 
-    public boolean isLiquidOutput = false;
-    public boolean isDependant = false;
+    /** When liquid is Output it's drawn with warmup opacity because of instant liquid removal with pipes */
+    public boolean drawFromWarmup = false;
 
-    public DrawLiquidCustom(Liquid drawLiquid, boolean isLiquidOutput, boolean isDependant)
+    /** Works only when this is Extension, when it's dependent on Extendable it uses liquid info from Extendable (used mainly with Storage Blocks)  */
+    public boolean isExtendableDependant = false;
+
+    public DrawLiquidCustom(Liquid drawLiquid, boolean drawFromWarmup, boolean isExtendableDependant)
     {
         this.drawLiquid = drawLiquid;
-        this.isLiquidOutput = isLiquidOutput;
-        this.isDependant = isDependant;
+        this.drawFromWarmup = drawFromWarmup;
+        this.isExtendableDependant = isExtendableDependant;
     }
 
-    public DrawLiquidCustom(boolean isLiquidOutput, boolean isDependant)
+    public DrawLiquidCustom(boolean drawFromWarmup, boolean isExtendableDependant)
     {
-        this.isLiquidOutput = isLiquidOutput;
-        this.isDependant = isDependant;
+        this.drawFromWarmup = drawFromWarmup;
+        this.isExtendableDependant = isExtendableDependant;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class DrawLiquidCustom extends DrawBlock
     {
         Liquid drawn = drawLiquid != null ? drawLiquid : build.liquids.current();
         float a = build.liquids.get(drawn) / build.block.liquidCapacity;
-        if (isDependant && build instanceof ExtensionBuild eb)
+        if (isExtendableDependant && build instanceof ExtensionBuild eb)
         {
             if (eb.Extendable != null && eb.Extendable.block.hasLiquids)
             {
@@ -44,7 +47,7 @@ public class DrawLiquidCustom extends DrawBlock
             }
         }
 
-        ThermalLiquidBlock.drawTiledFrames(build.block.size, build.x, build.y, padLeft, padRight, padTop, padBottom, drawn, (isLiquidOutput ? build.warmup() : a) * alpha);
+        ThermalLiquidBlock.drawTiledFrames(build.block.size, build.x, build.y, padLeft, padRight, padTop, padBottom, drawn, (drawFromWarmup ? build.warmup() : a) * alpha);
     }
 
     @Override

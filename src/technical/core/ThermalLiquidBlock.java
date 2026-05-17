@@ -248,11 +248,19 @@ public class ThermalLiquidBlock extends TBlock implements Autotiler
             return (liquids.current() == liquid || liquids.currentAmount() < 0.2f);
         }
 
-        public void dumpTLiquid(Liquid liquidToDump) 
+        public void dumpTLiquid()
         {
+            dumpTLiquid(null);
+        }
+
+        public void dumpTLiquid(Liquid liquidToDump)
+        {
+            if (liquidToDump == null)
+                liquidToDump = liquids.current();
+
             for (var pro : proximity)
             {
-                moveTLiquidStated(pro.tile, false, liquids.current(), 1f / proximity.size);
+                moveTLiquidStated(pro.tile, false, liquidToDump, 1f / proximity.size);
             }
             noSleep();
         }

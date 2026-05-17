@@ -36,7 +36,7 @@ public class TSectors
                     t.addMessage("master", "1");
                     t.addMessage("master", "2");
                     t.addMessage("master", "3", m -> {
-                        m.addObjective(new CoreItemsObjective(new ItemStack(TItems.stone, 1)), o -> {
+                        m.addObjective(new CoreItemsObjective(TItems.stone, 1), o -> {
                             o.addFeedback("stone-feedback", 10, f -> {
                                 f.addMessage("master", "0");
                                 f.addMessage("master", "1");
@@ -44,7 +44,7 @@ public class TSectors
                         });
                     });
                     t.addMessage("master", "4", m -> {
-                        m.addObjective(new CoreItemsObjective(new ItemStack(TItems.stone, 40)));
+                        m.addObjective(new CoreItemsObjective(TItems.stone, 40));
                     });
                 });
 
@@ -52,6 +52,7 @@ public class TSectors
                     t.addObjective(new TalkProgressObjective("stone", 2, 3));
                     t.addMessage("master", "0", Fr.time * 35);
                     t.addMessage("master", "1");
+                    t.addMessage("master", "2");
                 });
 
                 d.addTalk("clay", 10, t -> {
@@ -62,7 +63,7 @@ public class TSectors
                     t.addMessage("master", "2");
                     t.addMessage("master", "3");
                     t.addMessage("master", "4", m -> {
-                        m.addObjective(new PlayerItemsObjective(new ItemStack(TItems.clay, 10)), o -> {
+                        m.addObjective(new PlayerItemsObjective(TItems.clay, 10), o -> {
                             o.addFeedback("clay-feedback", 10, f -> {
                                 f.addMessage("master", "0");
                                 f.addMessage("master", "1");
@@ -80,7 +81,34 @@ public class TSectors
                         m.addObjective(new ResearchObjective(TItems.brick));
                     });
                     t.addMessage("master", "9", m -> {
-                        m.addObjective(new CoreItemsObjective(new ItemStack(TItems.brick, 10)));
+                        m.addObjective(new CoreItemsObjective(TItems.brick, 10));
+                    });
+                });
+
+                d.addTalk("prep", 10, t -> {
+                    t.addObjective(new TalkEndedObjective("clay"));
+                    t.addMessage("master", "0");
+                    t.addMessage("master", "1");
+                    t.addMessage("master", "2");
+                    t.addMessage("master", "3");
+                    t.addMessage("master", "4");
+                    t.addMessage("master", "5");
+                    t.addMessage("master", "6");
+                });
+
+                d.addTalk("iron", 10, t -> {
+                    t.addObjective(new TalkEndedObjective("prep"));
+                    t.addObjective(new PlaceObjective(TBlocks.drying_pad));
+                    t.addMessage("master", "0");
+                    t.addMessage("master", "1", m -> {
+                        m.addObjective(new PlaceObjective(TBlocks.brick_furnace));
+                        m.addObjective(new PlaceObjective(TBlocks.stone_chimney, 2));
+                    });
+                    t.addMessage("master", "2", m -> {
+                        m.addObjective(new ResearchObjective(TItems.iron_plate));
+                    });
+                    t.addMessage("master", "3", m -> {
+                        m.addObjective(new CoreItemsObjective(TItems.iron_plate, 1));
                     });
                 });
             });

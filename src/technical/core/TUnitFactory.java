@@ -14,6 +14,7 @@ import arc.util.*;
 import arc.util.io.*;
 import mindustry.*;
 import mindustry.ai.*;
+import mindustry.content.Liquids;
 import mindustry.ctype.*;
 import mindustry.entities.*;
 import mindustry.game.EventType.*;

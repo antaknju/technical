@@ -9,6 +9,7 @@ public class TCol
     smoke = from("#3b3535ff"),
     uranium = from("#b0e117"),
     darkUranium = from("#789c0cff"),
+    sand = from("#f7cba4"),
     copper = from("#eb7425"),
     circuit = from("#8a8a8aff"),
     stone = from("#d7a349"),

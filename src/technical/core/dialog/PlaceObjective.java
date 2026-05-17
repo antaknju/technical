@@ -12,9 +12,17 @@ public class PlaceObjective extends DialogObjective
 
     public int startCount;
 
+    public int blockCount = 1;
+
     public PlaceObjective(Block block)
     {
         this.block = block;
+    }
+
+    public PlaceObjective(Block block, int blockCount)
+    {
+        this.block = block;
+        this.blockCount = blockCount;
     }
 
     @Override
@@ -26,7 +34,7 @@ public class PlaceObjective extends DialogObjective
     @Override
     public boolean onComplete()
     {
-        return Vars.state.stats.getPlaced(block) > startCount;
+        return Vars.state.stats.getPlaced(block) >= startCount + blockCount;
     }
 
     @Override
@@ -34,6 +42,7 @@ public class PlaceObjective extends DialogObjective
     {
         var copy = (PlaceObjective) super.clone();
         copy.block = block;
+        copy.blockCount = blockCount;
 
         return copy;
     }

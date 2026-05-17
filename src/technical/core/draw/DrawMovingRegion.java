@@ -11,6 +11,10 @@ import mindustry.graphics.Layer;
 import mindustry.world.*;
 import mindustry.world.draw.*;
 
+/**
+ * @deprecated Use {@link DrawTransformRegion} instead.
+ */
+@Deprecated()
 public class DrawMovingRegion extends DrawBlock 
 {
     public String suffix = "";

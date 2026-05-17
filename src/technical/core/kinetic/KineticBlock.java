@@ -9,9 +9,10 @@ import mindustry.gen.Building;
 import mindustry.graphics.Pal;
 import mindustry.world.Block;
 import technical.core.TBlock;
+import technical.core.ThermalLiquidBlock;
 import technical.util.TDraw;
 
-public class KineticBlock extends TBlock 
+public class KineticBlock extends TBlock
 {
     public KineticComponentData kineticData = null;
 
@@ -36,7 +37,7 @@ public class KineticBlock extends TBlock
         return consumeKineticEnergy(new KineticEnergy(speed, torque));
     }
 
-    public class KineticBuild extends TBuild 
+    public class KineticBuild extends TBuild
     {
         public KineticComponent kinetic = null;
 

@@ -25,6 +25,12 @@ public class TCustom
                     TItems.copper_gear, ActionType.Applying,
                     TItems.iron_plate,  ActionType.Applying
             ),
+            TItems.porcelain_plate, new ConveyorRecipe(5, TItems.high_precision_mechanism,
+                    TItems.precision_mechanism,   ActionType.Applying,
+                    TItems.zinc_gear,  ActionType.Applying,
+                    TItems.porcelain_plate,   ActionType.Applying,
+                    TItems.iron_rivet,   ActionType.Riveting
+            ),
             TItems.iron_rod, new ConveyorRecipe(5, TItems.iron_frame,
                     TItems.iron_rivet, ActionType.Riveting,
                     TItems.iron_rod,   ActionType.Applying,
@@ -32,6 +38,11 @@ public class TCustom
                     TItems.iron_rod,   ActionType.Applying,
                     TItems.iron_rivet, ActionType.Riveting,
                     TItems.iron_rod,   ActionType.Applying
+            ),
+            TItems.flint, new ConveyorRecipe(1, TItems.flint_wheel,
+                    TItems.iron_plate, ActionType.Applying,
+                    TItems.iron_rod, ActionType.Applying,
+                    TItems.iron_rivet, ActionType.Riveting
             ),
             TItems.precision_mechanism, new ConveyorRecipe(3, TItems.primitive_radio_unit,
                     TItems.small_copper_coil, ActionType.Soldering,

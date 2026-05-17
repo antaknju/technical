@@ -18,10 +18,7 @@ import mindustry.entities.pattern.ShootBarrel;
 import mindustry.gen.Building;
 import mindustry.gen.Sounds;
 import mindustry.graphics.CacheLayer;
-import mindustry.type.Category;
-import mindustry.type.ItemStack;
-import mindustry.type.LiquidStack;
-import mindustry.type.PayloadStack;
+import mindustry.type.*;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.ContinuousLiquidTurret;
@@ -29,13 +26,7 @@ import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.StorageBlock;
-import mindustry.world.draw.DrawArcSmelt;
-import mindustry.world.draw.DrawBlurSpin;
-import mindustry.world.draw.DrawDefault;
-import mindustry.world.draw.DrawGlowRegion;
-import mindustry.world.draw.DrawMulti;
-import mindustry.world.draw.DrawRegion;
-import mindustry.world.draw.DrawTurret;
+import mindustry.world.draw.*;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.BuildVisibility;
@@ -67,24 +58,25 @@ import technical.core.trap.SickleTrap;
 import technical.core.trap.SpikeTrap;
 import technical.core.trap.TrapHook;
 
-public class TBlocks {
+public class TBlocks
+{
     public static Block basic_drone_core_expansion, crossbow, flamethrower,
 
     basic_rail_connector, copper_train_assembler, train_loader, train_unloader, train_payload_loader, train_payload_unloader, coal_pipe_heater, pipe_cooler, kinetic_energy_source,
 
     grill_heater, stone_chimney, basic_crusher, liquid_storage, fan, basic_control_panel,solar_heater, stone_boulder_trap, dart_trap, copper_gearbox, facility_floor, facility_loader, facility_unloader,
     drying_pad, iron_drill, iron_trap_hook, mechanical_drill, iron_alloy_vessel,
-    nuclear_reactor, iron_base_applicator, lab, facility_flame_cutter, small_riveter, iron_rod_applicator, copper_plate_applicator, small_coil_solderer,
+    nuclear_reactor, iron_base_applicator, lab, facility_flame_cutter, small_riveter, iron_rod_applicator, copper_plate_applicator, small_coil_solderer, sand_crusher,
 
     low_temperature_oil_still, gear_bender, rod_roller, porcelain_router, basic_shredder, // middle_temperature_oil_still, high_temperature_oil_still
 
-    furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe, arrow_press, primitive_factory, roller_router, rivet_factory,
+    furnace_heater, roller_tunnel, copper_sprocket, brick_boiler, conducted_pipe, arrow_press, primitive_factory, roller_router, rivet_factory, water_cooler,
 
-    pebbles, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber, iron_vault,
+    pebbles, brick_wall, brick_wall_large, basic_core, basic_spike_trap, porcelain_pipe, brick_alloying_chamber, iron_vault, rainwater_collector, porcelain_tank,
     
     stone_crusher, roller_conveyor, brick_furnace, flint_extractor, iron_inserter, electric_inserter, mechanical_inserter, basic_ammo_forge, iron_chaingun, sickle_trap, flywheel, iron_gear_applicator, copper_gear_applicator, brick_crucible, basic_mold, mechanical_pump,
 
-    porcelain_furnace, steam_engine, brass_arm, brass_welder, brass_polisher, brass_smasher, ingot_mold, payload_conveyor, payload_router,
+    porcelain_furnace, steam_engine, brass_arm, brass_welder, brass_polisher, brass_smasher, ingot_mold, payload_conveyor, payload_router, gear_mold,
 
     // ENVIRONMENT
     water_floor, water_deep,
@@ -113,7 +105,7 @@ public class TBlocks {
         flywheel = new Extension("flywheel"){{
             requirements(Category.crafting, with());
             techType = TechType.MechanicalWorking;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             size = 3;
             liquidCapacity = 30;
 
@@ -132,7 +124,7 @@ public class TBlocks {
         basic_control_panel = new Extension("basic-control-panel"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             size = 1;
 
             type = ExtensionType.Control;
@@ -147,7 +139,7 @@ public class TBlocks {
         grill_heater = new Extension("grill-heater"){{
             requirements(Category.crafting, with());
             techType = TechType.TemperatureManagement;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             type = ExtensionType.Heater;
@@ -168,7 +160,7 @@ public class TBlocks {
         furnace_heater = new Extension("furnace-heater"){{
             requirements(Category.crafting, with(TItems.stone, 30, TItems.iron_plate, 10));
             techType = TechType.TemperatureManagement;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             type = ExtensionType.Heater;
@@ -182,11 +174,39 @@ public class TBlocks {
             drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawRingBurning(), new DrawDefault(), new DrawGlowRegion(){{glowIntensity = 0.8f; alpha = 0.5f; lightRadius = 5f;}});
         }};
 
+        water_cooler = new Extension("water-cooler"){{
+            requirements(Category.crafting, with(TItems.porcelain, 30, TItems.iron_frame, 10));
+            techType = TechType.TemperatureManagement;
+            researchCostMultiplier = 0.1f;
+            size = 2;
+
+            type = ExtensionType.Cooler;
+            additionalStorage = 0;
+            efficiencyBoost = 10;
+
+            consumeLiquid(TLiquids.water, 30 * Fr.liquid);
+
+            wasteLiquid = new LiquidStack(TLiquids.steam, 29 * Fr.liquid);
+
+            outputsLiquid = true;
+
+//            workingTemperature = 20; extendable gives temperature
+
+            itemDuration = 2 * Fr.time;
+
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawLiquidCustom(TLiquids.water, false, false),
+                    new DrawLiquidBubbles(TLiquids.water),
+                    new DrawDefault()
+            );
+        }};
+
         solar_heater = new Extension("solar-heater"){{
             requirements(Category.crafting, with(TItems.stone, 50, TItems.iron_plate, 10));
             techType = TechType.TemperatureManagement;
             size = 3;
-            health = 160;
+            researchCostMultiplier = 0.16f;
 
             type = ExtensionType.Heater;
             additionalStorage = 0;
@@ -198,7 +218,7 @@ public class TBlocks {
         stone_chimney = new Extension("stone-chimney"){{
             requirements(Category.crafting, with(TItems.stone, 50));
             techType = TechType.PollutionManagement;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             additionalStorage = 0;
@@ -210,9 +230,9 @@ public class TBlocks {
         }};
 
         basic_crusher = new Extension("basic-crusher"){{
-            requirements(Category.crafting, with(TItems.stone, 100, TItems.iron_plate, 5));
+            requirements(Category.crafting, with(TItems.stone, 1f, TItems.iron_plate, 5));
             techType = TechType.MaterialPreparation;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             additionalStorage = 0;
@@ -224,13 +244,13 @@ public class TBlocks {
             consumeEffect = TFx.coalSmelt;
             itemDuration = 3 * Fr.time;
 
-            drawer = new DrawMulti(new DrawDefault(), new DrawRegion("-rotator", 1f, true), new DrawRegion("-top"));
+            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawRegion("-rotator", 1f, true), new DrawDefault());
         }};
 
         liquid_storage = new Extension("liquid-storage"){{
             requirements(Category.crafting, with(TItems.porcelain, 30, TItems.brick, 30));
             techType = TechType.Storage;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             size = 3;
 
             additionalStorage = 0;
@@ -244,7 +264,7 @@ public class TBlocks {
         fan = new Extension("fan"){{
             requirements(Category.crafting, with());
             techType = TechType.TemperatureManagement;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             additionalStorage = 0;
@@ -269,7 +289,7 @@ public class TBlocks {
         iron_alloy_vessel = new Extension("iron-alloy-vessel"){{
             requirements(Category.crafting, with(TItems.iron_plate, 50, TItems.iron_rod, 10));
             techType = TechType.Metallurgy;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             size = 3;
 
             additionalStorage = 0;
@@ -307,7 +327,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.iron_plate, 20, TItems.iron_gear, 10));
             techType = TechType.MechanicalWorking;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             performedAction = new ConveyorRecipe.Action(TItems.iron_gear, ConveyorRecipe.Action.ActionType.Applying);
 
@@ -318,7 +338,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.iron_plate, 20, TItems.copper_gear, 10));
             techType = TechType.MechanicalWorking;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             performedAction = new ConveyorRecipe.Action(TItems.copper_gear, ConveyorRecipe.Action.ActionType.Applying);
 
@@ -329,7 +349,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.iron_plate, 20));
             techType = TechType.MechanicalWorking;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             performedAction = new ConveyorRecipe.Action(TItems.iron_plate, ConveyorRecipe.Action.ActionType.Applying);
 
@@ -340,7 +360,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brass_ingot, 20, TItems.precision_mechanism, 10));
             techType = TechType.SimpleManufacturing;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             performedAction = new ConveyorRecipe.Action(TItems.iron_rod, ConveyorRecipe.Action.ActionType.Applying);
 
@@ -352,7 +372,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brass_ingot, 20, TItems.precision_mechanism, 10));
             techType = TechType.SimpleManufacturing;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             performedAction = new ConveyorRecipe.Action(TItems.iron_rivet, ConveyorRecipe.Action.ActionType.Riveting);
 
@@ -364,7 +384,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brass_ingot, 20, TItems.precision_mechanism, 10));
             techType = TechType.SimpleManufacturing;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             performedAction = new ConveyorRecipe.Action(TItems.small_copper_coil, ConveyorRecipe.Action.ActionType.Soldering);
 
@@ -376,7 +396,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brass_ingot, 20, TItems.precision_mechanism, 10));
             techType = TechType.SimpleManufacturing;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             performedAction = new ConveyorRecipe.Action(TItems.copper_plate, ConveyorRecipe.Action.ActionType.Applying);
 
@@ -390,7 +410,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.stone, 20, TItems.copper_wire, 10));
             techType = TechType.CrudeWorking;
             size = 3;
-            health = 500;
+            researchCostMultiplier = 0.5f;
 
             itemCapacity = 10;
             liquidCapacity = 60f;
@@ -449,7 +469,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.iron_plate, 60, TItems.stone, 60));
             techType = TechType.CrudeWorking;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
 
             itemCapacity = 20;
             liquidCapacity = 0f;
@@ -482,7 +502,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brass_ingot, 10, TItems.iron_rod, 20));
             techType = TechType.SimpleManufacturing;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
 
             itemCapacity = 30;
             liquidCapacity = 0f;
@@ -515,7 +535,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.iron_plate, 30, TItems.brick, 30));
             techType = TechType.CrudeWorking;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
 
             itemCapacity = 30;
             liquidCapacity = 0f;
@@ -548,7 +568,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.precision_mechanism, 10, TItems.iron_rod, 20, TItems.copper_gear, 30));
             techType = TechType.SimpleManufacturing;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
 
             itemCapacity = 30;
             liquidCapacity = 0f;
@@ -571,8 +591,8 @@ public class TBlocks {
 
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
-                    new DrawTransformRegion("-saw-t", new Transform(1, 1, 1.5f, 0, 0), new Transform(1, 1, -1.5f, 0, 0), Interp.linear, 0, 4),
-                    new DrawTransformRegion("-saw-b", new Transform(1, 1, -1.5f, 0, 0), new Transform(1, 1, 1.5f, 0, 0), Interp.linear, 0, 4),
+                    new DrawTransformRegion("-saw-t", new Transform(1, 1, 1.5f, 0, 0), new Transform(1, 1, -1.5f, 0, 0), Interp.linear, 0, 6),
+                    new DrawTransformRegion("-saw-b", new Transform(1, 1, -1.5f, 0, 0), new Transform(1, 1, 1.5f, 0, 0), Interp.linear, 0, 6),
                     new DrawDefault()
             );
         }};
@@ -581,7 +601,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.precision_mechanism, 30, TItems.brick, 30));
             techType = TechType.SimpleManufacturing;
             size = 3;
-            health = 200;
+            researchCostMultiplier = 0.2f;
 
             itemCapacity = 30;
             liquidCapacity = 0f;
@@ -596,13 +616,13 @@ public class TBlocks {
 
             recipes = Seq.with(
                 new Recipe(
-                    ItemStack.with(TItems.copper_plate, 3), null,
-                    ItemStack.with(TItems.copper_rod, 1), null,
+                    with(TItems.copper_plate, 3), null,
+                    with(TItems.copper_rod, 1), null,
                     4 * Fr.time, 0, 100, new KineticEnergy(5 * Fr.speed, 10 * Fr.torque)
                 ),
                 new Recipe(
-                    ItemStack.with(TItems.iron_plate, 3), null,
-                    ItemStack.with(TItems.iron_rod, 1), null,
+                    with(TItems.iron_plate, 3), null,
+                    with(TItems.iron_rod, 1), null,
                     8 * Fr.time, 0, 150, new KineticEnergy(10 * Fr.speed, 20 * Fr.torque)
                 )
             );
@@ -614,7 +634,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.porcelain, 50, TItems.iron_plate, 20));
             techType = TechType.SoftWorking;
             size = 2;
-            health = 300;
+            researchCostMultiplier = 0.3f;
 
             itemCapacity = 20;
             liquidCapacity = 10f;
@@ -674,10 +694,10 @@ public class TBlocks {
         }};
 
         brick_furnace = new ExtendableCrafter("brick-furnace"){{
-            requirements(Category.crafting, with(TItems.brick, 30, TItems.stone, 30));
+            requirements(Category.crafting, with(TItems.brick, 20, TItems.stone, 40));
             techType = TechType.Metallurgy;
             size = 3;
-            health = 300;
+            researchCostMultiplier = 0.05f;
             itemCapacity = 20;
             liquidCapacity = 0f;
 
@@ -710,7 +730,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.porcelain, 30, TItems.precision_mechanism, 5));
             techType = TechType.SoftWorking;
             size = 3;
-            health = 200;
+            researchCostMultiplier = 0.2f;
             itemCapacity = 20;
             liquidCapacity = 30f;
 
@@ -751,7 +771,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brick, 100, TItems.iron_plate, 100));
             techType = TechType.Metallurgy;
             size = 4;
-            health = 600;
+            researchCostMultiplier = 0.6f;
             itemCapacity = 30;
             liquidCapacity = 40f;
 
@@ -816,7 +836,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brick, 300, TItems.iron_rod, 20));
             techType = TechType.Metallurgy;
             size = 4;
-            health = 800;
+            researchCostMultiplier = 0.8f;
             itemCapacity = 0;
             liquidCapacity = 20f;
 
@@ -872,7 +892,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brick, 10, TItems.iron_plate, 10));
             techType = TechType.SteamWorking;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
             itemCapacity = 10;
             liquidCapacity = 0;
 
@@ -902,7 +922,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.brick, 10, TItems.iron_plate, 20));
             techType = TechType.Metallurgy;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
             itemCapacity = 30;
             liquidCapacity = 20f;
 
@@ -922,13 +942,13 @@ public class TBlocks {
             recipes = Seq.with(
                 new Recipe(
                     null, LiquidStack.with(TLiquids.molten_copper, 1 * Fr.liquid),
-                    ItemStack.with(TItems.copper_plate, 1), null,
-                    Fr.time * 4, 0, 100, null
+                    with(TItems.copper_plate, 1), null,
+                    Fr.time * 8, 0, 100, null
                 ),
                 new Recipe(
                     null, LiquidStack.with(TLiquids.molten_iron, 1 * Fr.liquid),
-                    ItemStack.with(TItems.iron_plate, 1), null,
-                    Fr.time * 8, 0, 100, null
+                    with(TItems.iron_plate, 1), null,
+                    Fr.time * 4, 0, 100, null
                 )
             );
 
@@ -946,7 +966,7 @@ public class TBlocks {
             requirements(Category.crafting, with(TItems.iron_rod, 30, TItems.iron_plate, 100));
             techType = TechType.Metallurgy;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
             itemCapacity = 30;
             liquidCapacity = 20f;
 
@@ -965,13 +985,13 @@ public class TBlocks {
 
             recipes = Seq.with(
                     new Recipe(
-                            null, LiquidStack.with(TLiquids.molten_zinc, 3 * Fr.liquid),
-                            ItemStack.with(TItems.zinc_ingot, 1), null,
+                            null, LiquidStack.with(TLiquids.molten_zinc, 2 * Fr.liquid),
+                            with(TItems.zinc_ingot, 1), null,
                             Fr.time * 4, 0, 150, null
                     ),
                     new Recipe(
-                            null, LiquidStack.with(TLiquids.molten_brass, 3 * Fr.liquid),
-                            ItemStack.with(TItems.brass_ingot, 1), null,
+                            null, LiquidStack.with(TLiquids.molten_brass, 2 * Fr.liquid),
+                            with(TItems.brass_ingot, 1), null,
                             Fr.time * 8, 0, 150, null
                     )
             );
@@ -982,12 +1002,105 @@ public class TBlocks {
             );
         }};
 
+        gear_mold = new RecipeCrafter("gear-mold"){{
+            requirements(Category.crafting, with(TItems.brass_ingot, 30, TItems.iron_frame, 10));
+            techType = TechType.Metallurgy;
+            size = 2;
+            researchCostMultiplier = 0.2f;
+            itemCapacity = 30;
+            liquidCapacity = 20f;
+
+            hasItems = true;
+            hasPower = false;
+            hasLiquids = true;
+
+            craftEffect = Fx.smeltsmoke;
+
+            maxEfficiency = 2;
+
+            AllowedExtensions = Seq.with(
+                    ExtensionType.Cooler,
+                    ExtensionType.Storage
+            );
+
+            recipes = Seq.with(
+                    new Recipe(
+                            null, LiquidStack.with(TLiquids.molten_zinc, 1 * Fr.liquid),
+                            with(TItems.zinc_gear, 1), null,
+                            Fr.time * 8, 0, 150, null
+                    ),
+                    new Recipe(
+                            null, LiquidStack.with(TLiquids.molten_copper, 1 * Fr.liquid),
+                            with(TItems.copper_gear, 1), null,
+                            Fr.time * 8, 0, 150, null
+                    ),
+                    new Recipe(
+                            null, LiquidStack.with(TLiquids.molten_iron, 1 * Fr.liquid),
+                            with(TItems.iron_gear, 1), null,
+                            Fr.time * 4, 0, 150, null
+                    )
+            );
+
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawEffect((Building build) -> ((RecipeCrafterBuild)build).recipe() != null ? ((RecipeCrafterBuild)build).recipe().outputItems[0].item.color : Color.white, 10f, TFx.smoke)
+            );
+        }};
+
+        sand_crusher = new RecipeCrafter("sand-crusher"){{
+            requirements(Category.crafting, with(TItems.brass_ingot, 10, TItems.flint_wheel, 20));
+            techType = TechType.CrudeWorking;
+            size = 3;
+            researchCostMultiplier = 0.2f;
+            itemCapacity = 30;
+            liquidCapacity = 20f;
+
+            hasItems = true;
+            hasPower = false;
+            hasLiquids = true;
+
+            craftEffect = Fx.none;
+
+            maxEfficiency = 2;
+
+            AllowedExtensions = Seq.with(
+                    ExtensionType.Cooler,
+                    ExtensionType.Storage
+            );
+
+            RequiredExtensions = T.mapIntOf(
+                    ExtensionType.Cooler, 40
+            );
+
+            recipes = Seq.with(
+                    new Recipe(
+                            with(TItems.stone, 1), null,
+                            with(TItems.sand, 3), null,
+                            Fr.time * 1, 0, 100, null
+                    )
+            );
+
+            consumeKineticEnergy(10 * Fr.speed, 20 * Fr.torque, 50 * Fr.inertia);
+
+            workingTemperature = 20;
+
+            float pos_y = 2.4f;
+
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawTransformRegion("-l", new Transform(1, 1, 0, -pos_y, 0), new Transform(1, 1, 0, pos_y, 0), Interp.linear, 0, 3),
+                    new DrawTransformRegion("-r", new Transform(1, 1, 0, pos_y, 0), new Transform(1, 1, 0, -pos_y, 0), Interp.linear, 0, 3),
+                    new DrawEffect(Color.white, 3f, TFx.crush),
+                    new DrawDefault()
+            );
+        }};
+
         basic_ammo_forge = new ExtendableCrafter("basic-ammo-forge"){{
             requirements(Category.crafting, with(TItems.brick, 30, TItems.iron_plate, 30));
             techType = TechType.WeaponWorking;
 
             size = 2;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             itemCapacity = 20;
             liquidCapacity = 0f;
 
@@ -1026,7 +1139,7 @@ public class TBlocks {
             requirements(Category.effect, with(TItems.porcelain, 100, TItems.precision_mechanism, 10));
             techType = TechType.Research;
             size = 3;
-            health = 300;
+            researchCostMultiplier = 0.3f;
 
             range = 6;
 
@@ -1061,7 +1174,7 @@ public class TBlocks {
             requirements(Category.power, with(TItems.copper_gear, 10, TItems.copper_plate, 20));
             techType = TechType.MechanicalPowerTransport;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
 
             hasItems = false;
             hasPower = false;
@@ -1088,7 +1201,7 @@ public class TBlocks {
             techType = TechType.MechanicalPowerProduction;
 
             size = 2;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             itemCapacity = 20;
             liquidCapacity = 10f;
 
@@ -1122,7 +1235,7 @@ public class TBlocks {
             techType = TechType.MechanicalPowerTransport;
 
             size = 1;
-            health = 50;
+            researchCostMultiplier = 0.5f;
 
             kineticData = new KineticComponentData(null, 1 * Fr.inertia);
         }};
@@ -1135,7 +1248,7 @@ public class TBlocks {
             requirements(Category.power, with());
             techType = TechType.PowerProduction;
             size = 4;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             itemCapacity = 100;
             liquidCapacity = 100f;
 
@@ -1181,7 +1294,7 @@ public class TBlocks {
             requirements(Category.liquid, with(TItems.iron_gear, 1, TItems.porcelain, 1));
             techType = TechType.LiquidTransportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             liquidCapacity = 5f;
 
@@ -1194,7 +1307,7 @@ public class TBlocks {
             requirements(Category.liquid, with(TItems.copper_plate, 4, TItems.porcelain, 3));
             techType = TechType.LiquidTransportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             liquidCapacity = 1f;
 
@@ -1211,18 +1324,31 @@ public class TBlocks {
             requirements(Category.liquid, with(TItems.iron_gear, 3, TItems.porcelain, 10));
             techType = TechType.LiquidTransportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             squareSprite = false;
 
             liquidCapacity = 6f;
         }};
 
+        porcelain_tank = new ThermalRouter("porcelain-tank"){{
+            requirements(Category.liquid, with(TItems.iron_frame, 10, TItems.porcelain, 30));
+            techType = TechType.LiquidTransportation;
+            size = 2;
+            researchCostMultiplier = 0.1f;
+
+            squareSprite = false;
+
+            solid = true;
+
+            liquidCapacity = 60f;
+        }};
+
         coal_pipe_heater = new ThermalConduitHeater("coal-pipe-heater"){{
             requirements(Category.liquid, with());
             techType = TechType.LiquidTransportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             liquidCapacity = 3;
             itemCapacity = 10;
@@ -1237,18 +1363,18 @@ public class TBlocks {
             requirements(Category.liquid, with(TItems.iron_plate, 10, TItems.precision_mechanism, 5));
             techType = TechType.LiquidTransportation;
             size = 2;
-            health = 200;
+            researchCostMultiplier = 0.2f;
 
             liquidCapacity = 10f;
             pumpAmount = 1 * Fr.liquid;
 
             drawer = new DrawMulti(
-                new DrawRegion("-bottom"),
+//                new DrawRegion("-bottom"),
                 new DrawLiquidCustom(false, false),
                 new DrawLiquidBubbles(),
                 new DrawBlurSpin("-rotator", -10f){{blurThresh = 100;}},
                 new DrawDefault(),
-                new DrawRegion("-top"),
+//                new DrawRegion("-top"),
                 new DrawThermalHeatOverlay()
             );
         }};
@@ -1257,7 +1383,7 @@ public class TBlocks {
             requirements(Category.liquid, with());
             techType = TechType.LiquidTransportation;
             size = 1;
-            health = 300;
+            researchCostMultiplier = 0.3f;
 
             liquidCapacity = 5;
             itemCapacity = 10;
@@ -1278,7 +1404,7 @@ public class TBlocks {
             requirements(Category.distribution, with(TItems.iron_plate, 10, TItems.iron_gear, 10));
             techType = TechType.Transportation;
             size = 1;
-            health = 300;
+            researchCostMultiplier = 0.3f;
 
             speed = 0.05f;
             displayedSpeed = 5f;
@@ -1288,7 +1414,7 @@ public class TBlocks {
             requirements(Category.distribution, with(TItems.iron_plate, 1, TItems.stone, 1));
             techType = TechType.Transportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             tunnelReplacement = roller_tunnel;
 
@@ -1300,7 +1426,7 @@ public class TBlocks {
             requirements(Category.distribution, with(TItems.iron_plate, 10, TItems.precision_mechanism, 10));
             techType = TechType.Transportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
 
             tunnelReplacement = roller_tunnel;
 
@@ -1312,7 +1438,7 @@ public class TBlocks {
             requirements(Category.distribution, with(TItems.iron_plate, 5, TItems.iron_gear, 5));
             techType = TechType.Transportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             itemCapacity = 5;
 
             maxStackSize = 1;
@@ -1326,7 +1452,7 @@ public class TBlocks {
             requirements(Category.distribution, with(TItems.copper_plate, 10, TItems.precision_mechanism, 1));
             techType = TechType.Transportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             itemCapacity = 0;
 
             consumeEffect = Fx.none;
@@ -1341,7 +1467,7 @@ public class TBlocks {
             requirements(Category.distribution, with());
             techType = TechType.Transportation;
             size = 1;
-            health = 200;
+            researchCostMultiplier = 0.2f;
 
             maxStackSize = 10;
             moveTime = 10f;
@@ -1354,14 +1480,14 @@ public class TBlocks {
         basic_rail_connector = new RailConnector("basic-rail-connector"){{
             requirements(Category.distribution, with());
             techType = TechType.Transportation;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 1;
         }};
 
         copper_train_assembler = new TrainFactory("copper-train-assembler"){{
             requirements(Category.distribution, with(TItems.copper_plate, 30, TItems.precision_mechanism, 2));
             techType = TechType.Transportation;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
 
             unitType = TUnits.basic_train;
@@ -1375,7 +1501,7 @@ public class TBlocks {
         train_loader = new TrainLoader("train-loader"){{
             requirements(Category.distribution, with());
             techType = TechType.Transportation;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
 
             itemCapacity = 1000;
@@ -1384,7 +1510,7 @@ public class TBlocks {
         train_unloader = new TrainLoader("train-unloader"){{
             requirements(Category.distribution, with());
             techType = TechType.Transportation;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
 
             itemCapacity = 1000;
@@ -1395,7 +1521,7 @@ public class TBlocks {
         train_payload_loader = new TrainPayloadLoader("train-payload-loader"){{
             requirements(Category.distribution, with());
             techType = TechType.Transportation;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
 
             itemCapacity = 1000;
@@ -1404,7 +1530,7 @@ public class TBlocks {
         train_payload_unloader = new TrainPayloadLoader("train-payload-unloader"){{
             requirements(Category.distribution, with());
             techType = TechType.Transportation;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
 
             itemCapacity = 1000;
@@ -1419,7 +1545,7 @@ public class TBlocks {
         iron_drill = new ExtendableDrill("iron-drill"){{
             requirements(Category.production, with(TItems.stone, 20, TItems.iron_plate, 10));
             techType = TechType.Mining;
-            health = 200;
+            researchCostMultiplier = 0.2f;
             size = 3;
             itemCapacity = 20;
             hasPower = false;
@@ -1453,7 +1579,7 @@ public class TBlocks {
         mechanical_drill = new ExtendableDrillRig("mechanical-drill"){{
             requirements(Category.production, with(TItems.iron_plate, 20, TItems.precision_mechanism, 5, TItems.copper_gear, 10));
             techType = TechType.Mining;
-            health = 500;
+            researchCostMultiplier = 0.5f;
             size = 3;
             itemCapacity = 30;
             hasPower = false;
@@ -1480,7 +1606,7 @@ public class TBlocks {
         stone_crusher = new ExtendableWallCrafter("stone-crusher"){{
             requirements(Category.production, with());
             techType = TechType.Mining;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             attribute = TAttributes.stone;
@@ -1499,6 +1625,24 @@ public class TBlocks {
             consumeItem(TItems.coal, 1);
         }};
 
+        rainwater_collector = new PrecipitationCollector("rainwater-collector"){{
+            requirements(Category.production, with(TItems.iron_frame, 30, TItems.porcelain_plate, 30));
+            techType = TechType.Mining;
+            researchCostMultiplier = 0.1f;
+            size = 4;
+
+            liquidCapacity = 60f;
+
+            liquidGatherIntensity = 0.05f;
+
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawLiquidCustom(false, false),
+                    new DrawLiquidBubbles(){{spread = 12f; recurrence = 9f; radius = 4f; sides = 10; amount = 22;}},
+                    new DrawDefault()
+            );
+        }};
+
         ////////////////////////////////////////
         ///             SPECIAL              ///
         ////////////////////////////////////////
@@ -1506,7 +1650,7 @@ public class TBlocks {
         basic_drone_core_expansion = new DroneCoreExpansion("basic-drone-core-expansion"){{
             requirements(Category.effect, with());
             // techType = TechType.Core;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
 
             itemCapacity = 1000;
@@ -1537,7 +1681,7 @@ public class TBlocks {
 
         iron_vault = new StorageBlock("iron-vault"){{
             requirements(Category.effect, with(TItems.iron_plate, 200, TItems.stone, 100));
-            health = 3000;
+            researchCostMultiplier = 0.3f;
             itemCapacity = 300;
             size = 2;
         }};
@@ -1557,7 +1701,7 @@ public class TBlocks {
         brick_wall_large = new Wall("brick-wall-large"){{
             requirements(Category.defense, with(TItems.brick, 6*4));
             // techType = TechType.Defense;
-            health = 2137;
+            health = 2137 / 4;
             size = 2;
             armor = 1;
         }};
@@ -1565,7 +1709,7 @@ public class TBlocks {
         iron_trap_hook = new TrapHook("iron-trap-hook"){{
             requirements(Category.defense, with(TItems.iron_plate, 20, TItems.iron_gear, 5, TItems.precision_mechanism, 3));
             techType = TechType.Trapping;
-            health = 50;
+            researchCostMultiplier = 0.5f;
             size = 1;
 
             consumeKineticEnergy(1 * Fr.speed, 3 * Fr.torque, 1 * Fr.inertia);
@@ -1576,7 +1720,7 @@ public class TBlocks {
         stone_boulder_trap = new BoulderTrap("stone-boulder-trap"){{
             requirements(Category.defense, with(TItems.iron_plate, 10, TItems.iron_gear, 10, TItems.stone, 150));
             techType = TechType.Trapping;
-            health = 50;
+            researchCostMultiplier = 0.5f;
             size = 2;
 
             consumeKineticEnergy(1 * Fr.speed, 3 * Fr.torque, 1 * Fr.inertia);
@@ -1589,7 +1733,7 @@ public class TBlocks {
         basic_spike_trap = new SpikeTrap("basic-spike-trap"){{
             requirements(Category.defense, with(TItems.iron_plate, 20, TItems.flint, 10, TItems.precision_mechanism, 3));
             techType = TechType.Trapping;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             size = 2;
 
             consumeKineticEnergy(5 * Fr.speed, 1 * Fr.torque, 5 * Fr.inertia);
@@ -1598,7 +1742,7 @@ public class TBlocks {
         sickle_trap = new SickleTrap("sickle-trap"){{
             requirements(Category.defense, with(TItems.iron_plate, 60, TItems.flint, 30, TItems.precision_mechanism, 20));
             techType = TechType.Trapping;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             size = 2;
 
             consumeKineticEnergy(10 * Fr.speed, 20 * Fr.torque, 10 * Fr.inertia);
@@ -1607,7 +1751,7 @@ public class TBlocks {
         dart_trap = new DartTrap("dart-trap"){{
             requirements(Category.defense, with(TItems.iron_plate, 10, TItems.flint, 10, TItems.precision_mechanism, 3));
             techType = TechType.Trapping;
-            health = 300;
+            researchCostMultiplier = 0.3f;
             size = 2;
 
             consumeKineticEnergy(5 * Fr.speed, 1 * Fr.torque, 3 * Fr.inertia);
@@ -1615,7 +1759,7 @@ public class TBlocks {
 
         crossbow = new ItemTurret("crossbow"){{
             requirements(Category.turret, with(TItems.iron_plate, 50, TItems.precision_mechanism, 10));
-            health = 150;
+            researchCostMultiplier = 0.15f;
             size = 3;
 
             shootSound = TSounds.crossbow;
@@ -1657,7 +1801,7 @@ public class TBlocks {
 
         flamethrower = new ContinuousLiquidTurret("flamethrower"){{
             requirements(Category.turret, with(TItems.iron_plate, 50));
-            health = 150;
+            researchCostMultiplier = 0.15f;
             size = 2;
 
             shootSound = Sounds.shootFlame;
@@ -1704,7 +1848,7 @@ public class TBlocks {
         brass_smasher = new ItemTurret("brass-smasher"){{
             requirements(Category.turret, with());
             // techType = TechType.HardAmmoTurrets;
-            health = 150;
+            researchCostMultiplier = 0.15f;
             size = 3;
 
             shootSound = Sounds.explosionDull;
@@ -1738,7 +1882,7 @@ public class TBlocks {
         iron_chaingun = new ItemTurret("iron-chaingun"){{
             requirements(Category.turret, with(TItems.iron_plate, 50));
             // techType = TechType.HardAmmoTurrets;
-            health = 150;
+            researchCostMultiplier = 0.15f;
             size = 2;
 
             shootSound = Sounds.shootAlpha;
@@ -1792,7 +1936,7 @@ public class TBlocks {
         primitive_factory = new TUnitFactory("primitive-factory"){{
             requirements(Category.units, with(TItems.copper_gear, 50, TItems.precision_mechanism, 10, TItems.stone, 100));
             techType = TechType.UnitProduction;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
 
             plans = Seq.with(
@@ -1803,14 +1947,14 @@ public class TBlocks {
         payload_conveyor = new PayloadRollerConveyor("payload-conveyor"){{
             requirements(Category.units, with(TItems.iron_rod, 10, TItems.precision_mechanism, 5));
             techType = TechType.PayloadTransport;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
         }};
 
         payload_router = new PayloadRollerRouter("payload-router"){{
             requirements(Category.units, with(TItems.iron_rod, 30, TItems.precision_mechanism, 10));
             techType = TechType.PayloadTransport;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
         }};
 
@@ -1821,7 +1965,7 @@ public class TBlocks {
         facility_floor = new FacilityFloorTile("facility-floor"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 1;
 
             rotate = false;
@@ -1830,19 +1974,19 @@ public class TBlocks {
         facility_loader = new FacilityLoader("facility-loader"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
         }};
 
         facility_unloader = new FacilityController("facility-unloader"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 3;
 
             plans = Seq.with(
                 new FacilityPlan(
-                    ItemStack.with(Items.copper, 100), null, PayloadStack.with(Blocks.copperWall, 10),
+                    with(Items.copper, 100), null, PayloadStack.with(Blocks.copperWall, 10),
                     new PayloadStack(Blocks.duo),
                     0, null,
                     Seq.with(
@@ -1851,7 +1995,7 @@ public class TBlocks {
                     )
                 ),
                 new FacilityPlan(
-                    ItemStack.with(Items.copper, 200), null, PayloadStack.with(Blocks.copperWall, 20),
+                    with(Items.copper, 200), null, PayloadStack.with(Blocks.copperWall, 20),
                     new PayloadStack(Blocks.salvo),
                     0, null,
                     Seq.with(
@@ -1865,7 +2009,7 @@ public class TBlocks {
         facility_flame_cutter = new FacilityLaser("facility-flame-cutter"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             stepType = FacilityStepType.Cutting;
@@ -1874,7 +2018,7 @@ public class TBlocks {
         brass_arm = new FacilityInserter("brass-arm"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             stepType = FacilityStepType.Preparing;
@@ -1883,7 +2027,7 @@ public class TBlocks {
         brass_welder = new FacilityWelder("brass-welder"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             stepType = FacilityStepType.Welding;
@@ -1892,7 +2036,7 @@ public class TBlocks {
         brass_polisher = new FacilityPolisher("brass-polisher"){{
             requirements(Category.crafting, with());
             techType = TechType.Control;
-            health = 100;
+            researchCostMultiplier = 0.1f;
             size = 2;
 
             stepType = FacilityStepType.Polishing;
@@ -1909,7 +2053,7 @@ public class TBlocks {
 
         mycelis_cord_iron_plated = new MycelisCord("mycelis-cord-iron-plated"){{
             requirements(Category.effect, with());
-            health = 200;
+            researchCostMultiplier = 0.2f;
             size = 1;
             regionName = "technical-mycelis-cord";
             platingRegionName = "technical-mycelis-iron-plating";
@@ -1917,7 +2061,7 @@ public class TBlocks {
 
         mycelis_cord = new MycelisCord("mycelis-cord"){{
             requirements(Category.effect, with());
-            health = 50;
+            researchCostMultiplier = 0.5f;
             size = 1;
             evolution = mycelis_cord_iron_plated;
             platingRegionName = null;
@@ -1926,13 +2070,13 @@ public class TBlocks {
 
         mycelis_brutal_drill = new MycelisDrill("mycelis-brutal-drill"){{
             requirements(Category.effect, with());
-            health = 150;
+            researchCostMultiplier = 0.15f;
             size = 3;
         }};
 
         mycelis_oxidizer = new MycelisRecipeCrafter("mycelis-oxidizer"){{
             requirements(Category.effect, with());
-            health = 350;
+            researchCostMultiplier = 0.35f;
             size = 3;
 
             itemCapacity = 30;
@@ -2221,7 +2365,7 @@ public class TBlocks {
         cogwheel = new Cogwheel("cogwheel"){{
             requirements(Category.power, with());
 
-            health = 100;
+            researchCostMultiplier = 0.100;
             size = 1;
         }};
 
@@ -2231,7 +2375,7 @@ public class TBlocks {
         //     requirements(Category.crafting, with(TItems.copper_wire, 10, TItems.iron_plate, 20));
         //     techType = TechType.CircuitCrafting;
         //     size = 1;
-        //     health = 100;
+        //     researchCostMultiplier = 0.100;
 
         //     performedAction = new ConveyorRecipe.Action(null, ConveyorRecipe.Action.Type.Cutting);
         // }};
@@ -2240,7 +2384,7 @@ public class TBlocks {
         //     requirements(Category.crafting, with(TItems.copper_wire, 10, TItems.iron_plate, 20));
         //     techType = TechType.CircuitCrafting;
         //     size = 1;
-        //     health = 100;
+        //     researchCostMultiplier = 0.100;
 
         //     performedAction = new ConveyorRecipe.Action(TItems.copper_wire, ConveyorRecipe.Action.Type.Applying);
 
@@ -2252,7 +2396,7 @@ public class TBlocks {
         //     requirements(Category.distribution, with(TItems.iron_plate, 20));
         //     techType = TechType.Transportation;
         //     size = 1;
-        //     health = 150;
+        //     researchCostMultiplier = 0.150;
 
         //     consumeItem(TItems.coal, 1);
         //     itemDuration = 360f;
@@ -2264,13 +2408,13 @@ public class TBlocks {
             requirements(Category.distribution, with(TItems.iron_plate, 10));
             techType = TechType.Transportation;
             size = 1;
-            health = 100;
+            researchCostMultiplier = 0.100;
         }};
 
 stone_furnace = new ExtendableCrafter("stone-furnace"){{
             requirements(Category.crafting, with());
             size = 3;
-            health = 150;
+            researchCostMultiplier = 0.150;
 
             itemCapacity = 10;
             liquidCapacity = 10 / 60f;
@@ -2316,7 +2460,7 @@ stone_furnace = new ExtendableCrafter("stone-furnace"){{
 
         small_helper_turret = new HelperTurret("small-helper-turret"){{
             requirements(Category.turret, with(TItems.iron_plate, 50, TItems.copper_wire, 30));
-            health = 150;
+            researchCostMultiplier = 0.150;
             size = 2;
 
             shootSound = Sounds.shootCyclone;

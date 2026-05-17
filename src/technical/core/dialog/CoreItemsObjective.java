@@ -1,6 +1,7 @@
 package technical.core.dialog;
 
 import mindustry.Vars;
+import mindustry.type.Item;
 import mindustry.type.ItemStack;
 
 public class CoreItemsObjective extends DialogObjective
@@ -13,6 +14,11 @@ public class CoreItemsObjective extends DialogObjective
     public CoreItemsObjective(ItemStack itemStack)
     {
         this.itemStack = itemStack;
+    }
+
+    public CoreItemsObjective(Item item, int count)
+    {
+        this.itemStack = new ItemStack(item, count);
     }
 
     @Override

@@ -49,6 +49,8 @@ public class Technical extends Mod
         TItems.load();
         TLiquids.load();
 
+        TWeathers.load();
+
         TCustom.load();
 
         TUnits.load();

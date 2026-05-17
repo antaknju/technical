@@ -226,6 +226,13 @@ public class TFx {
         Lines.spikes(e.x, e.y, 1f + e.fout() * 6f, e.fin() * 4f, 6);
     }),
 
+    crush = new Effect(30, e -> {
+        randLenVectors(e.id, 10, 4f + e.fin() * 5f, (x, y) -> {
+            color(TCol.stone, TCol.darkStone, e.fin());
+            Fill.square(e.x + x, e.y + y, 0.5f + e.fout(), 40 + e.fin() * 20f);
+        });
+    }),
+
     coalSmelt = new Effect(15, e -> {
         randLenVectors(e.id, 6, 4f + e.fin() * 5f, (x, y) -> {
             color(Color.orange.a(0.5f), Color.red.a(0.5f), e.fin());

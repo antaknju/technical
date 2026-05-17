@@ -135,28 +135,33 @@ public class ThermalPump extends ThermalLiquidBlock
         }
 
         @Override
-        public void draw(){
+        public void draw()
+        {
             drawer.draw(this);
         }
 
         @Override
-        public void drawLight(){
+        public void drawLight()
+        {
             super.drawLight();
             drawer.drawLight(this);
         }
 
         @Override
-        public void pickedUp(){
+        public void pickedUp()
+        {
             amount = 0f;
         }
 
         @Override
-        public boolean shouldConsume(){
+        public boolean shouldConsume()
+        {
             return super.shouldConsume() && liquidDrop != null && liquids.get(liquidDrop) < liquidCapacity - 0.01f && enabled;
         }
 
         @Override
-        public void updateTile(){
+        public void updateTile()
+        {
             super.updateTile();
 
             float maxPump = Math.min(liquidCapacity - liquids.get(liquidDrop), amount * pumpAmount * edelta());
@@ -183,17 +188,20 @@ public class ThermalPump extends ThermalLiquidBlock
         }
 
         @Override
-        public float warmup(){
+        public float warmup()
+        {
             return warmup;
         }
 
         @Override
-        public float progress(){
+        public float progress()
+        {
             return Mathf.clamp(consTimer / consumeTime);
         }
 
         @Override
-        public float totalProgress(){
+        public float totalProgress()
+        {
             return totalProgress;
         }
         

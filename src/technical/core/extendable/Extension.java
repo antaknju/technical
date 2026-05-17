@@ -12,6 +12,7 @@ import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.type.Item;
 import mindustry.type.Liquid;
+import mindustry.type.LiquidStack;
 import mindustry.world.consumers.ConsumeCoolant;
 import mindustry.world.consumers.ConsumeLiquid;
 import mindustry.world.draw.DrawBlock;
@@ -19,7 +20,10 @@ import mindustry.world.draw.DrawDefault;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;
+import mindustry.world.meta.StatValues;
 import technical.content.TIcons;
+import technical.core.TLiquid;
+import technical.core.ThermalLiquidBlock;
 import technical.core.extendable.Extendable.ExtendableBuild;
 import technical.core.kinetic.KineticBlock;
 import technical.core.tech.TechStat;
@@ -42,6 +46,8 @@ public class Extension extends KineticBlock
 
     public ExtensionType type = ExtensionType.Chimney;
 
+    public LiquidStack wasteLiquid = null;
+
     public Extension(String name) 
     {
         super(name);
@@ -62,16 +68,20 @@ public class Extension extends KineticBlock
         super.setBars();
 
         boolean conliq = false;
-        for(var con : consumers)
-            if(con instanceof ConsumeLiquid || con instanceof ConsumeCoolant)
+        for(var con : consumers) {
+            if (con instanceof ConsumeLiquid || con instanceof ConsumeCoolant) {
                 conliq = true;
+                break;
+            }
+        }
 
         if (!conliq)
             removeBar("liquid");
     }
 
     @Override
-    public void setStats() {
+    public void setStats()
+    {
         super.setStats();
 
         stats.add(Stat.productionTime, itemDuration() / 60f, StatUnit.seconds);
@@ -99,6 +109,11 @@ public class Extension extends KineticBlock
         stats.add(boostEffectStat, table -> {
             table.add(TBundle.color("+" + efficiencyBoost, TCol.highlight) + TIcons.get(TIcons.boostPowerIcon));
         });
+
+        if (wasteLiquid != null)
+        {
+            stats.add(Stat.output, StatValues.liquids(1f, wasteLiquid));
+        }
     }
 
     @Override
@@ -110,7 +125,6 @@ public class Extension extends KineticBlock
     public TextureRegion[] icons(){
         return drawer.finalIcons(this);
     }
-
 
     @Override
     public void getRegionsToOutline(Seq<TextureRegion> out){
@@ -150,6 +164,7 @@ public class Extension extends KineticBlock
                 {
                     if (!chance(TechStat.materialSaveChance)) consume();
                     consumeEffect.at(x + Mathf.range(generateEffectRange), y + Mathf.range(generateEffectRange));
+
                     generateTime = 1f;
                 }
 
@@ -164,6 +179,14 @@ public class Extension extends KineticBlock
             else
             {
                 warmup = Mathf.approachDelta(warmup, 0f, warmupSpeed);
+            }
+
+            if (wasteLiquid != null)
+            {
+                if (warmup > 0f)
+                    liquids.add(wasteLiquid.liquid, wasteLiquid.amount * warmup);
+
+                dumpLiquid(wasteLiquid.liquid);
             }
 
             propagateHeat();
@@ -183,7 +206,7 @@ public class Extension extends KineticBlock
         {
             for (Building other : proximity)
             {
-                if (other != null && other instanceof ExtendableBuild ext) 
+                if (other instanceof ExtendableBuild ext)
                 {
                     if (((Extendable)ext.block).AllowedExtensions.contains(type))
                     {
