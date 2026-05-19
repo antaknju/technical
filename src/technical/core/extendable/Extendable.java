@@ -43,7 +43,7 @@ import technical.util.TBundle;
 import technical.util.TCol;
 import technical.util.TDraw;
 
-public class Extendable extends KineticBlock
+public class Extendable extends Explodable
 {
     public DrawBlock drawer = new DrawDefault();
 
@@ -54,17 +54,6 @@ public class Extendable extends KineticBlock
 
     public float maxUnstability = 100000f;
     public boolean isUnstable = false;
-
-    public int explosionRadius = 12;
-    public int explosionDamage = 2400;
-    public Effect explodeEffect = Fx.explosion;
-    public Sound explodeSound = Sounds.blockExplode3;
-
-    public int explosionPuddles = 12;
-    public float explosionPuddleRange = tilesize * 8f;
-    public float explosionPuddleAmount = 150f;
-    public @Nullable Liquid explosionPuddleLiquid = TLiquids.toxic_waste;
-    public float explosionShake = 1f, explosionShakeDuration = 6f;
 
     public ObjectIntMap<ExtensionType> RequiredExtensions = new ObjectIntMap<>();
     public Seq<ExtensionType> AllowedExtensions = new Seq<>();
@@ -79,6 +68,15 @@ public class Extendable extends KineticBlock
 
         hasLiquids = true;
         liquidCapacity = 10;
+    }
+
+    @Override
+    public void init()
+    {
+        super.init();
+
+        if (isUnstable)
+            canExplode = true;
     }
 
     @Override
@@ -178,13 +176,14 @@ public class Extendable extends KineticBlock
         });
     }
 
-    public class ExtendableBuild extends KineticBuild
+    public class ExtendableBuild extends ExplodableBuild
     {
         public Seq<ExtensionBuild> connectedExtensions = new Seq<>();
         public float Unstability = 0f;
 
         @Override
-        public void updateTile() {
+        public void updateTile()
+        {
             super.updateTile();
 
             if (hasRequiredExtensions() && efficiency > 0f) 
@@ -200,37 +199,13 @@ public class Extendable extends KineticBlock
                 }
             }
 
-            if(shouldExplode() && state.rules.reactorExplosions){
-                createExplosion();
-            }
-
             propagateHeat();
         }
 
-        public boolean shouldExplode(){
-            return Unstability >= maxUnstability && isUnstable;
-        }
-
-        public void createExplosion()
+        @Override
+        public boolean shouldExplode()
         {
-            if(explosionDamage > 0){
-                Damage.damage(x, y, explosionRadius * tilesize, explosionDamage);
-            }
-
-            explodeEffect.at(this);
-            explodeSound.at(this);
-
-            if(explosionPuddleLiquid != null){
-                for(int i = 0; i < explosionPuddles; i++){
-                    Tmp.v1.trns(Mathf.random(360f), Mathf.random(explosionPuddleRange));
-                    Tile tile = world.tileWorld(x + Tmp.v1.x, y + Tmp.v1.y);
-                    Puddles.deposit(tile, explosionPuddleLiquid, explosionPuddleAmount);
-                }
-            }
-
-            if(explosionShake > 0){
-                Effect.shake(explosionShake, explosionShakeDuration, this);
-            }
+            return Unstability >= maxUnstability && isUnstable;
         }
 
         public ObjectIntMap<ExtensionType> getMissingExtensions() 

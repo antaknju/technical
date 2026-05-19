@@ -174,11 +174,13 @@ public class TBlocks
             drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawRingBurning(), new DrawDefault(), new DrawGlowRegion(){{glowIntensity = 0.8f; alpha = 0.5f; lightRadius = 5f;}});
         }};
 
-        water_cooler = new Extension("water-cooler"){{
+        water_cooler = new WasteExtension("water-cooler"){{
             requirements(Category.crafting, with(TItems.porcelain, 30, TItems.iron_frame, 10));
             techType = TechType.TemperatureManagement;
             researchCostMultiplier = 0.1f;
             size = 2;
+
+            liquidCapacity = 60;
 
             type = ExtensionType.Cooler;
             additionalStorage = 0;
@@ -186,11 +188,19 @@ public class TBlocks
 
             consumeLiquid(TLiquids.water, 30 * Fr.liquid);
 
-            wasteLiquid = new LiquidStack(TLiquids.steam, 29 * Fr.liquid);
+            outputLiquid = new LiquidStack(TLiquids.steam, 29 * Fr.liquid);
+
+            explodeOnFull = true;
 
             outputsLiquid = true;
+            explosionPuddles = 8;
+            explosionDamage = 1000;
+            explosionRadius = 6;
+            explosionPuddleLiquid = TLiquids.steam;
+            explosionPuddleAmount = 300f;
+            explosionShakeDuration = 2f;
 
-//            workingTemperature = 20; extendable gives temperature
+//            workingTemperature = 34; extendables are giving temperature
 
             itemDuration = 2 * Fr.time;
 
@@ -909,7 +919,7 @@ public class TBlocks
                 ExtensionType.Storage
             );
 
-            workingTemperature = 30;
+            workingTemperature = 40;
 
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
@@ -1082,7 +1092,7 @@ public class TBlocks
 
             consumeKineticEnergy(10 * Fr.speed, 20 * Fr.torque, 50 * Fr.inertia);
 
-            workingTemperature = 20;
+            workingTemperature = 35;
 
             float pos_y = 2.4f;
 

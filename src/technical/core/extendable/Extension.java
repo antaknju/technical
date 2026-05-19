@@ -22,8 +22,6 @@ import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
 import technical.content.TIcons;
-import technical.core.TLiquid;
-import technical.core.ThermalLiquidBlock;
 import technical.core.extendable.Extendable.ExtendableBuild;
 import technical.core.kinetic.KineticBlock;
 import technical.core.tech.TechStat;
@@ -31,7 +29,7 @@ import technical.util.TBundle;
 import technical.util.TCol;
 import technical.util.TDraw;
 
-public class Extension extends KineticBlock 
+public class Extension extends Explodable
 {
     public DrawBlock drawer = new DrawDefault();
     public int efficiencyBoost = 0;
@@ -45,8 +43,6 @@ public class Extension extends KineticBlock
     public float warmupSpeed = 0.01f;
 
     public ExtensionType type = ExtensionType.Chimney;
-
-    public LiquidStack wasteLiquid = null;
 
     public Extension(String name) 
     {
@@ -109,11 +105,6 @@ public class Extension extends KineticBlock
         stats.add(boostEffectStat, table -> {
             table.add(TBundle.color("+" + efficiencyBoost, TCol.highlight) + TIcons.get(TIcons.boostPowerIcon));
         });
-
-        if (wasteLiquid != null)
-        {
-            stats.add(Stat.output, StatValues.liquids(1f, wasteLiquid));
-        }
     }
 
     @Override
@@ -143,10 +134,10 @@ public class Extension extends KineticBlock
         return itemDuration * getTotalStat(TechStat.itemDuration);
     }
 
-    public class ExtensionBuild extends KineticBuild 
+    public class ExtensionBuild extends ExplodableBuild
     {
         public ExtendableBuild Extendable;
-        float generateTime = 0f;
+        float consumeTimer = 0f;
         float totalProgress = 0f;
         float warmup;
 
@@ -160,16 +151,16 @@ public class Extension extends KineticBlock
 
             if (block.consumers.length > 0 && Extendable != null)
             {
-                if(efficiency > 0 && generateTime <= 0.1f && Extendable.hasRequiredExtensions())
+                if(efficiency > 0 && consumeTimer <= 0.1f && Extendable.hasRequiredExtensions())
                 {
                     if (!chance(TechStat.materialSaveChance)) consume();
                     consumeEffect.at(x + Mathf.range(generateEffectRange), y + Mathf.range(generateEffectRange));
 
-                    generateTime = 1f;
+                    consumeTimer = 1f;
                 }
 
-                generateTime -= delta() / itemDuration();
-                generateTime = Mathf.clamp(generateTime, 0f, 1f);
+                consumeTimer -= delta() / itemDuration();
+                consumeTimer = Mathf.clamp(consumeTimer, 0f, 1f);
             }
 
             if (Extendable != null && Extendable.efficiency > 0 && Extendable.hasRequiredExtensions() && (efficiency > 0 || block.consumers.length == 0))
@@ -179,14 +170,6 @@ public class Extension extends KineticBlock
             else
             {
                 warmup = Mathf.approachDelta(warmup, 0f, warmupSpeed);
-            }
-
-            if (wasteLiquid != null)
-            {
-                if (warmup > 0f)
-                    liquids.add(wasteLiquid.liquid, wasteLiquid.amount * warmup);
-
-                dumpLiquid(wasteLiquid.liquid);
             }
 
             propagateHeat();
@@ -319,7 +302,7 @@ public class Extension extends KineticBlock
         public void write(Writes write){
             super.write(write);
 
-            write.f(generateTime);
+            write.f(consumeTimer);
             write.f(totalProgress);
             write.f(warmup);
         }
@@ -328,7 +311,7 @@ public class Extension extends KineticBlock
         public void read(Reads read, byte revision){
             super.read(read, revision);
 
-            generateTime = read.f();
+            consumeTimer = read.f();
             totalProgress = read.f();
             warmup = read.f();
         }

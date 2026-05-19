@@ -242,7 +242,7 @@ public class TLiquids
 
             color = TCol.water;
 
-            setupLower(ice, -20, 3);
+            setupLower(ice, -20, 5);
         }};
 
         steam = new TLiquid("steam"){{
@@ -256,7 +256,7 @@ public class TLiquids
 
             color = TCol.from("#a0a0a0ff");
 
-            setupLower(water, 20, 3);
+            setupLower(water, 30, 5);
         }};
     }
 }

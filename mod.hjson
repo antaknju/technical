@@ -3,7 +3,7 @@ description: "Complete overhaul of the standard Mindustry experience.\n\nMy prim
 subtitle: "Isn't Mindustry Technical enough?"
 author: "AnTakNju"
 
-version: 1.6.0-alpha+414
+version: 1.6.1-alpha+013
 
 name: "technical"
 main: "technical.Technical"

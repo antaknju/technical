@@ -26,6 +26,7 @@ import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
 import technical.core.tech.TechStat;
+import technical.util.Fr;
 
 public class ExtendableGenerator extends Extendable
 {
@@ -63,10 +64,6 @@ public class ExtendableGenerator extends Extendable
         baseExplosiveness = 5f;
         flags = EnumSet.of(BlockFlag.generator);
     }
-    
-    public float getDisplayedPowerProduction(){
-        return powerProduction;
-    }
 
     @Override
     public void setStats()
@@ -74,14 +71,14 @@ public class ExtendableGenerator extends Extendable
         stats.timePeriod = itemDuration();
 
         super.setStats();
-        stats.add(generationType, powerProduction * 60.0f, StatUnit.powerSecond);
+        stats.add(generationType, powerProduction / Fr.power, StatUnit.powerSecond);
 
         if(hasItems){
-            stats.add(Stat.productionTime, itemDuration() / 60f, StatUnit.seconds);
+            stats.add(Stat.productionTime, itemDuration() / Fr.time, StatUnit.seconds);
         }
 
         if(outputLiquid != null){
-            stats.add(Stat.output, StatValues.liquid(outputLiquid.liquid, outputLiquid.amount * 60f, true));
+            stats.add(Stat.output, StatValues.liquid(outputLiquid.liquid, outputLiquid.amount / Fr.liquid, true));
         }
     }
 
@@ -91,10 +88,12 @@ public class ExtendableGenerator extends Extendable
     }
 
     @Override
-    public void setBars(){
+    public void setBars()
+    {
         super.setBars();
 
-        if(hasPower && outputsPower){
+        if(hasPower && outputsPower)
+        {
             addBar("power", (ExtendableGeneratorBuild entity) -> new Bar(() ->
             Core.bundle.format("bar.poweroutput",
             Strings.fixed(entity.getPowerProduction() * 60 * entity.timeScale(), 1)),
@@ -108,12 +107,14 @@ public class ExtendableGenerator extends Extendable
     }
 
     @Override
-    public void init(){
+    public void init()
+    {
         filterItem = findConsumer(c -> c instanceof ConsumeItemFilter);
         filterLiquid = findConsumer(c -> c instanceof ConsumeLiquidFilter);
 
         //pass along the duration multipliers to the consumer, so it can display them properly
-        if(filterItem instanceof ConsumeItemEfficiency eff){
+        if(filterItem instanceof ConsumeItemEfficiency eff)
+        {
             eff.itemDurationMultipliers = itemDurationMultipliers;
         }
 
