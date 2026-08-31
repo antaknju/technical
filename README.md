@@ -43,8 +43,21 @@ https://github.com/ThomasThings/xenacia/blob/master/assets/sprites/units/core/ra
 https://github.com/AureusStratus/ExoGenesis
 https://github.com/liplum/MultiCrafterLib
 
-AI assistance was used when making this project
+Music Credits:
+Kyle Dixon & Michael Stein - Agents
+PatternShift - Flicker Fusion
+PatternShift - Missense
+PatternShift - Visitors
+
+Kyle Dixon & Michael Stein - Dispatch
+Kyle Dixon & Michael Stein - Fresh Blood
+Kyle Dixon & Michael Stein - Walking Through the Upside Down
+PatternShift - Approach Vector
+
+Kyle Dixon & Michael Stein - Kids
 
 ---
+
+AI assistance was used when making this project
 
 Feel free to use the code from this mod, but please, leave me a credit, it means a lot to me
