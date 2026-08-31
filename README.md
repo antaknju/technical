@@ -67,4 +67,4 @@ Kyle Dixon & Michael Stein - Kids
 
 AI assistance was used when making this project
 
-Feel free to use the code from this mod, but please, leave me a credit, it means a lot to me
+Feel free to use the code from this mod, but please, leave me a credit, it means a lot to me.
