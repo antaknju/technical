@@ -44,14 +44,21 @@ https://github.com/AureusStratus/ExoGenesis
 https://github.com/liplum/MultiCrafterLib
 
 Music Credits:
+
 Kyle Dixon & Michael Stein - Agents
+
 PatternShift - Flicker Fusion
+
 PatternShift - Missense
+
 PatternShift - Visitors
 
 Kyle Dixon & Michael Stein - Dispatch
+
 Kyle Dixon & Michael Stein - Fresh Blood
+
 Kyle Dixon & Michael Stein - Walking Through the Upside Down
+
 PatternShift - Approach Vector
 
 Kyle Dixon & Michael Stein - Kids
