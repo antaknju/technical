@@ -32,6 +32,19 @@ import technical.core.TLiquid;
 
 public class T
 {
+    public static boolean isInCameraBounds(float x, float y, float margin)
+    {
+        float camX = Core.camera.position.x;
+        float camY = Core.camera.position.y;
+        float halfWidth = Core.camera.width / 2f;
+        float halfHeight = Core.camera.height / 2f;
+
+        return x + margin >= camX - halfWidth &&
+                x - margin <= camX + halfWidth &&
+                y + margin >= camY - halfHeight &&
+                y - margin <= camY + halfHeight;
+    }
+
     public static TLiquid getTLiquidDrop(Tile tile)
     {
         if (tile == null || tile.floor() == null || tile.floor().liquidDrop == null) return null;

@@ -117,7 +117,7 @@ public class TFx {
         }
     }),
 
-    volcanoDormant = new Effect(140f, e -> {
+    volcanoSteam = new Effect(140f, e -> {
         for(int i = 0; i < 8; i++)
         {
             rand.setSeed(e.id + i);
@@ -134,8 +134,65 @@ public class TFx {
             Fill.circle(sx, sy, 3f * (1 - e.fin()));
         }
     }).layer(Layer.darkness - 1),
-
-    volcanoErupting = new Effect(140f, TFx::get).layer(Layer.darkness - 1),
+//
+//    volcanoErupting = new Effect(140f, e -> {
+//        for (int i = 0; i < 8; i++)
+//        {
+//            rand.setSeed(e.id + i);
+//
+//            float angle = rand.random(80f, 100f);
+//            float speed = rand.random(30f, 60f);
+//
+//            float move = e.fin(Interp.pow3Out) * speed;
+//
+//            float sx = e.x + Mathf.cosDeg(angle) * move;
+//            float sy = e.y + Mathf.sinDeg(angle) * move;
+//
+//            color(Pal.vent, Pal.vent2, e.fin());
+//            Fill.circle(sx, sy, 3f * (1 - e.fin()));
+//        }
+//
+//        for (int i = 0; i < 4; i++)
+//        {
+//            rand.setSeed(e.id + i + 100);
+//
+//            float ang = 90 + rand.random(-40f, 40f);
+//            float force = rand.random(60f, 100f);
+//            float gravity = 120f;
+//            float split = 0.5f;
+//
+//            if (e.fin() < split) {
+//                float t = e.fin() / split;
+//
+//                color(TCol.lavaOrange, TCol.lavaRed, t);
+//                for (int j = 0; j < 3; j++) {
+//                    float trailT = Math.max(0, t - (j * 0.05f));
+//                    float tx = e.x + Mathf.cosDeg(ang) * force * trailT;
+//                    float ty = e.y + Mathf.sinDeg(ang) * force * trailT - (0.5f * gravity * trailT * trailT);
+//                    Fill.circle(tx, ty, (1f + 2f * Mathf.slope(t)) * (1f - j * 0.2f));
+//                }
+//            } else {
+//                float t = (e.fin() - split) / (1f - split);
+//
+//                // Landing position (where t of flight was 1.0)
+//                float lx = e.x + Mathf.cosDeg(ang) * force;
+//                float ly = e.y + Mathf.sinDeg(ang) * force - (0.5f * gravity);
+//
+//                color(Pal.vent, Pal.vent2, e.fin());
+//                for (int j = 0; j < 3; j++) {
+//                    // Sub-seed for the steam circles so they don't teleport
+//                    rand.setSeed(e.id + i + j + 500);
+//                    float driftX = lx + Mathf.sin(t * 8f + j) * 4f + rand.range(5f);
+//                    float driftY = ly + t * rand.random(10f, 30f);
+//
+//                    alpha((1f - t) * 0.6f);
+//                    Fill.circle(driftX, driftY, 1f + (Mathf.slope(t) * 1.5f));
+//                }
+//
+//                Puddles.deposit(world.tileWorld(lx, ly), world.tileWorld(lx, ly), TLiquids.lava, 0.3f, true, false);
+//            }
+//        }
+//    }).layer(Layer.darkness - 1),
 
     hugeSmoke = new Effect(180f, e -> {
         color(e.color, Pal.vent2, e.fin());
@@ -838,61 +895,4 @@ public class TFx {
             });
         });
     });
-
-    private static void get(Effect.EffectContainer e) {
-        for (int i = 0; i < 8; i++) {
-            rand.setSeed(e.id + i);
-
-            float angle = rand.random(80f, 100f);
-            float speed = rand.random(30f, 60f);
-
-            float move = e.fin(Interp.pow3Out) * speed;
-
-            float sx = e.x + Mathf.cosDeg(angle) * move;
-            float sy = e.y + Mathf.sinDeg(angle) * move;
-
-            color(Pal.vent, Pal.vent2, e.fin());
-            Fill.circle(sx, sy, 3f * (1 - e.fin()));
-        }
-
-        for (int i = 0; i < 4; i++) {
-            rand.setSeed(e.id + i + 100);
-
-            float ang = 90 + rand.random(-40f, 40f);
-            float force = rand.random(60f, 100f);
-            float gravity = 120f;
-            float split = 0.5f;
-
-            if (e.fin() < split) {
-                float t = e.fin() / split;
-
-                color(TCol.lavaOrange, TCol.lavaRed, t);
-                for (int j = 0; j < 3; j++) {
-                    float trailT = Math.max(0, t - (j * 0.05f));
-                    float tx = e.x + Mathf.cosDeg(ang) * force * trailT;
-                    float ty = e.y + Mathf.sinDeg(ang) * force * trailT - (0.5f * gravity * trailT * trailT);
-                    Fill.circle(tx, ty, (1f + 2f * Mathf.slope(t)) * (1f - j * 0.2f));
-                }
-            } else {
-                float t = (e.fin() - split) / (1f - split);
-
-                // Landing position (where t of flight was 1.0)
-                float lx = e.x + Mathf.cosDeg(ang) * force;
-                float ly = e.y + Mathf.sinDeg(ang) * force - (0.5f * gravity);
-
-                color(Pal.vent, Pal.vent2, e.fin());
-                for (int j = 0; j < 3; j++) {
-                    // Sub-seed for the steam circles so they don't teleport
-                    rand.setSeed(e.id + i + j + 500);
-                    float driftX = lx + Mathf.sin(t * 8f + j) * 4f + rand.range(5f);
-                    float driftY = ly + t * rand.random(10f, 30f);
-
-                    alpha((1f - t) * 0.6f);
-                    Fill.circle(driftX, driftY, 1f + (Mathf.slope(t) * 1.5f));
-                }
-
-                Puddles.deposit(world.tileWorld(lx, ly), world.tileWorld(lx, ly), TLiquids.lava, 0.3f, true, false);
-            }
-        }
-    }
 }

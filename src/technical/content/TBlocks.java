@@ -103,7 +103,7 @@ public class TBlocks
         ////////////////////////////////////////
 
         flywheel = new Extension("flywheel"){{
-            requirements(Category.crafting, with());
+            requirements(Category.crafting, with(TItems.iron_frame, 30, TItems.precision_mechanism, 30));
             techType = TechType.MechanicalWorking;
             researchCostMultiplier = 0.3f;
             size = 3;
